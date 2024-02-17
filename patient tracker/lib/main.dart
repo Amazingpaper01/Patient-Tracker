@@ -87,7 +87,7 @@ class _Login_FormState extends State<Login_Form> {
   //bool _isObscure = true; // show the password or not
 
   // API
-  final String apiURL = 'https://jsonplaceholder.typicode.com/posts';
+  final String apiURL = 'https://jsonplaceholder.typicode.com/posts'; // backend URL
   // create Controller
   final signIn_email = TextEditingController();
   final signIn_password = TextEditingController();  
@@ -116,7 +116,7 @@ class _Login_FormState extends State<Login_Form> {
         }),
       );
 
-      if (response.statusCode == 201) {
+      if (response.statusCode == 200) {
         // Successful POST request, handle the reponse here
         final responseData = jsonDecode(response.body);
         setState((){
@@ -216,7 +216,10 @@ class _Login_FormState extends State<Login_Form> {
               primary: Color(0xFF6750A4), // background
               onPrimary: Colors.white, // foreground
             ),
-            onPressed: _postData, //SignIn, 
+            onPressed: () {
+              _postData; //SignIn, 
+              SignIn();
+            },  
             child: const Text(
               'Sign In',
               style: TextStyle(
