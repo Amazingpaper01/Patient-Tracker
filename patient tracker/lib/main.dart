@@ -139,8 +139,9 @@ class _Login_FormState extends State<Login_Form> {
   @override
   Widget build(BuildContext context) { 
     
-    // function for button
-    SignIn(){
+    // function for button   
+    void SignIn(){
+      
       debugPrint(signIn_email.text);
       debugPrint(signIn_password.text);
       // go to Home Page (home.dart)
@@ -148,7 +149,35 @@ class _Login_FormState extends State<Login_Form> {
         context,
         MaterialPageRoute(builder: (context) => Home()),
       );
+      
+      /*
+      // go to Home page if not null
+      if (signIn_email.text.isNotEmpty && signIn_password.text.isNotEmpty){
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Home()),
+        );
+      }  
+      else {
+        debugPrint('Empty');
+      }
+      */
+
+      /*
+      // check email type by regular expression
+      final email = signIn_email.text;
+      if (RegExp(
+        r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$")
+        .hasMatch(email)) {
+        debugPrint('Correct');
+      } 
+      else {
+          debugPrint('Error');
+      }
+      */
     }
+    
+    
 
     // main funciton
     final logIn_form = Container(

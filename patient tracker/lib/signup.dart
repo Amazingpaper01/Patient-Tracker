@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:practice/main.dart';    // for Login Page
-import 'package:practice/home.dart';    // for Home Page
+//import 'package:practice/home.dart';    // for Home Page
+//import 'package:practice/home_doctor.dart'; // for Doctor's Home page 
 import 'package:http/http.dart' as http;  // for http
 
 class SignUp extends StatelessWidget {
@@ -72,10 +73,10 @@ class Signup_Form extends StatelessWidget {
       debugPrint(signUp_email.text);
       debugPrint(signUp_password.text);
       debugPrint(signUp_confirmPassword.text);
-      // go to Home Page (home.dart)
+      // go to Login Page (main.dart)
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => Home()),
+        MaterialPageRoute(builder: (context) => LogIn()),
       );
     }
 

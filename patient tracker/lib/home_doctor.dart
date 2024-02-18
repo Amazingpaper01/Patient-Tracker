@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class Home extends StatelessWidget {
+class Home_Doctor extends StatelessWidget {
   //const Home({super.key});
 
   @override
@@ -10,7 +10,7 @@ class Home extends StatelessWidget {
           centerTitle: true,
           leading: BackButton(
             color: Colors.white    // change back button color
-          ),         
+          ),
           title: const Text(
             "Patient Tracker",
             style: TextStyle(
@@ -27,7 +27,7 @@ class Home extends StatelessWidget {
         body: Scaffold(
           backgroundColor: Colors.orange[50],
           body: Center(
-            child: Text('Hello :)'),
+            child: Text('Hello doctor :)'),
           ),
         ),    
         bottomNavigationBar: BottomNavigationBar(
@@ -52,4 +52,5 @@ class Home extends StatelessWidget {
       );
   }
 }
+
 
