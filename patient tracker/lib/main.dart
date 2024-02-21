@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:practice/signup.dart';  // for SignUp page
 import 'package:practice/home.dart';    // for Home Page
+import 'package:practice/home_doctor.dart';    // for doctor's Home Page
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -87,7 +88,7 @@ class _Login_FormState extends State<Login_Form> {
   //bool _isObscure = true; // show the password or not
 
   // API
-  final String apiURL = 'https://jsonplaceholder.typicode.com/posts'; // backend URL
+  final String apiURL = ''; // backend URL
   // create Controller
   final signIn_email = TextEditingController();
   final signIn_password = TextEditingController();  
@@ -141,14 +142,37 @@ class _Login_FormState extends State<Login_Form> {
     
     // function for button   
     void SignIn(){
-      
+      final email = signIn_email.text;
       debugPrint(signIn_email.text);
       debugPrint(signIn_password.text);
       // go to Home Page (home.dart)
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => Home()),
-      );
+
+      // check doctor or not
+      if (RegExp(
+        r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@communitymedical.org")
+        .hasMatch(email)) {
+        debugPrint('doctor email');
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Home_Doctor()),
+        );
+        }
+      else {
+        if (RegExp(
+          r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$")
+          .hasMatch(email)) {
+          debugPrint('patient email');
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => Home()),
+          );
+        } 
+        else {
+          debugPrint('Error');
+        }
+      }
+
+ 
       
       /*
       // go to Home page if not null
@@ -169,10 +193,15 @@ class _Login_FormState extends State<Login_Form> {
       if (RegExp(
         r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$")
         .hasMatch(email)) {
-        debugPrint('Correct');
+        debugPrint('patient email');
       } 
+      else if (RegExp(
+        r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@communitymedical.org")
+        .hasMatch(email)) {
+        debugPrint('doctor email');
+        }
       else {
-          debugPrint('Error');
+        debugPrint('Error');
       }
       */
     }
