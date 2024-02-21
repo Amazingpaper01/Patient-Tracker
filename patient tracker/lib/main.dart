@@ -88,7 +88,7 @@ class _Login_FormState extends State<Login_Form> {
   //bool _isObscure = true; // show the password or not
 
   // API
-  final String apiURL = ''; // backend URL
+  final String apiURL = 'http://backend'; // backend URL
   // create Controller
   final signIn_email = TextEditingController();
   final signIn_password = TextEditingController();  
@@ -149,7 +149,7 @@ class _Login_FormState extends State<Login_Form> {
 
       // check doctor or not
       if (RegExp(
-        r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@communitymedical.org")
+        r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+(@communitymedical.org)$")
         .hasMatch(email)) {
         debugPrint('doctor email');
         Navigator.push(
@@ -159,7 +159,7 @@ class _Login_FormState extends State<Login_Form> {
         }
       else {
         if (RegExp(
-          r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$")
+          r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+\.(com|edu|org|gov)$")
           .hasMatch(email)) {
           debugPrint('patient email');
           Navigator.push(
