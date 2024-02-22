@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:practice/main.dart';    // for Login Page
-import 'package:practice/home.dart';    // for Home Page
 //import 'package:practice/home.dart';    // for Home Page
 //import 'package:practice/home_doctor.dart'; // for Doctor's Home page 
 import 'package:http/http.dart' as http;  // for http
-import 'dart:convert';  // for decoding received JSON
+import 'dart:convert';
 
 class SignUp extends StatelessWidget {
   //const Home({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(        
@@ -40,6 +39,7 @@ class SignUp extends StatelessWidget {
 // create Login page 
 class SignUp extends StatelessWidget {
   const SignUp({Key? key} ) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final signUp = Align(
@@ -53,26 +53,31 @@ class SignUp extends StatelessWidget {
 */
 
 class Signup_Form extends StatefulWidget {
-  //const MyWidget({super.key});
+  //const Login_Form({Key? key}) : super(key: key);
+
   @override
-  _Signup_Form createState() => _Signup_Form();
+  _Signup_FormState createState() => _Signup_FormState();
 }
 
-class _Signup_Form extends State<Signup_Form> {
+
+class _Signup_FormState extends State<Login_Form> {
+  //const _Login_FormState({Key? key} ) : super(key: key);
+  //bool _isObscure = true; // show the password or not
+
   // API
-  final String apiURL = 'http://backend';
+  final String apiURL = 'http://backend'; // backend URL
   // create Controller
   final signUp_firstName = TextEditingController();
   final signUp_lastName = TextEditingController();
   final signUp_email = TextEditingController();
   final signUp_password = TextEditingController();
   final signUp_confirmPassword = TextEditingController();
-  String result = '';
+  
+  String result = ''; // To store the result from the API call
 
-  // ======
-
+  // ===========
   @override
-  void dispose() {
+  void dispose(){
     signUp_firstName.dispose();
     signUp_lastName.dispose();
     signUp_email.dispose();
@@ -81,58 +86,92 @@ class _Signup_Form extends State<Signup_Form> {
     super.dispose();
   }
 
-  Future<void> _postData() async{
-    try{
+  Future <void> _postData() async {
+    try {
       final response = await http.post(
         Uri.parse(apiURL),
-        headers: <String, String>{
-          'Content-Type':'application/json; charset=UTF-8',
+        headers: <String, String> {
+          'Content-TYpe': 'application/json; charset = UTF-8',
         },
         body: jsonEncode(<String, dynamic>{
           'firstName':signUp_firstName.text,
           'lastName':signUp_lastName.text,
-          'email':signUp_email.text,
-          'password':signUp_password.text,
+          'email': signUp_email.text,
+          'password': signUp_password.text,
           'confirmPassword':signUp_confirmPassword.text,
         }),
       );
 
-      if (response.statusCode == 200){
+      if (response.statusCode == 200) {
+        // Successful POST request, handle the reponse here
         final responseData = jsonDecode(response.body);
-        setState(() {
-          result = 'Name:${responseData['firstName']}';
+        setState((){
+          result = 'FirstName: ${responseData['firstName']}\nLastName: ${responseData['lastName']}\nEmail: ${responseData['email']}\nPassword: ${responseData['password']}\nConfirmPassword: ${responseData['confirmPassword']}';
         });
       }
       else {
+        // if the server returns an error response, thrown an exception
         throw Exception('Failed to post data');
-      }    
+      }
     }
-    catch(e){
-      setState(() {
+    catch (e) {
+      setState((){
         result = 'Error: $e';
       });
     }
   }
 
-  // ======
-
+  // ============
   @override
-  Widget build(BuildContext context) {
-    
+  Widget build(BuildContext context) { 
+    /*
+    // function for button   
+    void SignIn(){
+      final email = signIn_email.text;
+      debugPrint(signIn_email.text);
+      debugPrint(signIn_password.text);
+      // go to Home Page (home.dart)
+
+      // check doctor or not
+      if (RegExp(
+        r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+(@communitymedical.org)$")
+        .hasMatch(email)) {
+        debugPrint('doctor email');
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Home_Doctor()),
+        );
+        }
+      else {
+        if (RegExp(
+          r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+\.(com|edu|org|gov)$")
+          .hasMatch(email)) {
+          debugPrint('patient email');
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => Home()),
+          );
+        } 
+        else {
+          debugPrint('Error');
+        }
+      }
+    }  
+    */
     // function for button
-    SignUp(){
+    void SignUp(){
       debugPrint(signUp_firstName.text);
       debugPrint(signUp_lastName.text);
       debugPrint(signUp_email.text);
       debugPrint(signUp_password.text);
       debugPrint(signUp_confirmPassword.text);
-      // go to Home Page (home.dart)
       // go to Login Page (main.dart)
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => LogIn()),
       );
     }
+    
 
     // main funciton
     final signUp_form = Container(
@@ -252,6 +291,7 @@ class _Signup_Form extends State<Signup_Form> {
               signUp_email.clear();
               signUp_password.clear();   
               signUp_confirmPassword.clear();
+
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => LogIn()),
@@ -275,7 +315,9 @@ class _Signup_Form extends State<Signup_Form> {
           
       ]),
     );
-
+    
     return signUp_form;
   }
 }
+
+

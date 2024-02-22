@@ -77,7 +77,6 @@ class _Login extends StatelessWidget {
 
 class Login_Form extends StatefulWidget {
   //const Login_Form({Key? key}) : super(key: key);
-
   @override
   _Login_FormState createState() => _Login_FormState();
 }
@@ -88,7 +87,7 @@ class _Login_FormState extends State<Login_Form> {
   //bool _isObscure = true; // show the password or not
 
   // API
-  final String apiURL = 'http://backend'; // backend URL
+  final String apiURL = 'http://patient.com/api'; // backend URL
   // create Controller
   final signIn_email = TextEditingController();
   final signIn_password = TextEditingController();  
@@ -97,19 +96,13 @@ class _Login_FormState extends State<Login_Form> {
 
   // ===========
 
-  @override
-  void dispose(){
-    signIn_email.dispose();
-    signIn_password.dispose();
-    super.dispose();
-  }
-
-  Future <void> _postData() async {
+  // applying GET request
+  Future <void> postRequest() async {
     try {
       final response = await http.post(
         Uri.parse(apiURL),
         headers: <String, String> {
-          'Content-TYpe': 'application/json; charset = UTF-8',
+          'Content-Type': 'application/json; charset = UTF-8',
         },
         body: jsonEncode(<String, dynamic>{
           'email': signIn_email.text,
@@ -221,7 +214,7 @@ class _Login_FormState extends State<Login_Form> {
         children: [          
           // Title - Sign In
           const Text(
-            'Sign In',
+            'Log In',
             style: TextStyle(
               fontSize: 40,
               fontFamily: 'Istok Web',
@@ -275,8 +268,8 @@ class _Login_FormState extends State<Login_Form> {
               onPrimary: Colors.white, // foreground
             ),
             onPressed: () {
-              _postData; //SignIn, 
-              SignIn();
+              SignIn(); //SignIn
+              //postRequest();              
             },  
             child: const Text(
               'Sign In',
