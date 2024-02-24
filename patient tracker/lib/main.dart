@@ -84,7 +84,7 @@ class Login_Form extends StatefulWidget {
 // create sign up form
 class _Login_FormState extends State<Login_Form> {
   //const _Login_FormState({Key? key} ) : super(key: key);
-  //bool _isObscure = true; // show the password or not
+  
 
   // API
   final String apiURL = 'http://10.62.78.58:3000/login'; // backend URL
@@ -93,6 +93,7 @@ class _Login_FormState extends State<Login_Form> {
   final TextEditingController signIn_password = TextEditingController();  
   
   String result = ''; // To store the result from the API call
+  bool isVisible = true; // show the password or not
   // ===========
 
   // applying POST request
@@ -145,11 +146,12 @@ class _Login_FormState extends State<Login_Form> {
         debugPrint('any field is empty');        
       }
       else {
-        // check doctor or not
+        // check email
         if (RegExp(
           r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+(@communitymedical.org)$")
           .hasMatch(email)) {
           debugPrint('doctor email');
+          // go to Doctor's Home Page (home_doctor.dart)
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => Home_Doctor()),
@@ -160,6 +162,7 @@ class _Login_FormState extends State<Login_Form> {
             r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+\.(com|edu|org|gov)$")
             .hasMatch(email)) {
             debugPrint('patient email');
+            // go to Home Page (home.dart)
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => Home()),
@@ -169,8 +172,7 @@ class _Login_FormState extends State<Login_Form> {
             debugPrint('email is incorrect');
           }
         }
-      }
-      
+      }      
     }
     
     
@@ -215,23 +217,23 @@ class _Login_FormState extends State<Login_Form> {
             height: 56,
             child: TextFormField(
               controller: signIn_password,
-              //obscureText: _isObscure,  // hidden password
+              obscureText: isVisible,  // hidden password
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Password',
                 hintText: 'Enter here...',
-                /*
+                
                 suffixIcon: IconButton(
                   icon: Icon(
-                    _isObscure ? Icons.visibility_off : Icons.visibility,
+                    isVisible ? Icons.visibility_off : Icons.visibility,
                   ),
                   onPressed: (){
                     setState(() {
-                        _isObscure = !_isObscure;
-                      });
+                        isVisible = !isVisible;
+                    });
                   },
                 ),
-                */
+                
               ),
             ),
           ),

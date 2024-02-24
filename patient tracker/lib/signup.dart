@@ -69,6 +69,8 @@ class _Signup_Form extends State<Signup_Form> {
   final signUp_confirmPassword = TextEditingController();
   String result = '';
   String role = ''; 
+  bool isVisible_1 = true;
+  bool isVisible_2 = true;
 
   // ======
 
@@ -133,16 +135,10 @@ class _Signup_Form extends State<Signup_Form> {
       debugPrint(signUp_password.text);
       
       //debugPrint(signUp_confirmPassword.text);
-      // go to Home Page (home.dart)
-      // go to Login Page (main.dart)
-      /*
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => LogIn()),
-      );
-      */
+
       // check empty textfields
-      if (signUp_firstName.text.isEmpty || signUp_lastName.text.isEmpty || signUp_email.text.isEmpty || signUp_password.text.isEmpty || signUp_confirmPassword.text.isEmpty){
+      if (signUp_firstName.text.isEmpty || signUp_lastName.text.isEmpty 
+            || signUp_email.text.isEmpty || signUp_password.text.isEmpty || signUp_confirmPassword.text.isEmpty){
         debugPrint('any field is empty');
       }
       else {
@@ -252,11 +248,21 @@ class _Signup_Form extends State<Signup_Form> {
             height: 56,
             child: TextField(
               controller: signUp_password,
-              //obscureText: true,  // hidden password
+              obscureText: isVisible_1,  // hidden password
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Password',
                 hintText: 'Enter here...',
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    isVisible_1 ? Icons.visibility_off : Icons.visibility,
+                  ),
+                  onPressed: (){
+                    setState(() {
+                        isVisible_1 = !isVisible_1;
+                    });
+                  },
+                ),
               ),
             ),
           ),
@@ -266,10 +272,21 @@ class _Signup_Form extends State<Signup_Form> {
             height: 56,
             child: TextField(
               controller: signUp_confirmPassword,
+              obscureText: isVisible_2,  // hidden password
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Confirm Password',
                 hintText: 'Enter here...',
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    isVisible_2 ? Icons.visibility_off : Icons.visibility,
+                  ),
+                  onPressed: (){
+                    setState(() {
+                        isVisible_2 = !isVisible_2;
+                    });
+                  },
+                ),
               ),
             ),
           ),
