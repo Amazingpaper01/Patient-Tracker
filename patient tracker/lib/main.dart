@@ -87,17 +87,17 @@ class _Login_FormState extends State<Login_Form> {
   //bool _isObscure = true; // show the password or not
 
   // API
-  final String apiURL = 'http://patient.com/api'; // backend URL
+  final String apiURL = 'http://10.62.78.58:3000/login'; // backend URL
   // create Controller
-  final signIn_email = TextEditingController();
-  final signIn_password = TextEditingController();  
+  final TextEditingController signIn_email = TextEditingController();
+  final TextEditingController signIn_password = TextEditingController();  
   
   String result = ''; // To store the result from the API call
-
   // ===========
 
-  // applying GET request
-  Future <void> postRequest() async {
+  // applying POST request
+  //Future <void> postRequest() async {
+  void postRequest() async {
     try {
       final response = await http.post(
         Uri.parse(apiURL),
@@ -134,69 +134,43 @@ class _Login_FormState extends State<Login_Form> {
   Widget build(BuildContext context) { 
     
     // function for button   
-    void SignIn(){
+    void LogIn(){
       final email = signIn_email.text;
       debugPrint(signIn_email.text);
       debugPrint(signIn_password.text);
       // go to Home Page (home.dart)
 
-      // check doctor or not
-      if (RegExp(
-        r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+(@communitymedical.org)$")
-        .hasMatch(email)) {
-        debugPrint('doctor email');
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => Home_Doctor()),
-        );
-        }
+      // check empty textfield
+      if (signIn_email.text.isEmpty || signIn_password.text.isEmpty){
+        debugPrint('any field is empty');        
+      }
       else {
+        // check doctor or not
         if (RegExp(
-          r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+\.(com|edu|org|gov)$")
+          r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+(@communitymedical.org)$")
           .hasMatch(email)) {
-          debugPrint('patient email');
+          debugPrint('doctor email');
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => Home()),
+            MaterialPageRoute(builder: (context) => Home_Doctor()),
           );
-        } 
+          }
         else {
-          debugPrint('Error');
+          if (RegExp(
+            r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+\.(com|edu|org|gov)$")
+            .hasMatch(email)) {
+            debugPrint('patient email');
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Home()),
+            );
+          } 
+          else {
+            debugPrint('email is incorrect');
+          }
         }
       }
-
- 
       
-      /*
-      // go to Home page if not null
-      if (signIn_email.text.isNotEmpty && signIn_password.text.isNotEmpty){
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => Home()),
-        );
-      }  
-      else {
-        debugPrint('Empty');
-      }
-      */
-
-      /*
-      // check email type by regular expression
-      final email = signIn_email.text;
-      if (RegExp(
-        r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$")
-        .hasMatch(email)) {
-        debugPrint('patient email');
-      } 
-      else if (RegExp(
-        r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@communitymedical.org")
-        .hasMatch(email)) {
-        debugPrint('doctor email');
-        }
-      else {
-        debugPrint('Error');
-      }
-      */
     }
     
     
@@ -268,8 +242,8 @@ class _Login_FormState extends State<Login_Form> {
               onPrimary: Colors.white, // foreground
             ),
             onPressed: () {
-              SignIn(); //SignIn
-              //postRequest();              
+              LogIn(); //LogIn
+              postRequest();              
             },  
             child: const Text(
               'Sign In',

@@ -60,7 +60,7 @@ class Signup_Form extends StatefulWidget {
 
 class _Signup_Form extends State<Signup_Form> {
   // API
-  final String apiURL = 'http://backend';
+  final String apiURL = 'http://10.62.78.58:3000/register';
   // create Controller
   final signUp_firstName = TextEditingController();
   final signUp_lastName = TextEditingController();
@@ -68,6 +68,7 @@ class _Signup_Form extends State<Signup_Form> {
   final signUp_password = TextEditingController();
   final signUp_confirmPassword = TextEditingController();
   String result = '';
+  String role = ''; 
 
   // ======
 
@@ -77,7 +78,7 @@ class _Signup_Form extends State<Signup_Form> {
     signUp_lastName.dispose();
     signUp_email.dispose();
     signUp_password.dispose();
-    signUp_confirmPassword.dispose();
+    //signUp_confirmPassword.dispose();
     super.dispose();
   }
 
@@ -93,7 +94,8 @@ class _Signup_Form extends State<Signup_Form> {
           'lastName':signUp_lastName.text,
           'email':signUp_email.text,
           'password':signUp_password.text,
-          'confirmPassword':signUp_confirmPassword.text,
+          //'confirmPassword':signUp_confirmPassword.text,
+          'role':role,
         }),
       );
 
@@ -121,17 +123,67 @@ class _Signup_Form extends State<Signup_Form> {
     
     // function for button
     SignUp(){
+      final email = signUp_email.text;
+      final password_1 = signUp_password.text;
+      final password_2 = signUp_confirmPassword.text;
+      
       debugPrint(signUp_firstName.text);
       debugPrint(signUp_lastName.text);
       debugPrint(signUp_email.text);
       debugPrint(signUp_password.text);
-      debugPrint(signUp_confirmPassword.text);
+      
+      //debugPrint(signUp_confirmPassword.text);
       // go to Home Page (home.dart)
       // go to Login Page (main.dart)
+      /*
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => LogIn()),
       );
+      */
+      // check empty textfields
+      if (signUp_firstName.text.isEmpty || signUp_lastName.text.isEmpty || signUp_email.text.isEmpty || signUp_password.text.isEmpty || signUp_confirmPassword.text.isEmpty){
+        debugPrint('any field is empty');
+      }
+      else {
+        // check password
+        if (password_1 == password_2){
+          // check doctor or not
+          if (RegExp(
+            r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+(@communitymedical.org)$")
+            .hasMatch(email)) {
+            debugPrint('doctor email');
+            // go to Login Page (main.dart)
+            role = 'staff';
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => LogIn()),
+            );
+          }
+          else {
+            if (RegExp(
+              r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+\.(com|edu|org|gov)$")
+              .hasMatch(email)) {
+              debugPrint('patient email');
+              // go to Login Page (main.dart)
+              role = 'user';
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => LogIn()),
+              );
+            } 
+            else {
+              debugPrint('email has a spelling mistake');
+            }
+          }
+          debugPrint(role);
+        }
+        else {
+          debugPrint("pasword doesn't match");
+        }
+      }
+      
+      
     }
 
     // main funciton
@@ -200,7 +252,7 @@ class _Signup_Form extends State<Signup_Form> {
             height: 56,
             child: TextField(
               controller: signUp_password,
-              obscureText: true,  // hidden password
+              //obscureText: true,  // hidden password
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Password',
@@ -247,16 +299,15 @@ class _Signup_Form extends State<Signup_Form> {
           TextButton(
             onPressed: (){
               //Navigator.pop(context);
-              signUp_firstName.clear();
-              signUp_lastName.clear();     
-              signUp_email.clear();
-              signUp_password.clear();   
-              signUp_confirmPassword.clear();
+              //signUp_firstName.clear();
+              //signUp_lastName.clear();     
+              //signUp_email.clear();
+              //signUp_password.clear();   
+              //signUp_confirmPassword.clear();
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => LogIn()),
               );             
-              
             }, 
             child: const Text(
               "Already Have an Account? Sign In",
@@ -272,7 +323,6 @@ class _Signup_Form extends State<Signup_Form> {
               ),
             ),
           ),
-          
       ]),
     );
 
