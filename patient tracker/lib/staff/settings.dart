@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class Home_Doctor extends StatelessWidget {
-  //const Home({super.key});
+class Settings_Doctor extends StatelessWidget {
+  const Settings_Doctor({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +12,7 @@ class Home_Doctor extends StatelessWidget {
             color: Colors.white    // change back button color
           ),
           title: const Text(
-            "Patient Tracker",
+            "Settings",
             style: TextStyle(
               color: Colors.white,
               fontSize: 24,
@@ -29,26 +29,7 @@ class Home_Doctor extends StatelessWidget {
           body: Center(
             child: Text('Hello doctor :)'),
           ),
-        ),    
-        bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Color(0xFF323264),
-          selectedItemColor: Color.fromARGB(255, 124, 190, 240),
-          unselectedItemColor: Colors.white,  // set icon color when unselected
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person), 
-              label: 'Patient',
-              ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home), 
-              label: 'Home'
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.settings), 
-              label: 'Setting'
-            ),
-          ],
-        ),     
+        ),              
       );
   }
 }

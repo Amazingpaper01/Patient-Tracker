@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
+//import 'package:flutter/rendering.dart';
 import 'package:practice/main.dart';    // for Login Page
-import 'package:practice/home.dart';    // for Home Page
+import 'package:practice/user/home.dart';    // for Home Page
 //import 'package:practice/home.dart';    // for Home Page
 //import 'package:practice/home_doctor.dart'; // for Doctor's Home page 
 import 'package:http/http.dart' as http;  // for http
