@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class Home extends StatelessWidget {
-  const Home({Key? key}) : super(key: key);
+class Patient extends StatelessWidget {
+  const Patient({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +12,7 @@ class Home extends StatelessWidget {
             color: Colors.white    // change back button color
           ),         
           title: const Text(
-            "Home",
+            "Patient Information",
             style: TextStyle(
               color: Colors.white,
               fontSize: 24,

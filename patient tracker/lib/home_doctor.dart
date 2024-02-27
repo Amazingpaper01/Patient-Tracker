@@ -36,16 +36,16 @@ class Home_Doctor extends StatelessWidget {
           unselectedItemColor: Colors.white,  // set icon color when unselected
           items: [
             BottomNavigationBarItem(
-              icon: Icon(Icons.flutter_dash), 
-              label: 'Tab1',
+              icon: Icon(Icons.person), 
+              label: 'Patient',
               ),
             BottomNavigationBarItem(
               icon: Icon(Icons.home), 
-              label: 'Tab2'
+              label: 'Home'
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.settings), 
-              label: 'Tab3'
+              label: 'Setting'
             ),
           ],
         ),     

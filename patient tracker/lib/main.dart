@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:practice/signup.dart';  // for SignUp page
-import 'package:practice/home.dart';    // for Home Page
+import 'package:practice/page.dart';    
 import 'package:practice/home_doctor.dart';    // for doctor's Home Page
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -154,7 +154,7 @@ class _Login_FormState extends State<Login_Form> {
           // go to Doctor's Home Page (home_doctor.dart)
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => Home_Doctor()),
+            MaterialPageRoute(builder: (context) => Home_Doctor()), // go to doctor's pages
           );
           }
         else {
@@ -165,7 +165,7 @@ class _Login_FormState extends State<Login_Form> {
             // go to Home Page (home.dart)
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => Home()),
+              MaterialPageRoute(builder: (context) => Page_User()), // go to user's pages
             );
           } 
           else {
@@ -175,8 +175,7 @@ class _Login_FormState extends State<Login_Form> {
       }      
     }
     
-    
-
+  
     // main funciton
     final logIn_form = Container(
       width: 322,
