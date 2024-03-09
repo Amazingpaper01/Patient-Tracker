@@ -56,8 +56,8 @@ class Logout extends StatelessWidget {
           height: 40,
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-                primary: Color(0xFF6750A4), // background
-                onPrimary: Colors.white, // foreground
+                backgroundColor: Color(0xFF49DAF9),
+                foregroundColor: Colors.white,
               ),
             onPressed: () {
                 LogOut(); //LogIn
@@ -81,7 +81,7 @@ class Logout extends StatelessWidget {
                 Icon(
                     Icons.logout,
                     color: Colors.white,
-                  ),
+                ),
               ],
             ),
           ),

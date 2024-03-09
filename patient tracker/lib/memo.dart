@@ -263,8 +263,10 @@ class _Signup_FormState extends State<Login_Form> {
           // Button for Sign In
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              primary: Color(0xFF6750A4), // background
-              onPrimary: Colors.white, // foreground
+              //primary: Color(0xFF6750A4), // background
+              //onPrimary: Colors.white, // foreground
+              backgroundColor: Color(0xFF6750A4),
+              foregroundColor: Colors.white,
             ),
             onPressed: (){
               _postData();

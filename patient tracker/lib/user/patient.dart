@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:practice/user/adding.dart';
 
 class Patient extends StatelessWidget {
   const Patient({Key? key}) : super(key: key);
@@ -29,12 +30,154 @@ class Patient extends StatelessWidget {
   }
 }
 
-class add_patient extends StatelessWidget {
-  // const MyWidget({super.key});
+class add_patient extends StatefulWidget {
+  //const MyWidget({super.key});
+  @override
+  State<add_patient> createState() => _add_patient();
+}
+
+class _add_patient extends State<add_patient> {
+
+  // create Controller
+  final TextEditingController patient_fname = TextEditingController();
+  final TextEditingController patient_lname = TextEditingController();
+  final TextEditingController patient_ID = TextEditingController();  
 
   newPatient(){
-
+    debugPrint(patient_fname.text);
+    debugPrint(patient_lname.text);
+    debugPrint(patient_ID.text);
   }
+
+  // create form
+  Future<void> InputDialog(BuildContext context) async {
+  return showDialog(    
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        backgroundColor: Colors.white,
+        title: Container(          
+          child: Row(
+            children: [
+              Text(
+                'Add Patient',
+                style: TextStyle(
+                  color: Color(0xBA4F96AC),
+                ),
+              ),
+              SizedBox(width: 90),
+              IconButton(
+                icon: Icon(
+                  Icons.close,
+                  color: Color(0xBA4F96AC),
+                ),
+                onPressed: (){
+                  Navigator.pop(context);
+                  newPatient(); 
+                },
+              ),
+            ],
+          ),          
+        ),
+        content: Container(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // First Name
+              Container(
+                width: 210,
+                height: 56,
+                child: TextField(
+                  controller: patient_fname,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Email',
+                    hintText: 'Enter here...',
+                  ),
+                ),
+              ),
+              SizedBox(height: 30),
+              // Last Name
+              Container(
+                width: 210,
+                height: 56,
+                child: TextField(
+                  controller: patient_lname,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Last Name',
+                    hintText: 'Enter here...',
+                  ),
+                ),
+              ),
+              SizedBox(height: 30),
+              // Patient ID
+              Container(
+                width: 210,
+                height: 56,
+                child: TextField(
+                  controller: patient_ID,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Patient ID',
+                    hintText: 'Enter here...',
+                  ),
+                ),
+              ),
+              SizedBox(height: 30),
+              Container(                
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        //primary:  // background
+                        //onPrimary: // foreground
+                        backgroundColor: Color(0xBA4F96AC),
+                        foregroundColor: Colors.white, 
+                      ),
+                      onPressed: () {
+                        // Add your logic here
+                        Navigator.pop(context);
+                        newPatient(); 
+                      },
+                      child: SizedBox(
+                        width: 50,
+                        height: 40,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [                   
+                            Text(
+                              'Save',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                                fontFamily: 'Roboto',
+                                fontWeight: FontWeight.w500,
+                                height: 0.10,
+                                letterSpacing: 0.10,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),                    
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),        
+      );
+    },
+  );
+}
+
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -75,11 +218,11 @@ class add_patient extends StatelessWidget {
             SizedBox(height: 30),                          
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                primary: Color(0xFF49DAF9), // background
-                onPrimary: Colors.white, // foreground
+                backgroundColor: Color(0xFF49DAF9),
+                foregroundColor: Colors.white
               ),
-              onPressed: () {
-                newPatient(); //LogIn            
+              onPressed: () {                
+                InputDialog(context);         
               },  
               child: SizedBox(
                 width: 143,
@@ -107,11 +250,11 @@ class add_patient extends StatelessWidget {
                   ]
                 ),
               ),
-            ),
-            
+            ),            
           ],
         ),
       ),
     );
   }
 }
+

@@ -4,6 +4,7 @@ import 'package:practice/user/page.dart';
 import 'package:practice/staff/page.dart';  // for doctor's Home Page
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'dart:async';
 
 void main() => runApp(const MyApp());
 
@@ -87,7 +88,7 @@ class _Login_FormState extends State<Login_Form> {
   
 
   // API
-  final String apiURL = 'http://10.62.78.58:3000/login'; // backend URL
+  final String apiURL = 'http://10.62.77.52:3000/auth/login'; // backend URL
   // create Controller
   final TextEditingController signIn_email = TextEditingController();
   final TextEditingController signIn_password = TextEditingController();  
@@ -99,33 +100,41 @@ class _Login_FormState extends State<Login_Form> {
   // applying POST request
   //Future <void> postRequest() async {
   void postRequest() async {
+    print("test");
     try {
       final response = await http.post(
         Uri.parse(apiURL),
         headers: <String, String> {
-          'Content-Type': 'application/json; charset = UTF-8',
+          'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode(<String, dynamic>{
           'email': signIn_email.text,
-          'password': signIn_password.text,
+          'password': signIn_password.text
         }),
       );
-
+      final responseData = jsonDecode(response.body);
+        final resultString = jsonEncode(responseData);
+      // print(response.statusCode);
       if (response.statusCode == 200) {
         // Successful POST request, handle the reponse here
-        final responseData = jsonDecode(response.body);
+        
         setState((){
-          result = 'ID: ${responseData['id']}\nEmail: ${responseData['email']}\nPassword: ${responseData['password']}';
+          //result = 'Email: ${responseData['email']}\nPassword: ${responseData['password']}';
+          result = resultString;
+          print(resultString);
         });
+
       }
       else {
         // if the server returns an error response, thrown an exception
-        throw Exception('Failed to post data');
+        //throw Exception('Failed to post data');
+        print(resultString);
       }
     }
     catch (e) {
       setState((){
         result = 'Error: $e';
+        print(result);
       });
     }
   }
@@ -239,8 +248,8 @@ class _Login_FormState extends State<Login_Form> {
           // Button for Sign In
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              primary: Color(0xFF6750A4), // background
-              onPrimary: Colors.white, // foreground
+              backgroundColor: Color(0xFF6750A4),
+              foregroundColor: Colors.white, 
             ),
             onPressed: () {
               LogIn(); //LogIn
