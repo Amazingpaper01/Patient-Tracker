@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart'; // for using Google Font
+import 'package:stroke_text/stroke_text.dart'; // for using outline to text
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);

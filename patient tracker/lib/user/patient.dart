@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:practice/user/adding.dart';
+import 'package:google_fonts/google_fonts.dart'; // for using Google Font
+import 'package:stroke_text/stroke_text.dart'; // for using outline to text
 
 class Patient extends StatelessWidget {
   const Patient({Key? key}) : super(key: key);
@@ -8,23 +10,47 @@ class Patient extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(        
         appBar: AppBar(
-          centerTitle: true,
-          leading: BackButton(
-            color: Colors.white    // change back button color
-          ),         
-          title: const Text(
-            "Patient Information",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 24,
-              fontFamily: 'Inter',
-              fontWeight: FontWeight.w400,
-              height: 0,
-            ),
-            textAlign: TextAlign.center,
-            ),          
+          centerTitle: false,
+          title: Stack (
+            clipBehavior: Clip.none,
+            children: [
+              //SizedBox(width: 100),
+              Container (
+                width: 45,
+                height: 45,
+                decoration: ShapeDecoration(
+                  color: Colors.white.withOpacity(0.5899999737739563),
+                  shape: OvalBorder(),
+                ),
+              ),
+              Positioned(
+                left: -4.5,
+                top: -2,
+                child: Image.asset(
+                  'assets/images/patient_logo.png',
+                  height: 55,
+                  width: 55,
+                ),
+              ),              
+              Positioned(
+                left: 30,
+                top: 20,
+                child: StrokeText(
+                  text: 'atient',
+                  textStyle: GoogleFonts.libreBodoni(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontStyle: FontStyle.italic,
+                  ),
+                  strokeColor: Color(0xFF323264),
+                  strokeWidth: 5,
+                ),
+              ),
+              //Text('Patient'),             
+            ],
+          ),        
           backgroundColor: const Color(0xFF323264),
-          ),
+        ),
         body: add_patient(),  
       );
   }
@@ -51,130 +77,130 @@ class _add_patient extends State<add_patient> {
 
   // create form
   Future<void> InputDialog(BuildContext context) async {
-  return showDialog(    
-    context: context,
-    builder: (context) {
-      return AlertDialog(
-        backgroundColor: Colors.white,
-        title: Container(          
-          child: Row(
-            children: [
-              Text(
-                'Add Patient',
-                style: TextStyle(
-                  color: Color(0xBA4F96AC),
-                ),
-              ),
-              SizedBox(width: 90),
-              IconButton(
-                icon: Icon(
-                  Icons.close,
-                  color: Color(0xBA4F96AC),
-                ),
-                onPressed: (){
-                  Navigator.pop(context);
-                  newPatient(); 
-                },
-              ),
-            ],
-          ),          
-        ),
-        content: Container(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // First Name
-              Container(
-                width: 210,
-                height: 56,
-                child: TextField(
-                  controller: patient_fname,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Email',
-                    hintText: 'Enter here...',
+    return showDialog(    
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          title: Container(          
+            child: Row(
+              children: [
+                Text(
+                  'Add Patient',
+                  style: TextStyle(
+                    color: Color(0xBA4F96AC),
                   ),
                 ),
-              ),
-              SizedBox(height: 30),
-              // Last Name
-              Container(
-                width: 210,
-                height: 56,
-                child: TextField(
-                  controller: patient_lname,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Last Name',
-                    hintText: 'Enter here...',
+                SizedBox(width: 90),
+                IconButton(
+                  icon: Icon(
+                    Icons.close,
+                    color: Color(0xBA4F96AC),
                   ),
+                  onPressed: (){
+                    Navigator.pop(context);
+                    newPatient(); 
+                  },
                 ),
-              ),
-              SizedBox(height: 30),
-              // Patient ID
-              Container(
-                width: 210,
-                height: 56,
-                child: TextField(
-                  controller: patient_ID,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Patient ID',
-                    hintText: 'Enter here...',
-                  ),
-                ),
-              ),
-              SizedBox(height: 30),
-              Container(                
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        //primary:  // background
-                        //onPrimary: // foreground
-                        backgroundColor: Color(0xBA4F96AC),
-                        foregroundColor: Colors.white, 
-                      ),
-                      onPressed: () {
-                        // Add your logic here
-                        Navigator.pop(context);
-                        newPatient(); 
-                      },
-                      child: SizedBox(
-                        width: 50,
-                        height: 40,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [                   
-                            Text(
-                              'Save',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontFamily: 'Roboto',
-                                fontWeight: FontWeight.w500,
-                                height: 0.10,
-                                letterSpacing: 0.10,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),                    
-                  ],
-                ),
-              ),
-            ],
+              ],
+            ),          
           ),
-        ),        
-      );
-    },
-  );
-}
+          content: Container(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // First Name
+                Container(
+                  width: 210,
+                  height: 56,
+                  child: TextField(
+                    controller: patient_fname,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Email',
+                      hintText: 'Enter here...',
+                    ),
+                  ),
+                ),
+                SizedBox(height: 30),
+                // Last Name
+                Container(
+                  width: 210,
+                  height: 56,
+                  child: TextField(
+                    controller: patient_lname,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Last Name',
+                      hintText: 'Enter here...',
+                    ),
+                  ),
+                ),
+                SizedBox(height: 30),
+                // Patient ID
+                Container(
+                  width: 210,
+                  height: 56,
+                  child: TextField(
+                    controller: patient_ID,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Patient ID',
+                      hintText: 'Enter here...',
+                    ),
+                  ),
+                ),
+                SizedBox(height: 30),
+                Container(                
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          //primary:  // background
+                          //onPrimary: // foreground
+                          backgroundColor: Color(0xBA4F96AC),
+                          foregroundColor: Colors.white, 
+                        ),
+                        onPressed: () {
+                          // Add your logic here
+                          Navigator.pop(context);
+                          newPatient(); 
+                        },
+                        child: SizedBox(
+                          width: 50,
+                          height: 40,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [                   
+                              Text(
+                                'Save',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                  fontFamily: 'Roboto',
+                                  fontWeight: FontWeight.w500,
+                                  height: 0.10,
+                                  letterSpacing: 0.10,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),                    
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),        
+        );
+      },
+    );
+  }
 
 
   

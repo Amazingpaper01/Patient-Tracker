@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:practice/user/patient.dart'; // for Patient Information Page
 import 'package:practice/user/home.dart';    // for Home Page
 import 'package:practice/user/settings.dart'; // for Settings Page
+import 'package:google_fonts/google_fonts.dart'; // for using Google Font
+import 'package:stroke_text/stroke_text.dart'; // for using outline to text
 
 class Page_User extends StatefulWidget {
   //const MyWidget({super.key});
