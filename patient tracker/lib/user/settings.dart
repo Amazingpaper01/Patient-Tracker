@@ -11,23 +11,47 @@ class Settings extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(        
         appBar: AppBar(
-          centerTitle: true,
-          leading: BackButton(
-            color: Colors.white    // change back button color
-          ),         
-          title: const Text(
-            "Settings",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 24,
-              fontFamily: 'Inter',
-              fontWeight: FontWeight.w400,
-              height: 0,
-            ),
-            textAlign: TextAlign.center,
-            ),          
+          centerTitle: false,
+          title: Stack (
+            clipBehavior: Clip.none,
+            children: [
+              //SizedBox(width: 100),
+              Container (
+                width: 45,
+                height: 45,
+                decoration: ShapeDecoration(
+                  color: Colors.white.withOpacity(0.5899999737739563),
+                  shape: OvalBorder(),
+                ),
+              ),
+              Positioned(
+                left: -4.5,
+                top: -2,
+                child: Image.asset(
+                  'assets/images/patient_logo.png',
+                  height: 55,
+                  width: 55,
+                ),
+              ),              
+              Positioned(
+                left: 30,
+                top: 20,
+                child: StrokeText(
+                  text: 'atient',
+                  textStyle: GoogleFonts.libreBodoni(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontStyle: FontStyle.italic,
+                  ),
+                  strokeColor: Color(0xFF323264),
+                  strokeWidth: 5,
+                ),
+              ),
+              //Text('Patient'),             
+            ],
+          ),        
           backgroundColor: const Color(0xFF323264),
-          ),
+        ),
         body: Logout(),
       );
   }
@@ -35,8 +59,6 @@ class Settings extends StatelessWidget {
 
 class Logout extends StatelessWidget {
   //const MyWidget({super.key});
-
-  
 
   @override
   Widget build(BuildContext context) {

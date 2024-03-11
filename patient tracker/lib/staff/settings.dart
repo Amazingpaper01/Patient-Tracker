@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:practice/main.dart';
+import 'package:google_fonts/google_fonts.dart'; // for using Google Font
+import 'package:stroke_text/stroke_text.dart'; // for using outline to text
 
 class Settings_Doctor extends StatelessWidget {
   const Settings_Doctor({Key? key}) : super(key: key);
@@ -7,31 +10,108 @@ class Settings_Doctor extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(        
         appBar: AppBar(
-          centerTitle: true,
-          leading: BackButton(
-            color: Colors.white    // change back button color
-          ),
-          title: const Text(
-            "Settings",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 24,
-              fontFamily: 'Inter',
-              fontWeight: FontWeight.w400,
-              height: 0,
-            ),
-            textAlign: TextAlign.center,
-            ),          
+          centerTitle: false,
+          title: Stack (
+            clipBehavior: Clip.none,
+            children: [
+              //SizedBox(width: 100),
+              Container (
+                width: 45,
+                height: 45,
+                decoration: ShapeDecoration(
+                  color: Colors.white.withOpacity(0.5899999737739563),
+                  shape: OvalBorder(),
+                ),
+              ),
+              Positioned(
+                left: -4.5,
+                top: -2,
+                child: Image.asset(
+                  'assets/images/patient_logo.png',
+                  height: 55,
+                  width: 55,
+                ),
+              ),              
+              Positioned(
+                left: 30,
+                top: 20,
+                child: StrokeText(
+                  text: 'atient',
+                  textStyle: GoogleFonts.libreBodoni(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontStyle: FontStyle.italic,
+                  ),
+                  strokeColor: Color(0xFF323264),
+                  strokeWidth: 5,
+                ),
+              ),
+              //Text('Patient'),             
+            ],
+          ),        
           backgroundColor: const Color(0xFF323264),
-          ),
-        body: Scaffold(
-          backgroundColor: Colors.orange[50],
-          body: Center(
-            child: Text('Hello doctor :)'),
-          ),
-        ),              
+        ),
+        body: Logout(),             
       );
   }
 }
 
+class Logout extends StatelessWidget {
+  //const MyWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    LogOut(){
+      debugPrint('patient email');
+      // go back to Login Page
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => LogIn()), // go to user's pages
+      );
+    }
+
+    return Scaffold(
+      backgroundColor: Colors.orange[50],
+      body: Center(
+        //width: 146,
+        //height: 40,
+        child: SizedBox(
+          width: 146,
+          height: 40,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFF49DAF9),
+                foregroundColor: Colors.white,
+              ),
+            onPressed: () {
+                LogOut(); //LogIn
+                //postRequest();              
+            },  
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  'Log Out',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.w500,
+                    height: 0.10,
+                    letterSpacing: 0.10,
+                  ),                 
+                ),
+                SizedBox(width: 8),
+                Icon(
+                    Icons.logout,
+                    color: Colors.white,
+                ),
+              ],
+            ),
+          ),
+        ),        
+      ),
+    );
+  }
+}
 

@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-//import 'package:flutter/rendering.dart';
 import 'package:practice/main.dart';    // for Login Page
 import 'package:practice/user/home.dart';    // for Home Page
-//import 'package:practice/home.dart';    // for Home Page
-//import 'package:practice/home_doctor.dart'; // for Doctor's Home page 
 import 'package:http/http.dart' as http;  // for http
 import 'dart:convert';  // for decoding received JSON
 import 'package:google_fonts/google_fonts.dart'; // for using Google Font
@@ -64,21 +61,6 @@ class SignUp extends StatelessWidget {
       );
   }
 }
-/*
-// create Login page 
-class SignUp extends StatelessWidget {
-  const SignUp({Key? key} ) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    final signUp = Align(
-      alignment: Alignment.center,
-      child: Signup_Form(),
-    );
-    
-    return signUp;
-  }
-}
-*/
 
 class Signup_Form extends StatefulWidget {
   //const MyWidget({super.key});
