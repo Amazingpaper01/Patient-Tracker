@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart'; // for using Google Font
 import 'package:stroke_text/stroke_text.dart'; // for using outline to text
+import 'package:practice/user/patient_list.dart';
 
 class Patient extends StatelessWidget {
   const Patient({Key? key}) : super(key: key);
@@ -55,7 +56,24 @@ class Patient extends StatelessWidget {
   }
 }
 
+
+class listData {
+  String fName;
+  String lName;
+  int patientID;
+
+  listData (this.fName, this.lName, this.patientID);
+}
+
+// patient list
+List<listData> patientList = [];
+
+
+
+//List<String> patientList  = ['Kazuya'];
+
 class add_patient extends StatefulWidget {
+  add_patient ({Key? key}) : super(key:key);
   //const MyWidget({super.key});
   @override
   State<add_patient> createState() => _add_patient();
@@ -68,11 +86,38 @@ class _add_patient extends State<add_patient> {
   final TextEditingController patient_lname = TextEditingController();
   final TextEditingController patient_ID = TextEditingController();  
 
+  // patient data list
+  //List<String> patientList  = [];
+  List<String> patientList2 = [];
+
   newPatient(){
     debugPrint(patient_fname.text);
     debugPrint(patient_lname.text);
     debugPrint(patient_ID.text);
+    //patientList.add(patient_fname.text);
+    final num = patientList.length;
+    debugPrint(num.toString());
+    patient_fname.clear();
+    //debugPrint(patientList[0]);
+    //createList();
+    //patientList.add(listData('John','Doe',456));
   }
+
+  
+  createList(){
+    if (patientList2.length == 0){
+      return patient_list();
+    }
+    
+    else {
+      return Text('Patient List:');
+    }
+    
+  }
+  
+  
+  String _text = '';
+  
 
   // create form
   Future<void> InputDialog(BuildContext context) async {
@@ -98,7 +143,7 @@ class _add_patient extends State<add_patient> {
                   ),
                   onPressed: (){
                     Navigator.pop(context);
-                    newPatient(); 
+                    //newPatient(); 
                   },
                 ),
               ],
@@ -116,9 +161,14 @@ class _add_patient extends State<add_patient> {
                     controller: patient_fname,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
-                      labelText: 'Email',
+                      labelText: 'First Name',
                       hintText: 'Enter here...',
                     ),
+                    onChanged: (String value){
+                      setState(() {
+                        _text = value;
+                      });
+                    },
                   ),
                 ),
                 SizedBox(height: 30),
@@ -162,10 +212,14 @@ class _add_patient extends State<add_patient> {
                           backgroundColor: Color(0xBA4F96AC),
                           foregroundColor: Colors.white, 
                         ),
-                        onPressed: () {
+                        onPressed: () async {
                           // Add your logic here
-                          Navigator.pop(context);
+                          //Navigator.of(context).pop(_text);
                           newPatient(); 
+                          Navigator.of(context).pop();
+                          setState(() {
+                            patientList2.add(_text);
+                          });
                         },
                         child: SizedBox(
                           width: 50,
@@ -211,40 +265,45 @@ class _add_patient extends State<add_patient> {
             //mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,      
           children: [
-            SizedBox(height: 70),
-            Text(
-              'Currently No Patients',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 24,
-                fontFamily: 'Roboto',
-                fontWeight: FontWeight.w500,
-                height: 0.07,
-                letterSpacing: 0.10,
-              ),
-            ),            
-            SizedBox(height: 30),
+            //patient_list(),            
+            SizedBox(height: 30), 
+            // create a list based on input data            
+            createList(),
+            
             Container(
-              width: 320,
-              decoration: ShapeDecoration(
-                shape: RoundedRectangleBorder(
-                  side: BorderSide(
-                    width: 1,
-                    strokeAlign: BorderSide.strokeAlignCenter,
-                    color: Color(0xFFCAC4D0),
-                  ),
-                )
+              child: ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(), 
+                itemCount: patientList2.length,
+                itemBuilder: (context, index){
+                  return Card(
+                    //child: Text(patientList[index].fName),
+                    child: ListTile(
+                      title: Text(patientList2[index]),
+                    ),
+                  );
+                },
               ),
             ),
+            
+            /*
+            ListView.builder(
+              itemCount: patientList.length,
+              itemBuilder: (context, index) {
+                return Card(
+                  child: Text(patientList[index]),
+                );
+              },
+            ),
+            */
             SizedBox(height: 30),                          
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color(0xFF49DAF9),
                 foregroundColor: Colors.white
               ),
-              onPressed: () {                
-                InputDialog(context);         
+              onPressed: () async {                
+                InputDialog(context);                  
               },  
               child: SizedBox(
                 width: 143,
