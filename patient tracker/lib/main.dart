@@ -16,103 +16,21 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: LogIn(),
     );
   }
 }
 
 // create LogIn page
-class LogIn extends StatelessWidget {
-  //const Home({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(        
-        appBar: AppBar(
-          centerTitle: false,
-          title: Stack (
-            clipBehavior: Clip.none,
-            children: [
-              //SizedBox(width: 100),
-              Container (
-                width: 45,
-                height: 45,
-                decoration: ShapeDecoration(
-                  color: Colors.white.withOpacity(0.5899999737739563),
-                  shape: OvalBorder(),
-                ),
-              ),
-              Positioned(
-                left: -4.5,
-                top: -2,
-                child: Image.asset(
-                  'assets/images/patient_logo.png',
-                  height: 55,
-                  width: 55,
-                ),
-              ),              
-              Positioned(
-                left: 30,
-                top: 20,
-                child: StrokeText(
-                  text: 'atient',
-                  textStyle: GoogleFonts.libreBodoni(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontStyle: FontStyle.italic,
-                  ),
-                  strokeColor: Color(0xFF323264),
-                  strokeWidth: 5,
-                ),
-              ),              
-            ],
-          ),        
-          backgroundColor: const Color(0xFF323264),
-        ),
-        body: Scaffold(
-          backgroundColor: Colors.orange[50],
-          body: Center(
-            child: Center(
-              child: Login_Form(),
-            ),
-          ),
-          /*
-          body: Container (
-            child: Login(),
-        ),
-        */
-        ),         
-      );
-  }
-}
-
-/*
-class _Login extends StatelessWidget {
-  const _Login({Key? key} ) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final logIn = Align(
-      alignment: Alignment.center,
-      child: Login_Form(),
-    );
-    
-    return logIn;
-  }
-}
-*/
-
-class Login_Form extends StatefulWidget {
+class LogIn extends StatefulWidget {
   //const Login_Form({Key? key}) : super(key: key);
   @override
-  _Login_FormState createState() => _Login_FormState();
+  _LogIn createState() => _LogIn();
 }
 
-// create sign up form
-class _Login_FormState extends State<Login_Form> {
-  //const _Login_FormState({Key? key} ) : super(key: key);
-  
 
+class _LogIn extends State<LogIn> {
   // API
   final String apiURL = 'http://10.62.77.52:3000/auth/login'; // backend URL
   // create Controller
@@ -164,11 +82,11 @@ class _Login_FormState extends State<Login_Form> {
       });
     }
   }
-
-  // ============
+  // ===========
+  
   @override
-  Widget build(BuildContext context) { 
-    
+  Widget build(BuildContext context) {
+
     // function for button   
     void LogIn(){
       final email = signIn_email.text;
@@ -209,119 +127,207 @@ class _Login_FormState extends State<Login_Form> {
         }
       }      
     }
-    
-  
-    // main funciton
-    final logIn_form = Container(
-      width: 322,
-      height: 447,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Column (
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [          
-          // Title - Sign In
-          const Text(
-            'Log In',
-            style: TextStyle(
-              fontSize: 40,
-              fontFamily: 'Istok Web',
-              fontWeight: FontWeight.w400,
-              height: 0,
+    // ===========
+
+    return Scaffold(
+      body: Container(
+        
+        child: Column(
+          //mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: double.infinity,
+              height: 50
             ),
-          ),
-          // Text Box for Email
-          Container(
-            width: 210,
-            height: 56,
-            child: TextField(
-              controller: signIn_email,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Email',
-                hintText: 'Enter here...',
-              ),
-            ),
-          ),
-          // Text Box for Password
-          Container(
-            width: 210,
-            height: 56,
-            child: TextFormField(
-              controller: signIn_password,
-              obscureText: isVisible,  // hidden password
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Password',
-                hintText: 'Enter here...',
-                
-                suffixIcon: IconButton(
-                  icon: Icon(
-                    isVisible ? Icons.visibility_off : Icons.visibility,
+            Stack (
+              clipBehavior: Clip.none,
+              children: [
+                Container (
+                  width: 157,
+                  height: 158,
+                  decoration: ShapeDecoration(
+                    color: Color(0xFFEFEFEF),
+                    shape: OvalBorder(),
                   ),
-                  onPressed: (){
-                    setState(() {
-                        isVisible = !isVisible;
-                    });
-                  },
                 ),
-                
-              ),
+                Positioned(
+                  left: -6,
+                  top: 5,
+                  child: Image.asset(
+                    'assets/images/patient_logo.png',
+                    height: 148.81,
+                    width: 171,
+                  ),
+                ),              
+                Positioned(
+                  left: 5.5,
+                  top: 5.5,
+                  child: Container (
+                    width: 144.89,
+                    height: 144.89,
+                    decoration: ShapeDecoration(
+                      color: Color(0x00D9D9D9),
+                      shape: OvalBorder(
+                        side: BorderSide(
+                          width: 4,
+                          color: Color(0xFF373C88),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),              
+              ],
             ),
-          ),
-          // Button for Sign In
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Color(0xFF6750A4),
-              foregroundColor: Colors.white, 
-            ),
-            onPressed: () {
-              LogIn(); //LogIn
-              postRequest();              
-            },  
-            child: const Text(
-              'Sign In',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 14,
-                fontFamily: 'Roboto',
+            SizedBox(height: 65),
+            Text(
+              'WELCOME',
+              style: GoogleFonts.montserrat(
+                color: Color(0xFF373C88),
+                fontSize: 40,
                 fontWeight: FontWeight.w500,
                 height: 0.10,
                 letterSpacing: 0.10,
               ),
             ),
-          ),
-          // go to Sign Up page (signup.dart)        
-          TextButton(
-            onPressed: (){
-              //signIn_email.clear();
-              //signIn_password.clear();
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => SignUp()),
-              );
-            },
-            child: const Text(
-            "Don't Have an Account? Sing Up",
-            style: TextStyle(
-              color: Color(0xFF0000FF),
-              fontSize: 16,
-              fontFamily: 'Roboto',
-              fontWeight: FontWeight.w400,   
-              decoration: TextDecoration.underline, 
-              decorationColor: Color(0xFF0000FF),          
-              height: 0.09,
-              letterSpacing: 0.50,
-              
+            SizedBox(height: 65),
+            // == Text Box for Email ==
+            Container(
+              width: 210,
+              height: 56,
+              child: TextField(
+                controller: signIn_email,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Email',
+                  hintText: 'Enter here...',
+                ),
+              ),
             ),
-          ),
-          ), 
-          
-      ]),
+            SizedBox(height: 25),
+            // == Text Box for Password ==
+            Container(
+              width: 210,
+              height: 56,
+              child: TextFormField(
+                controller: signIn_password,
+                obscureText: isVisible,  // hidden password
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Password',
+                  hintText: 'Enter here...',                  
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      isVisible ? Icons.visibility_off : Icons.visibility,
+                    ),
+                    onPressed: (){
+                      setState(() {
+                          isVisible = !isVisible;
+                      });
+                    },
+                  ),                  
+                ),
+              ),
+            ),
+            SizedBox(height: 50),
+            // == Button for Sign In ==
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFF373C88),
+                foregroundColor: Colors.white, 
+              ),
+              onPressed: () {
+                LogIn(); //LogIn
+                postRequest();    
+                signIn_email.clear();
+                signIn_password.clear();          
+              },  
+              child: const Text(
+                'Log In',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                  fontFamily: 'Roboto',
+                  fontWeight: FontWeight.w500,
+                  height: 0.10,
+                  letterSpacing: 0.10,
+                ),
+              ),
+            ),
+            SizedBox(height: 40),
+            Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 134,
+                    decoration: ShapeDecoration(
+                      shape: RoundedRectangleBorder(
+                        side: BorderSide(
+                          width: 1,
+                          strokeAlign: BorderSide.strokeAlignCenter,
+                          color: Color(0xFFCAC4D0),
+                        ),
+                      )
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  Text(
+                    'OR',
+                    style: GoogleFonts.montserrat(
+                      color: Color(0xFF373C88),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      height: 0.10,
+                      letterSpacing: 0.10,
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  Container(
+                    width: 134,
+                    decoration: ShapeDecoration(
+                      shape: RoundedRectangleBorder(
+                        side: BorderSide(
+                          width: 1,
+                          strokeAlign: BorderSide.strokeAlignCenter,
+                          color: Color(0xFFCAC4D0),
+                        ),
+                      )
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 40),
+            // == go to Sign Up page (signup.dart) ==  
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFF373C88),
+                foregroundColor: Colors.white, 
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SignUp()),
+                );
+                signIn_email.clear();
+                signIn_password.clear();        
+              },  
+              child: const Text(
+                'Sign Up',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                  fontFamily: 'Roboto',
+                  fontWeight: FontWeight.w500,
+                  height: 0.10,
+                  letterSpacing: 0.10,
+                ),
+              ),
+            ),   
+          ],
+        ),
+      ),
     );
-    
-    return logIn_form;
   }
 }
