@@ -138,7 +138,7 @@ class _LogIn extends State<LogIn> {
           children: [
             SizedBox(
               width: double.infinity,
-              height: 50
+              height: 30
             ),
             Stack (
               clipBehavior: Clip.none,

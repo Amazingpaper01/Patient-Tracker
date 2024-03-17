@@ -1,30 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:practice/signup.dart';  // for SignUp page
-import 'package:practice/user/page.dart';    
-import 'package:practice/staff/page.dart';  // for doctor's Home Page
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'dart:async';
+import 'package:practice/main.dart';    // for Login Page
+import 'package:practice/user/home.dart';    // for Home Page
+import 'package:http/http.dart' as http;  // for http
+import 'dart:convert';  // for decoding received JSON
 import 'package:google_fonts/google_fonts.dart'; // for using Google Font
 import 'package:stroke_text/stroke_text.dart'; // for using outline to text
 
-void main() => runApp(const MyApp());
-
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: LogIn(),
-    );
-  }
-}
-
-// create LogIn page
-class LogIn extends StatelessWidget {
+class SignUp extends StatelessWidget {
   //const Home({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(        
@@ -72,149 +55,147 @@ class LogIn extends StatelessWidget {
         body: Scaffold(
           backgroundColor: Colors.orange[50],
           body: Center(
-            child: Center(
-              child: Login_Form(),
-            ),
+            child: Signup_Form(),
           ),
-          /*
-          body: Container (
-            child: Login(),
-        ),
-        */
         ),         
       );
   }
 }
 
-/*
-class _Login extends StatelessWidget {
-  const _Login({Key? key} ) : super(key: key);
-
+class Signup_Form extends StatefulWidget {
+  //const MyWidget({super.key});
   @override
-  Widget build(BuildContext context) {
-    final logIn = Align(
-      alignment: Alignment.center,
-      child: Login_Form(),
-    );
-    
-    return logIn;
-  }
-}
-*/
-
-class Login_Form extends StatefulWidget {
-  //const Login_Form({Key? key}) : super(key: key);
-  @override
-  _Login_FormState createState() => _Login_FormState();
+  _Signup_Form createState() => _Signup_Form();
 }
 
-// create sign up form
-class _Login_FormState extends State<Login_Form> {
-  //const _Login_FormState({Key? key} ) : super(key: key);
-  
-
+class _Signup_Form extends State<Signup_Form> {
   // API
-  final String apiURL = 'http://10.62.77.52:3000/auth/login'; // backend URL
+  final String apiURL = 'http://10.62.78.58:3000/register';
   // create Controller
-  final TextEditingController signIn_email = TextEditingController();
-  final TextEditingController signIn_password = TextEditingController();  
-  
-  String result = ''; // To store the result from the API call
-  bool isVisible = true; // show the password or not
-  // ===========
+  final signUp_firstName = TextEditingController();
+  final signUp_lastName = TextEditingController();
+  final signUp_email = TextEditingController();
+  final signUp_password = TextEditingController();
+  final signUp_confirmPassword = TextEditingController();
+  String result = '';
+  String role = ''; 
+  bool isVisible_1 = true;
+  bool isVisible_2 = true;
 
-  // applying POST request
-  //Future <void> postRequest() async {
-  void postRequest() async {
-    print("test");
-    try {
+  // ======
+
+  @override
+  void dispose() {
+    signUp_firstName.dispose();
+    signUp_lastName.dispose();
+    signUp_email.dispose();
+    signUp_password.dispose();
+    //signUp_confirmPassword.dispose();
+    super.dispose();
+  }
+
+  Future<void> _postData() async{
+    try{
       final response = await http.post(
         Uri.parse(apiURL),
-        headers: <String, String> {
-          'Content-Type': 'application/json; charset=UTF-8',
+        headers: <String, String>{
+          'Content-Type':'application/json; charset=UTF-8',
         },
         body: jsonEncode(<String, dynamic>{
-          'email': signIn_email.text,
-          'password': signIn_password.text
+          'firstName':signUp_firstName.text,
+          'lastName':signUp_lastName.text,
+          'email':signUp_email.text,
+          'password':signUp_password.text,
+          //'confirmPassword':signUp_confirmPassword.text,
+          'role':role,
         }),
       );
-      final responseData = jsonDecode(response.body);
-        final resultString = jsonEncode(responseData);
-      // print(response.statusCode);
-      if (response.statusCode == 200) {
-        // Successful POST request, handle the reponse here
-        
-        setState((){
-          //result = 'Email: ${responseData['email']}\nPassword: ${responseData['password']}';
-          result = resultString;
-          print(resultString);
-        });
 
+      if (response.statusCode == 200){
+        final responseData = jsonDecode(response.body);
+        setState(() {
+          result = 'Name:${responseData['firstName']}';
+        });
       }
       else {
-        // if the server returns an error response, thrown an exception
-        //throw Exception('Failed to post data');
-        print(resultString);
-      }
+        throw Exception('Failed to post data');
+      }    
     }
-    catch (e) {
-      setState((){
+    catch(e){
+      setState(() {
         result = 'Error: $e';
-        print(result);
       });
     }
   }
 
-  // ============
-  @override
-  Widget build(BuildContext context) { 
-    
-    // function for button   
-    void LogIn(){
-      final email = signIn_email.text;
-      debugPrint(signIn_email.text);
-      debugPrint(signIn_password.text);
-      // go to Home Page (home.dart)
+  // ======
 
-      // check empty textfield
-      if (signIn_email.text.isEmpty || signIn_password.text.isEmpty){
-        debugPrint('any field is empty');        
+  @override
+  Widget build(BuildContext context) {
+    
+    // function for button
+    SignUp(){
+      final email = signUp_email.text;
+      final password_1 = signUp_password.text;
+      final password_2 = signUp_confirmPassword.text;
+      
+      debugPrint(signUp_firstName.text);
+      debugPrint(signUp_lastName.text);
+      debugPrint(signUp_email.text);
+      debugPrint(signUp_password.text);
+      
+      //debugPrint(signUp_confirmPassword.text);
+
+      // check empty textfields
+      if (signUp_firstName.text.isEmpty || signUp_lastName.text.isEmpty 
+            || signUp_email.text.isEmpty || signUp_password.text.isEmpty || signUp_confirmPassword.text.isEmpty){
+        debugPrint('any field is empty');
       }
       else {
-        // check email
-        if (RegExp(
-          r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+(@communitymedical.org)$")
-          .hasMatch(email)) {
-          debugPrint('doctor email');
-          // go to Doctor's Home Page (home_doctor.dart)
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => Page_Doctor()), // go to doctor's pages
-          );
-          }
-        else {
+        // check password
+        if (password_1 == password_2){
+          // check doctor or not
           if (RegExp(
-            r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+\.(com|edu|org|gov)$")
+            r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+(@communitymedical.org)$")
             .hasMatch(email)) {
-            debugPrint('patient email');
-            // go to Home Page (home.dart)
+            debugPrint('doctor email');
+            // go to Login Page (main.dart)
+            role = 'staff';
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => Page_User()), // go to user's pages
+              MaterialPageRoute(builder: (context) => LogIn()),
             );
-          } 
-          else {
-            debugPrint('email is incorrect');
           }
+          else {
+            if (RegExp(
+              r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+\.(com|edu|org|gov)$")
+              .hasMatch(email)) {
+              debugPrint('patient email');
+              // go to Login Page (main.dart)
+              role = 'user';
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => LogIn()),
+              );
+            } 
+            else {
+              debugPrint('email has a spelling mistake');
+            }
+          }
+          debugPrint(role);
         }
-      }      
+        else {
+          debugPrint("pasword doesn't match");
+        }
+      }
+      
+      
     }
-    
-  
+
     // main funciton
-    final logIn_form = Container(
+    final signUp_form = Container(
       width: 322,
-      height: 447,
+      height: 680,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
@@ -224,7 +205,7 @@ class _Login_FormState extends State<Login_Form> {
         children: [          
           // Title - Sign In
           const Text(
-            'Log In',
+            'Sign Up',
             style: TextStyle(
               fontSize: 40,
               fontFamily: 'Istok Web',
@@ -232,12 +213,38 @@ class _Login_FormState extends State<Login_Form> {
               height: 0,
             ),
           ),
+          // Text Box for First Name
+          Container(
+            width: 210,
+            height: 56,
+            child: TextField(
+              controller: signUp_firstName,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'First Name',
+                hintText: 'Enter here...',
+              ),
+            ),
+          ),
+          // Text Box for Last Name
+          Container(
+            width: 210,
+            height: 56,
+            child: TextField(
+              controller: signUp_lastName,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Last Name',
+                hintText: 'Enter here...',
+              ),
+            ),
+          ),
           // Text Box for Email
           Container(
             width: 210,
             height: 56,
             child: TextField(
-              controller: signIn_email,
+              controller: signUp_email,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Email',
@@ -249,24 +256,47 @@ class _Login_FormState extends State<Login_Form> {
           Container(
             width: 210,
             height: 56,
-            child: TextFormField(
-              controller: signIn_password,
-              obscureText: isVisible,  // hidden password
+            child: TextField(
+              controller: signUp_password,
+              obscureText: isVisible_1,  // hidden password
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Password',
                 hintText: 'Enter here...',
-                
                 suffixIcon: IconButton(
                   icon: Icon(
-                    isVisible ? Icons.visibility_off : Icons.visibility,
+                    isVisible_1 ? Icons.visibility_off : Icons.visibility,
                   ),
                   onPressed: (){
                     setState(() {
-                        isVisible = !isVisible;
+                        isVisible_1 = !isVisible_1;
                     });
                   },
-                ),                
+                ),
+              ),
+            ),
+          ),
+          // Text Box for Confirm Password
+          Container(
+            width: 210,
+            height: 56,
+            child: TextField(
+              controller: signUp_confirmPassword,
+              obscureText: isVisible_2,  // hidden password
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Confirm Password',
+                hintText: 'Enter here...',
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    isVisible_2 ? Icons.visibility_off : Icons.visibility,
+                  ),
+                  onPressed: (){
+                    setState(() {
+                        isVisible_2 = !isVisible_2;
+                    });
+                  },
+                ),
               ),
             ),
           ),
@@ -274,14 +304,14 @@ class _Login_FormState extends State<Login_Form> {
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: Color(0xFF6750A4),
-              foregroundColor: Colors.white, 
+              foregroundColor: Colors.white,
             ),
-            onPressed: () {
-              LogIn(); //LogIn
-              postRequest();              
-            },  
+            onPressed: (){
+              _postData();
+              SignUp();
+            }, 
             child: const Text(
-              'Sign In',
+              'Create Account',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 14,
@@ -292,35 +322,37 @@ class _Login_FormState extends State<Login_Form> {
               ),
             ),
           ),
-          // go to Sign Up page (signup.dart)        
+          // go to Sign In page
           TextButton(
             onPressed: (){
-              //signIn_email.clear();
-              //signIn_password.clear();
+              //Navigator.pop(context);
+              //signUp_firstName.clear();
+              //signUp_lastName.clear();     
+              //signUp_email.clear();
+              //signUp_password.clear();   
+              //signUp_confirmPassword.clear();
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => SignUp()),
-              );
-            },
+                MaterialPageRoute(builder: (context) => LogIn()),
+              );             
+            }, 
             child: const Text(
-            "Don't Have an Account? Sing Up",
-            style: TextStyle(
-              color: Color(0xFF0000FF),
-              fontSize: 16,
-              fontFamily: 'Roboto',
-              fontWeight: FontWeight.w400,   
-              decoration: TextDecoration.underline, 
-              decorationColor: Color(0xFF0000FF),          
-              height: 0.09,
-              letterSpacing: 0.50,
-              
+              "Already Have an Account? Sign In",
+              style: TextStyle(
+                color: Color(0xFF0000FF),
+                fontSize: 16,
+                fontFamily: 'Roboto',
+                fontWeight: FontWeight.w400,   
+                decoration: TextDecoration.underline, 
+                decorationColor: Color(0xFF0000FF),          
+                height: 0.09,
+                letterSpacing: 0.50,              
+              ),
             ),
           ),
-          ), 
-          
       ]),
     );
-    
-    return logIn_form;
+
+    return signUp_form;
   }
 }
