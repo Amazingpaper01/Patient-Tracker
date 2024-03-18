@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:practice/main.dart';    // for Login Page
 //import 'package:practice/user/home.dart';    // for Home Page
 import 'package:practice/user/page.dart';    
+import 'package:practice/user/patient.dart';
 import 'package:practice/staff/page.dart';  // for doctor's Home Page
 import 'package:http/http.dart' as http;  // for http
 import 'dart:convert';  // for decoding received JSON

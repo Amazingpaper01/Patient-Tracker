@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:practice/user/patient.dart'; // for Patient Information Page
-import 'package:practice/user/home.dart';    // for Home Page
-import 'package:practice/user/settings.dart'; // for Settings Page
+//import 'package:practice/user/patient.dart';
+import 'package:google_fonts/google_fonts.dart'; // for using Google Font
 
 class Page_User extends StatefulWidget {
   //const MyWidget({super.key});
@@ -11,45 +11,40 @@ class Page_User extends StatefulWidget {
 }
 
 class _Page extends State<Page_User> {
-  // set bottom navigation bar
-  static const _screen = [
-    Patient(),
-    Home(),
-    Settings()
-  ];
-
-  int selectedIndex = 0;
-  void _onItemTapped (int index){
-    setState((){
-      selectedIndex = index;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: _screen[selectedIndex],  
-        bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Color(0xFF323264),
-          selectedItemColor: Color.fromARGB(255, 124, 190, 240),
-          unselectedItemColor: Colors.white,  // set icon color when unselected
-          currentIndex: selectedIndex,
-          onTap: _onItemTapped,
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person), 
-              label: 'Patient',
-              ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home), 
-              label: 'Home'
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        centerTitle: false,
+        title: IconButton(
+          icon: Image.asset(
+                'assets/images/patient_logo.png',
+                height: 80,
+                width: 80,
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.settings), 
-              label: 'Setting'
+          //iconSize: 70,
+          onPressed: (){
+            //
+          },
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(
+              Icons.account_circle,
+              color: Color(0xFF373C88),
+              size: 40
             ),
-          ],
-        ),     
-      );
+            onPressed: (){
+              //Navigator.pop(context);
+            },
+          ),
+          SizedBox(width: 10),
+        ],     
+        backgroundColor: Color(0xFFF4F4F4),
+      ),
+      body: add_patient(),
+    );
   }
 }

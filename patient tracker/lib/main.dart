@@ -6,7 +6,6 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
 import 'package:google_fonts/google_fonts.dart'; // for using Google Font
-import 'package:stroke_text/stroke_text.dart'; // for using outline to text
 
 void main() => runApp(const MyApp());
 

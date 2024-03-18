@@ -3,60 +3,6 @@ import 'package:google_fonts/google_fonts.dart'; // for using Google Font
 import 'package:stroke_text/stroke_text.dart'; // for using outline to text
 import 'package:practice/user/patient_list.dart';
 
-class Patient extends StatelessWidget {
-  const Patient({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(        
-        appBar: AppBar(
-          centerTitle: false,
-          title: Stack (
-            clipBehavior: Clip.none,
-            children: [
-              //SizedBox(width: 100),
-              Container (
-                width: 45,
-                height: 45,
-                decoration: ShapeDecoration(
-                  color: Colors.white.withOpacity(0.5899999737739563),
-                  shape: OvalBorder(),
-                ),
-              ),
-              Positioned(
-                left: -4.5,
-                top: -2,
-                child: Image.asset(
-                  'assets/images/patient_logo.png',
-                  height: 55,
-                  width: 55,
-                ),
-              ),              
-              Positioned(
-                left: 30,
-                top: 20,
-                child: StrokeText(
-                  text: 'atient',
-                  textStyle: GoogleFonts.libreBodoni(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontStyle: FontStyle.italic,
-                  ),
-                  strokeColor: Color(0xFF323264),
-                  strokeWidth: 5,
-                ),
-              ),
-              //Text('Patient'),             
-            ],
-          ),        
-          backgroundColor: const Color(0xFF323264),
-        ),
-        body: add_patient(),  
-      );
-  }
-}
-
-
 class listData {
   String fName;
   String lName;
@@ -67,8 +13,6 @@ class listData {
 
 // patient list
 List<listData> patientList = [];
-
-
 
 //List<String> patientList  = ['Kazuya'];
 
@@ -132,14 +76,14 @@ class _add_patient extends State<add_patient> {
                 Text(
                   'Add Patient',
                   style: TextStyle(
-                    color: Color(0xBA4F96AC),
+                    color: Color(0xFF373C88),
                   ),
                 ),
                 SizedBox(width: 90),
                 IconButton(
                   icon: Icon(
                     Icons.close,
-                    color: Color(0xBA4F96AC),
+                    color: Color(0xFF373C88),
                   ),
                   onPressed: (){
                     Navigator.pop(context);
@@ -209,7 +153,7 @@ class _add_patient extends State<add_patient> {
                         style: ElevatedButton.styleFrom(
                           //primary:  // background
                           //onPrimary: // foreground
-                          backgroundColor: Color(0xBA4F96AC),
+                          backgroundColor: Color(0xFF373C88),
                           foregroundColor: Colors.white, 
                         ),
                         onPressed: () async {
@@ -229,7 +173,7 @@ class _add_patient extends State<add_patient> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [                   
                               Text(
-                                'Save',
+                                'Add',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   color: Colors.white,
@@ -258,7 +202,7 @@ class _add_patient extends State<add_patient> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.orange[50], // Color.(0xffE5E5E5)
+      backgroundColor: Colors.white, // Color.(0xffE5E5E5)
       body: Container(   
         width: double.infinity,     
         child: Column(  
@@ -299,7 +243,7 @@ class _add_patient extends State<add_patient> {
             SizedBox(height: 30),                          
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFF49DAF9),
+                backgroundColor: Color(0xFF373C88),
                 foregroundColor: Colors.white
               ),
               onPressed: () async {                
