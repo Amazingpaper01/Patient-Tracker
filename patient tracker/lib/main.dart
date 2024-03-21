@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:practice/signup.dart';  // for SignUp page
 import 'package:practice/user/page.dart';    
 import 'package:practice/staff/page.dart';  // for doctor's Home Page
@@ -6,6 +7,9 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
 import 'package:google_fonts/google_fonts.dart'; // for using Google Font
+import 'package:form_field_validator/form_field_validator.dart';
+	
+
 
 void main() => runApp(const MyApp());
 
@@ -20,6 +24,7 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
 
 // create LogIn page
 class LogIn extends StatefulWidget {
@@ -39,6 +44,8 @@ class _LogIn extends State<LogIn> {
   String result = ''; // To store the result from the API call
   bool isVisible = true; // show the password or not
   // ===========
+
+  
 
   // applying POST request
   //Future <void> postRequest() async {
@@ -86,6 +93,8 @@ class _LogIn extends State<LogIn> {
   @override
   Widget build(BuildContext context) {
 
+    final formKey = GlobalKey<FormState>();
+
     // function for button   
     void LogIn(){
       final email = signIn_email.text;
@@ -108,7 +117,9 @@ class _LogIn extends State<LogIn> {
             context,
             MaterialPageRoute(builder: (context) => Page_Doctor()), // go to doctor's pages
           );
-          }
+          signIn_email.clear();
+          signIn_password.clear();
+        }
         else {
           if (RegExp(
             r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+\.(com|edu|org|gov)$")
@@ -119,6 +130,8 @@ class _LogIn extends State<LogIn> {
               context,
               MaterialPageRoute(builder: (context) => Page_User()), // go to user's pages
             );
+            signIn_email.clear();
+            signIn_password.clear();
           } 
           else {
             debugPrint('email is incorrect');
@@ -129,12 +142,14 @@ class _LogIn extends State<LogIn> {
     // ===========
 
     return Scaffold(
-      body: Container(
-        
+      body: Container( // Container
+        //key: _formKey,
+        child: Form(
+          key: formKey,
         child: Column(
           //mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
+          children: <Widget>[
             SizedBox(
               width: double.infinity,
               height: 30
@@ -191,23 +206,49 @@ class _LogIn extends State<LogIn> {
             ),
             SizedBox(height: 65),
             // == Text Box for Email ==
+
             Container(
               width: 210,
-              height: 56,
-              child: TextField(
+              //height: 56,
+              child: TextFormField(                
                 controller: signIn_email,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Email',
                   hintText: 'Enter here...',
                 ),
+                /* error message */
+                validator: (value) {
+                  if (value == null || value.isEmpty){
+                    return 'Please enter your email';
+                  }
+                  if (value.isNotEmpty) {
+                    if (RegExp(
+                      r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+(@communitymedical.org)$")
+                      .hasMatch(value)) {
+                      return null;
+                    }
+                    else {
+                      if (RegExp(
+                        r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+\.(com|edu|org|gov)$")
+                        .hasMatch(value)) {
+                        return null;
+                      } 
+                      else {
+                        return 'Something went wrong';
+                      }
+                    }
+                  }
+                  return null;
+                }    
+                      
               ),
-            ),
+            ),            
             SizedBox(height: 25),
             // == Text Box for Password ==
             Container(
               width: 210,
-              height: 56,
+              //height: 56,
               child: TextFormField(
                 controller: signIn_password,
                 obscureText: isVisible,  // hidden password
@@ -224,8 +265,15 @@ class _LogIn extends State<LogIn> {
                           isVisible = !isVisible;
                       });
                     },
-                  ),                  
+                  ),                                    
                 ),
+                /* error message */
+                validator: (value) {
+                  if (value == null || value.isEmpty){
+                    return 'Please enter your passwords';
+                  }
+                  return null;                  
+                },
               ),
             ),
             SizedBox(height: 50),
@@ -236,10 +284,12 @@ class _LogIn extends State<LogIn> {
                 foregroundColor: Colors.white, 
               ),
               onPressed: () {
-                LogIn(); //LogIn
-                postRequest();    
-                signIn_email.clear();
-                signIn_password.clear();          
+                if (formKey.currentState!.validate()){
+                  LogIn(); //LogIn
+                  postRequest();    
+                  //signIn_email.clear();
+                  //signIn_password.clear();  
+                }        
               },  
               child: const Text(
                 'Log In',
@@ -325,6 +375,7 @@ class _LogIn extends State<LogIn> {
               ),
             ),   
           ],
+        ),
         ),
       ),
     );

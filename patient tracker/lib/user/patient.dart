@@ -257,7 +257,7 @@ class _add_patient extends State<add_patient> {
                   //crossAxisAlignment: CrossAxisAlignment.center, 
                   children: [                  
                     Icon(
-                        Icons.person_add,
+                        Icons.add,
                         color: Colors.white,
                       ),
                     SizedBox(width: 8),
