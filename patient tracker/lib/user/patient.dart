@@ -12,7 +12,7 @@ class listData {
 }
 
 // patient list
-List<listData> patientList = [];
+//List<listData> patientList = [];
 
 //List<String> patientList  = ['Kazuya'];
 
@@ -23,6 +23,9 @@ class add_patient extends StatefulWidget {
   State<add_patient> createState() => _add_patient();
 }
 
+
+List<listData> patientList = <listData>[]; 
+
 class _add_patient extends State<add_patient> {
 
   // create Controller
@@ -31,36 +34,31 @@ class _add_patient extends State<add_patient> {
   final TextEditingController patient_ID = TextEditingController();  
 
   // patient data list
-  //List<String> patientList  = [];
-  List<String> patientList2 = [];
-
   newPatient(){
     debugPrint(patient_fname.text);
     debugPrint(patient_lname.text);
     debugPrint(patient_ID.text);
-    //patientList.add(patient_fname.text);
     final num = patientList.length;
     debugPrint(num.toString());
     patient_fname.clear();
-    //debugPrint(patientList[0]);
-    //createList();
-    //patientList.add(listData('John','Doe',456));
+    patient_lname.clear();
+    patient_ID.clear();
   }
 
   
   createList(){
-    if (patientList2.length == 0){
+    if (patientList.length == 0){
       return patient_list();
-    }
-    
+    }    
     else {
       return Text('Patient List:');
-    }
-    
+    }    
   }
   
   
-  String _text = '';
+  String text_fname = '';
+  String text_lname = '';
+  int text_patientID = 0;
   
 
   // create form
@@ -110,7 +108,7 @@ class _add_patient extends State<add_patient> {
                     ),
                     onChanged: (String value){
                       setState(() {
-                        _text = value;
+                        text_fname = value;
                       });
                     },
                   ),
@@ -127,6 +125,11 @@ class _add_patient extends State<add_patient> {
                       labelText: 'Last Name',
                       hintText: 'Enter here...',
                     ),
+                    onChanged: (String value){
+                      setState(() {
+                        text_lname = value;
+                      });
+                    },
                   ),
                 ),
                 SizedBox(height: 30),
@@ -141,6 +144,11 @@ class _add_patient extends State<add_patient> {
                       labelText: 'Patient ID',
                       hintText: 'Enter here...',
                     ),
+                    onChanged: (String value){
+                      setState(() {
+                        text_patientID = int.parse(value);  // convert string to int
+                      });
+                    },
                   ),
                 ),
                 SizedBox(height: 30),
@@ -151,18 +159,15 @@ class _add_patient extends State<add_patient> {
                     children: [
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          //primary:  // background
-                          //onPrimary: // foreground
                           backgroundColor: Color(0xFF373C88),
                           foregroundColor: Colors.white, 
                         ),
                         onPressed: () async {
-                          // Add your logic here
                           //Navigator.of(context).pop(_text);
                           newPatient(); 
                           Navigator.of(context).pop();
                           setState(() {
-                            patientList2.add(_text);
+                            patientList.add(listData(text_fname, text_lname, text_patientID));  // add elements to the list
                           });
                         },
                         child: SizedBox(
@@ -191,6 +196,7 @@ class _add_patient extends State<add_patient> {
                     ],
                   ),
                 ),
+                SizedBox(height: 50),
               ],
             ),
           ),        
@@ -205,78 +211,139 @@ class _add_patient extends State<add_patient> {
       backgroundColor: Colors.white, // Color.(0xffE5E5E5)
       body: Container(   
         width: double.infinity,     
-        child: Column(  
-            //mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,      
+        child: ListView(
           children: [
-            //patient_list(),            
-            SizedBox(height: 30), 
-            // create a list based on input data            
-            createList(),
-            
-            Container(
-              child: ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(), 
-                itemCount: patientList2.length,
-                itemBuilder: (context, index){
-                  return Card(
-                    //child: Text(patientList[index].fName),
-                    child: ListTile(
-                      title: Text(patientList2[index]),
-                    ),
-                  );
-                },
-              ),
-            ),
-            
-            /*
-            ListView.builder(
-              itemCount: patientList.length,
-              itemBuilder: (context, index) {
-                return Card(
-                  child: Text(patientList[index]),
-                );
-              },
-            ),
-            */
-            SizedBox(height: 30),                          
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFF373C88),
-                foregroundColor: Colors.white
-              ),
-              onPressed: () async {                
-                InputDialog(context);                  
-              },  
-              child: SizedBox(
-                width: 143,
-                height: 40,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  //crossAxisAlignment: CrossAxisAlignment.center, 
-                  children: [                  
-                    Icon(
-                        Icons.add,
-                        color: Colors.white,
-                      ),
-                    SizedBox(width: 8),
-                    Text(
-                      'New Patient',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
-                        fontFamily: 'Roboto',
-                        fontWeight: FontWeight.w500,
-                        height: 0.10,
-                        letterSpacing: 0.10,
-                      ),
-                    ),
-                  ]
+            Column(  
+              crossAxisAlignment: CrossAxisAlignment.center,      
+              children: [
+                //patient_list(),            
+                SizedBox(height: 30), 
+                // create a list based on input data            
+                createList(),                
+                Container(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(), 
+                    itemCount: patientList.length,
+                    itemBuilder: (context, index){
+                      return Card (    
+                        margin: EdgeInsets.all(10),
+                        color: const Color(0xFFF4F4F4),
+                        shape: RoundedRectangleBorder(
+                          side: BorderSide(
+                            color: const Color(0xFF373C88), // border color
+                            width: 1, // border thickness                              
+                          ),   
+                          borderRadius: BorderRadius.circular(10)        
+                        ),
+                        child: ListTile(      
+                          leading: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                onPressed: (){
+
+                                }, 
+                                icon: Icon(Icons.favorite_outline_outlined)
+                              ),
+                              SizedBox(width: 10),
+                              CircleAvatar(
+                                backgroundColor: Color(0xFF373C88),
+                                child: Text(
+                                  'MK',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 3),
+                            ],
+                          ),
+                          title: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                patientList[index].fName,
+                                style: GoogleFonts.roboto(
+                                  color: Color(0xFF373C88),
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w500,
+                                  //height: 0.09,
+                                  letterSpacing: 0.15,
+                                ),
+                              ),
+                              SizedBox(width: 5),
+                              Text(
+                                patientList[index].lName,
+                                style: GoogleFonts.roboto(
+                                  color: Color(0xFF373C88),
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w500,
+                                  //height: 0.09,
+                                  letterSpacing: 0.15,
+                                ),
+                              ),
+                            ],
+                          ),
+                          subtitle: Text(
+                            'Dr. Joseph Green',
+                            style: GoogleFonts.roboto(
+                              color: Color(0xFF373C88),
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                              height: 0.10,
+                              letterSpacing: 0.25,
+                            ),
+                          ),
+                          trailing: IconButton(                          
+                            onPressed: (){
+                            }, 
+                            icon: Icon(Icons.do_not_disturb_on),
+                          ),   
+                        ),   
+                      );
+                    },
+                  ),
                 ),
-              ),
-            ),            
-          ],
+                SizedBox(height: 30),                          
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFF373C88),
+                    foregroundColor: Colors.white
+                  ),
+                  onPressed: () async {                
+                    InputDialog(context);                  
+                  },  
+                  child: SizedBox(
+                    width: 143,
+                    height: 40,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [                  
+                        Icon(
+                            Icons.add,
+                            color: Colors.white,
+                          ),
+                        SizedBox(width: 8),
+                        Text(
+                          'New Patient',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontFamily: 'Roboto',
+                            fontWeight: FontWeight.w500,
+                            height: 0.10,
+                            letterSpacing: 0.10,
+                          ),
+                        ),
+                      ]
+                    ),
+                  ),
+                ),            
+              ],
+            ),
+          ]
         ),
       ),
     );
