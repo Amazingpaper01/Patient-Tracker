@@ -278,7 +278,7 @@ class _SignUp extends State<SignUp> {
                               return null;
                             } 
                             else {
-                              return 'Email has a spelling mistake';
+                              return 'Not a valid email';
                             }
                           }
                         }                      
@@ -311,8 +311,8 @@ class _SignUp extends State<SignUp> {
                       validator: (value){
                         if (value == null || value.isEmpty){
                           return 'Please enter you password';
-                        }
-                        if(value.isNotEmpty){
+                        } else
+                        if (value.isNotEmpty){
                           if (signUp_password.text != signUp_confirmPassword.text){
                             return "Pasword doesn't match";
                           }
@@ -346,7 +346,7 @@ class _SignUp extends State<SignUp> {
                       validator: (value){
                         if(value == null || value.isEmpty){
                           return 'Please enter your password';
-                        }
+                        } else
                         if(value.isNotEmpty){
                           if (signUp_password.text != signUp_confirmPassword.text){
                             return "Pasword doesn't match";

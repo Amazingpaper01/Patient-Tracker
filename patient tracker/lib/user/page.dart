@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:practice/user/patient.dart'; // for Patient Information Page
 //import 'package:practice/user/patient.dart';
+import 'package:practice/main.dart';    
+import 'package:google_fonts/google_fonts.dart'; // for using Google Font
 import 'package:google_fonts/google_fonts.dart'; // for using Google Font
 
 class Page_User extends StatefulWidget {
@@ -11,52 +14,10 @@ class Page_User extends StatefulWidget {
 }
 
 class _Page extends State<Page_User> {
-  /*
-  final GlobalKey _actionKey = GlobalKey();
-  OverlayEntry? _menuOverlayEntry;
-
-  void logoutButton(){
-    final renderBox = _actionKey.currentContext?.findRenderObject() as RenderBox;
-    const menuWidth = 200.0;
-    
-    // overlay to show the menu
-    _menuOverlayEntry = OverlayEntry(builder: (context) {
-      return Stack(
-        children: [
-          // set clear background
-          Positioned.fill(
-            child: GestureDetector(
-              onTap: _closeMenu,
-              child: Container(color: Colors.transparent),
-            )
-          ),
-          // the widget to show the menu
-          Positioned(
-            left: MediaQuery.of(context).size.width - menuWidth - 24,
-            top: renderBox.size.height / 2,
-            width: menuWidth,
-            child: AccountMenu(
-              onClose: _closeMenu,
-            ),
-          ),
-        ],
-      );
-    });
-    // show the menu
-    Overlay.of(context).insert(_menuOverlayEntry!);
-  }
-  
-
-  void _closeMenu(){
-    // close the menu
-    _menuOverlayEntry?.remove();
-    _menuOverlayEntry = null;
-  }
-  */
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Scaffold(      
       appBar: AppBar(
         automaticallyImplyLeading: false,
         centerTitle: false,
@@ -66,28 +27,54 @@ class _Page extends State<Page_User> {
                 height: 80,
                 width: 80,
             ),
-          //iconSize: 70,
           onPressed: (){
             //
           },
         ),
-        actions: [
-          IconButton(
-            icon: Icon(
-              Icons.account_circle,
-              color: Color(0xFF373C88),
-              size: 40
-            ),
-            onPressed: (){
-              //Navigator.pop(context);
-              //logoutButton(),
+        actions: <Widget> [
+          PopupMenuButton<String>(
+            offset: Offset(0.0, 50), // position
+            constraints: BoxConstraints.expand(width: 120, height: 65), // size
+            color: Color(0xFFF4F4F4),  // color
+            surfaceTintColor: Color(0xFFF4F4F4),  // color
+            onSelected: (String value) async {
+              if (value == 'logout'){                
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LogIn()), // go to user's pages
+                );                
+              }
             },
+            child: CircleAvatar(
+              child: Icon(
+                Icons.account_circle,
+                color: Color(0xFF373C88),
+                size: 40,                
+              ),
+              backgroundColor: Color(0xFFF4F4F4),
+            ),            
+            itemBuilder: (context) {
+              return [
+                PopupMenuItem(
+                  value: 'logout',
+                  //enabled: false,
+                  child: Text('Log Out',
+                    style: GoogleFonts.montserrat(
+                      color: Color(0xFF373C88),
+                      fontSize: 22,
+                      fontWeight: FontWeight.w400,
+                      height: 0.06,                        
+                    ),
+                  ),
+                ),
+              ];
+            }
           ),
-          SizedBox(width: 10),
-        ],     
+        ],
         backgroundColor: Color(0xFFF4F4F4),
       ),
       body: add_patient(),
     );
   }
 }
+
