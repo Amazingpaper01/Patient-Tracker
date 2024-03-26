@@ -148,7 +148,7 @@ class _LogIn extends State<LogIn> {
             children: <Widget>[
               SizedBox(
                 width: double.infinity,
-                height: 30
+                height: 60
               ),
               Stack (
                 clipBehavior: Clip.none,
@@ -229,7 +229,7 @@ class _LogIn extends State<LogIn> {
                           return null;
                         } 
                         else {
-                          return 'Something went wrong';
+                          return 'Not a valid email';
                         }
                       }
                     }

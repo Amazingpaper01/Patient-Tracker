@@ -159,7 +159,7 @@ class _SignUp extends State<SignUp> {
                 children: [
                   SizedBox(
                     width: double.infinity,
-                    height: 30
+                    height: 60
                   ),
                   Stack (
                     clipBehavior: Clip.none,
@@ -200,7 +200,7 @@ class _SignUp extends State<SignUp> {
                       ),              
                     ],
                   ),
-                  SizedBox(height: 35),
+                  SizedBox(height: 40),
                   Text(
                     'Register',
                     style: GoogleFonts.montserrat(
@@ -211,7 +211,7 @@ class _SignUp extends State<SignUp> {
                       letterSpacing: 0.10,
                     ),
                   ),
-                  SizedBox(height: 40),
+                  SizedBox(height: 50),
                   /* Text Box for First Name */
                   Container(
                     width: 210,
@@ -230,7 +230,7 @@ class _SignUp extends State<SignUp> {
                       },
                     ),
                   ),
-                  SizedBox(height: 15),
+                  SizedBox(height: 20),
                   /* Text Box for Last Name */
                   Container(
                     width: 210,
@@ -249,7 +249,7 @@ class _SignUp extends State<SignUp> {
                       },
                     ),
                   ),
-                  SizedBox(height: 15),
+                  SizedBox(height: 20),
                   /* Text Box for Email */
                   Container(
                     width: 210,
@@ -286,7 +286,7 @@ class _SignUp extends State<SignUp> {
                       },
                     ),
                   ),
-                  SizedBox(height: 15),
+                  SizedBox(height: 20),
                   /* Text Box for Password */
                   Container(
                     width: 210,
@@ -321,7 +321,7 @@ class _SignUp extends State<SignUp> {
                       },
                     ),
                   ),
-                  SizedBox(height: 15),
+                  SizedBox(height: 20),
                   /* Text Box for Confirm Password */
                   Container(
                     width: 210,
@@ -386,7 +386,7 @@ class _SignUp extends State<SignUp> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 30),
+                  SizedBox(height: 40),
                   Container(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,

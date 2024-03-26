@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:practice/main.dart';  
+import 'package:practice/user/patientInfo.dart'; // for patient Home 
 import 'package:google_fonts/google_fonts.dart'; // for using Google Font
 import 'package:stroke_text/stroke_text.dart'; // for using outline to text
 import 'package:practice/user/patient_list.dart';
@@ -7,8 +9,10 @@ class listData {
   String fName;
   String lName;
   int patientID;
+  String initial_fName;
+  String initial_lName;
 
-  listData (this.fName, this.lName, this.patientID);
+  listData (this.fName, this.lName, this.patientID, this.initial_fName, this.initial_lName);
 }
 
 // patient list
@@ -49,16 +53,18 @@ class _add_patient extends State<add_patient> {
   createList(){
     if (patientList.length == 0){
       return patient_list();
-    }    
+    }        
     else {
-      return Text('Patient List:');
-    }    
+      return not_EmptyList();
+    }      
   }
   
   
   String text_fname = '';
   String text_lname = '';
   int text_patientID = 0;
+  String text_initial_fname = '';
+  String text_initial_lname = '';
   
 
   // create form
@@ -109,6 +115,7 @@ class _add_patient extends State<add_patient> {
                     onChanged: (String value){
                       setState(() {
                         text_fname = value;
+                        text_initial_fname = text_fname[0];
                       });
                     },
                   ),
@@ -128,6 +135,7 @@ class _add_patient extends State<add_patient> {
                     onChanged: (String value){
                       setState(() {
                         text_lname = value;
+                        text_initial_lname = text_lname[0];
                       });
                     },
                   ),
@@ -167,7 +175,7 @@ class _add_patient extends State<add_patient> {
                           newPatient(); 
                           Navigator.of(context).pop();
                           setState(() {
-                            patientList.add(listData(text_fname, text_lname, text_patientID));  // add elements to the list
+                            patientList.add(listData(text_fname, text_lname, text_patientID, text_initial_fname, text_initial_lname));  // add elements to the list
                           });
                         },
                         child: SizedBox(
@@ -226,82 +234,98 @@ class _add_patient extends State<add_patient> {
                     physics: const NeverScrollableScrollPhysics(), 
                     itemCount: patientList.length,
                     itemBuilder: (context, index){
-                      return Card (    
-                        margin: EdgeInsets.all(10),
-                        color: const Color(0xFFF4F4F4),
-                        shape: RoundedRectangleBorder(
-                          side: BorderSide(
-                            color: const Color(0xFF373C88), // border color
-                            width: 1, // border thickness                              
-                          ),   
-                          borderRadius: BorderRadius.circular(10)        
-                        ),
-                        child: ListTile(      
-                          leading: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              IconButton(
-                                onPressed: (){
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => patientHome()), // go to user's pages
+                          ); 
+                        },
+                        child: Card (    
+                          margin: EdgeInsets.all(10),
+                          color: const Color(0xFFF4F4F4),
+                          shape: RoundedRectangleBorder(
+                            side: BorderSide(
+                              color: const Color(0xFF373C88), // border color
+                              width: 1, // border thickness                              
+                            ),   
+                            borderRadius: BorderRadius.circular(10)        
+                          ),
+                          child: ListTile(      
+                            leading: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                IconButton(
+                                  onPressed: (){
 
-                                }, 
-                                icon: Icon(Icons.favorite_outline_outlined)
-                              ),
-                              SizedBox(width: 10),
-                              CircleAvatar(
-                                backgroundColor: Color(0xFF373C88),
-                                child: Text(
-                                  'MK',
-                                  style: TextStyle(
-                                    color: Colors.white,
+                                  }, 
+                                  icon: Icon(Icons.favorite_outline_outlined)
+                                ),
+                                SizedBox(width: 10),
+                                CircleAvatar(
+                                  backgroundColor: Color(0xFF373C88),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(
+                                        patientList[index].initial_fName,
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      Text(
+                                        patientList[index].initial_lName,
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ),
-                              SizedBox(width: 3),
-                            ],
-                          ),
-                          title: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(
-                                patientList[index].fName,
-                                style: GoogleFonts.roboto(
-                                  color: Color(0xFF373C88),
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w500,
-                                  //height: 0.09,
-                                  letterSpacing: 0.15,
-                                ),
-                              ),
-                              SizedBox(width: 5),
-                              Text(
-                                patientList[index].lName,
-                                style: GoogleFonts.roboto(
-                                  color: Color(0xFF373C88),
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w500,
-                                  //height: 0.09,
-                                  letterSpacing: 0.15,
-                                ),
-                              ),
-                            ],
-                          ),
-                          subtitle: Text(
-                            'Dr. Joseph Green',
-                            style: GoogleFonts.roboto(
-                              color: Color(0xFF373C88),
-                              fontSize: 12,
-                              fontWeight: FontWeight.w400,
-                              height: 0.10,
-                              letterSpacing: 0.25,
+                                SizedBox(width: 3),
+                              ],
                             ),
-                          ),
-                          trailing: IconButton(                          
-                            onPressed: (){
-                            }, 
-                            icon: Icon(Icons.do_not_disturb_on),
-                          ),   
-                        ),   
+                            title: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  patientList[index].fName,
+                                  style: GoogleFonts.roboto(
+                                    color: Color(0xFF373C88),
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                SizedBox(width: 5),
+                                Text(
+                                  patientList[index].lName,
+                                  style: GoogleFonts.roboto(
+                                    color: Color(0xFF373C88),
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            subtitle: Text(
+                              'Dr. Joseph Green',
+                              style: GoogleFonts.roboto(
+                                color: Color(0xFF373C88),
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            trailing: IconButton(                          
+                              onPressed: (){
+                              }, 
+                              icon: Icon(
+                                Icons.do_not_disturb_on,
+                                color: Color(0xFFD00202),
+                              ),
+                            ),   
+                          ),  
+                        ), 
                       );
                     },
                   ),

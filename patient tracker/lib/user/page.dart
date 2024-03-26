@@ -4,7 +4,6 @@ import 'package:practice/user/patient.dart'; // for Patient Information Page
 //import 'package:practice/user/patient.dart';
 import 'package:practice/main.dart';    
 import 'package:google_fonts/google_fonts.dart'; // for using Google Font
-import 'package:google_fonts/google_fonts.dart'; // for using Google Font
 
 class Page_User extends StatefulWidget {
   //const MyWidget({super.key});
@@ -41,17 +40,20 @@ class _Page extends State<Page_User> {
               if (value == 'logout'){                
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => LogIn()), // go to user's pages
+                  MaterialPageRoute(builder: (context) => LogIn()), // go to patient home pages
                 );                
               }
             },
-            child: CircleAvatar(
-              child: Icon(
-                Icons.account_circle,
-                color: Color(0xFF373C88),
-                size: 40,                
+            child: Container(
+              margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+              child:CircleAvatar(
+                child: Icon(
+                  Icons.account_circle,
+                  color: Color(0xFF373C88),
+                  size: 40,                
+                ),
+                backgroundColor: Color(0xFFF4F4F4),
               ),
-              backgroundColor: Color(0xFFF4F4F4),
             ),            
             itemBuilder: (context) {
               return [
@@ -63,10 +65,10 @@ class _Page extends State<Page_User> {
                       color: Color(0xFF373C88),
                       fontSize: 22,
                       fontWeight: FontWeight.w400,
-                      height: 0.06,                        
                     ),
                   ),
                 ),
+          
               ];
             }
           ),
