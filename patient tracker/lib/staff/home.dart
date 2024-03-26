@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:practice/user/patient.dart'; // for Patient Information Page
-//import 'package:practice/user/patient.dart';
-import 'package:practice/main.dart';    
+import 'package:practice/main.dart';   // for login page 
 import 'package:google_fonts/google_fonts.dart'; // for using Google Font
+import 'package:stroke_text/stroke_text.dart'; // for using outline to text
 
-class Page_User extends StatefulWidget {
+class Page_Doctor extends StatefulWidget {
   //const MyWidget({super.key});
 
   @override
-  State<Page_User> createState() => _Page();
+  State<Page_Doctor> createState() => _Page();
 }
 
-class _Page extends State<Page_User> {
+class _Page extends State<Page_Doctor> {
 
   @override
   Widget build(BuildContext context) {
@@ -75,8 +73,7 @@ class _Page extends State<Page_User> {
         ],
         backgroundColor: Color(0xFFF4F4F4),
       ),
-      body: add_patient(),
+      //body: add_patient(),
     );
   }
 }
-

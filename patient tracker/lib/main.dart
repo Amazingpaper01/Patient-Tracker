@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:practice/signup.dart';  // for SignUp page
-import 'package:practice/user/page.dart';    
-import 'package:practice/staff/page.dart';  // for doctor's Home Page
+import 'package:practice/user/home.dart';    
+import 'package:practice/staff/home.dart';  // for doctor's Home Page
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
