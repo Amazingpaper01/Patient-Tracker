@@ -30,6 +30,8 @@ class add_patient extends StatefulWidget {
 
 List<listData> patientList = <listData>[]; 
 
+List<bool> favoriteButton = [];
+
 class _add_patient extends State<add_patient> {
 
   // create Controller
@@ -39,16 +41,10 @@ class _add_patient extends State<add_patient> {
 
   // patient data list
   newPatient(){
-    debugPrint(patient_fname.text);
-    debugPrint(patient_lname.text);
-    debugPrint(patient_ID.text);
-    final num = patientList.length;
-    debugPrint(num.toString());
     patient_fname.clear();
     patient_lname.clear();
     patient_ID.clear();
   }
-
   
   createList(){
     if (patientList.length == 0){
@@ -65,7 +61,8 @@ class _add_patient extends State<add_patient> {
   int text_patientID = 0;
   String text_initial_fname = '';
   String text_initial_lname = '';
-  
+
+  bool isFavorite = true;  
 
   // create form
   Future<void> InputDialog(BuildContext context) async {
@@ -176,6 +173,7 @@ class _add_patient extends State<add_patient> {
                           Navigator.of(context).pop();
                           setState(() {
                             patientList.add(listData(text_fname, text_lname, text_patientID, text_initial_fname, text_initial_lname));  // add elements to the list
+                            favoriteButton.add(isFavorite);
                           });
                         },
                         child: SizedBox(
@@ -257,9 +255,14 @@ class _add_patient extends State<add_patient> {
                               children: [
                                 IconButton(
                                   onPressed: (){
-
+                                    setState(() {
+                                        favoriteButton[index] = !favoriteButton[index];
+                                    });
                                   }, 
-                                  icon: Icon(Icons.favorite_outline_outlined)
+                                  icon: Icon(
+                                    favoriteButton[index] ? Icons.favorite_outline_outlined : Icons.favorite,
+                                    color: favoriteButton[index] ? null: Color(0xffff0000)
+                                  ),
                                 ),
                                 SizedBox(width: 10),
                                 CircleAvatar(
@@ -318,6 +321,8 @@ class _add_patient extends State<add_patient> {
                             ),
                             trailing: IconButton(                          
                               onPressed: (){
+                                /* delete the list*/
+                                //patientList.removeAt(index);
                               }, 
                               icon: Icon(
                                 Icons.do_not_disturb_on,

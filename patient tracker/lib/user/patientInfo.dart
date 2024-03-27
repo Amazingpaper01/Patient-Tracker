@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:practice/main.dart';    // go back login page
+import 'package:practice/user/chat_page.dart'; // go to chat page
+import 'package:practice/user/pharmacy_page.dart'; // go to pharmacy page
+import 'package:practice/user/vitals_page.dart';  // go to vitals page
+import 'package:practice/user/calender_page.dart'; // go to calender page
+import 'package:practice/user/notification_page.dart'; // go to notification page
 import 'package:google_fonts/google_fonts.dart'; // for using Google Font
+import 'package:flutter_speed_dial/flutter_speed_dial.dart'; // for using SpeedDial
 
 
 class patientHome extends StatefulWidget {
@@ -73,31 +79,119 @@ class _patientHome extends State<patientHome> {
         ],
         backgroundColor: Color(0xFFF4F4F4),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(
-          Icons.accessibility,
-          size: 40,
+      floatingActionButton: SpeedDial(
+        icon: Icons.accessibility,
+        //activeIcon: Icons.accessibility,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
         ),
-        backgroundColor: Color(0xFFF4F4F4),
-        onPressed: (){},
+        backgroundColor: Color(0xFFECE6F0),
+        overlayColor:  Colors.white,
+        overlayOpacity: 0.4,
+        children: [
+          /* close button */
+          SpeedDialChild(
+            child: Icon(
+              Icons.expand_circle_down_outlined,
+              color: Color(0xFFECE6F0),
+            ),
+            backgroundColor: Color(0xFF373C88),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+          ),
+          /* Notificatin History */
+          SpeedDialChild(
+            child: Icon(
+              Icons.description_outlined,
+              color: Color(0xFF373C88),
+            ),
+            backgroundColor: Color(0xFFECE6F0),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            onTap: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => notificationPage()), // go to notification page
+              );                
+            }
+          ),
+          /* Calender */
+          SpeedDialChild(
+            child: Icon(
+              Icons.date_range_outlined,
+              color: Color(0xFF373C88),
+            ),
+            backgroundColor: Color(0xFFECE6F0),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            onTap: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => calenderPage()), // go to calender page
+              );                
+            }
+          ),
+          /* Vitals */
+          SpeedDialChild(
+            child: Icon(
+              Icons.thermostat_auto_outlined,
+              color: Color(0xFF373C88),
+            ),
+            backgroundColor: Color(0xFFECE6F0),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            onTap: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => vitalsPage()), // go to vitals page
+              );                
+            }
+          ),
+          /* Pharmacy */
+          SpeedDialChild(
+            child: Icon(
+              Icons.medical_services_outlined,
+              color: Color(0xFF373C88),
+            ),
+            backgroundColor: Color(0xFFECE6F0),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            onTap: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => pharmacyPage()), // go to pharmacy page
+              );                
+            }
+          ),
+          /* Chat with Doctor*/
+          SpeedDialChild(
+            child: Icon(
+              Icons.forum_outlined,
+              color: Color(0xFF373C88),
+            ),
+            backgroundColor: Color(0xFFECE6F0),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            onTap: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => chatPage()), // go to chat page
+              );                
+            }
+          ),
+        ],
       ),
       body: patientInfo(),
     );
   }
 }
 
-/*
-class floatingButton extends StatelessWidget {
-  //const MyWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      floating
-    );
-  }
-}
-*/
 
 class patientInfo extends StatelessWidget {
   //const MyWidget({super.key});
@@ -197,7 +291,6 @@ class patientInfo extends StatelessWidget {
                 Container(
                   width: double.infinity,
                   child: Column(                  
-                    //mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,                  
                     children: [
                       /* Patient ID */
