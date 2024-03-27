@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:practice/signup.dart';  // for SignUp page
-import 'package:practice/user/home.dart';    
-import 'package:practice/staff/home.dart';  // for doctor's Home Page
+import 'package:practice/user/home.dart';   // for users' Home Page 
+import 'package:practice/staff/home.dart';  // for doctors' Home Page
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: false,  // remove the debug sign on the right top
       home: LogIn(),
     );
   }
@@ -75,7 +75,7 @@ class _LogIn extends State<LogIn> {
 
       }
       else {
-        // if the server returns an error response, thrown an exception
+        /* if the server returns an error response, thrown an exception */
         //throw Exception('Failed to post data');
         print(resultString);
       }
@@ -139,6 +139,7 @@ class _LogIn extends State<LogIn> {
     }
     // ===========
 
+    /* Main Part of the LogIn Page */
     return Scaffold(
       body: Container( 
         child: Form(
@@ -150,9 +151,11 @@ class _LogIn extends State<LogIn> {
                 width: double.infinity,
                 height: 60
               ),
+              /* Logo */
               Stack (
                 clipBehavior: Clip.none,
                 children: [
+                  /* Background Circle */
                   Container (
                     width: 157,
                     height: 158,
@@ -161,6 +164,7 @@ class _LogIn extends State<LogIn> {
                       shape: OvalBorder(),
                     ),
                   ),
+                  /* Logo Image */
                   Positioned(
                     left: -6,
                     top: 5,
@@ -169,7 +173,8 @@ class _LogIn extends State<LogIn> {
                       height: 148.81,
                       width: 171,
                     ),
-                  ),              
+                  ),   
+                  /* Blue Outlined Circle */           
                   Positioned(
                     left: 5.5,
                     top: 5.5,
@@ -190,14 +195,13 @@ class _LogIn extends State<LogIn> {
                 ],
               ),
               SizedBox(height: 65),
+              /* Text: Welcome */
               Text(
                 'WELCOME',
                 style: GoogleFonts.montserrat(
                   color: Color(0xFF373C88),
                   fontSize: 40,
                   fontWeight: FontWeight.w500,
-                  height: 0.10,
-                  letterSpacing: 0.10,
                 ),
               ),
               SizedBox(height: 65),
@@ -257,7 +261,7 @@ class _LogIn extends State<LogIn> {
                             isVisible = !isVisible;
                         });
                       },
-                    ),                                    
+                    ), 
                   ),
                   /* error message */
                   validator: (value) {
@@ -269,7 +273,7 @@ class _LogIn extends State<LogIn> {
                 ),
               ),
               SizedBox(height: 50),
-              /* Button for Sign In */
+              /* Button for Log In */
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFF373C88),
@@ -278,9 +282,7 @@ class _LogIn extends State<LogIn> {
                 onPressed: () {
                   if (formKey.currentState!.validate()){
                     LogIn(); //LogIn
-                    postRequest();    
-                    //signIn_email.clear();
-                    //signIn_password.clear();  
+                    postRequest();  
                   }        
                 },  
                 child: const Text(
@@ -290,16 +292,16 @@ class _LogIn extends State<LogIn> {
                     fontSize: 14,
                     fontFamily: 'Roboto',
                     fontWeight: FontWeight.w500,
-                    height: 0.10,
-                    letterSpacing: 0.10,
                   ),
                 ),
               ),
               SizedBox(height: 40),
+              /* Text: --- Or --- */
               Container(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    /* underbar */
                     Container(
                       width: 134,
                       decoration: ShapeDecoration(
@@ -313,17 +315,17 @@ class _LogIn extends State<LogIn> {
                       ),
                     ),
                     SizedBox(width: 10),
+                    /* Text: OR */
                     Text(
                       'OR',
                       style: GoogleFonts.montserrat(
                         color: Color(0xFF373C88),
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
-                        height: 0.10,
-                        letterSpacing: 0.10,
                       ),
                     ),
                     SizedBox(width: 10),
+                    /* underbar */
                     Container(
                       width: 134,
                       decoration: ShapeDecoration(
@@ -361,8 +363,6 @@ class _LogIn extends State<LogIn> {
                     fontSize: 14,
                     fontFamily: 'Roboto',
                     fontWeight: FontWeight.w500,
-                    height: 0.10,
-                    letterSpacing: 0.10,
                   ),
                 ),
               ),   

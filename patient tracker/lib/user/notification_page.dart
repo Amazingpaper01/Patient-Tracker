@@ -12,11 +12,12 @@ class notificationPage extends StatefulWidget {
 
 class _notificationPage extends State<notificationPage> {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {    
     return Scaffold(      
       appBar: AppBar(
         automaticallyImplyLeading: false,
         centerTitle: false,
+        /* Logo Image Button */
         title: IconButton(
           icon: Image.asset(
                 'assets/images/patient_logo.png',
@@ -55,9 +56,9 @@ class _notificationPage extends State<notificationPage> {
             ),            
             itemBuilder: (context) {
               return [
+                /* LogOut Button */
                 PopupMenuItem(
                   value: 'logout',
-                  //enabled: false,
                   child: Text('Log Out',
                     style: GoogleFonts.montserrat(
                       color: Color(0xFF373C88),
@@ -66,7 +67,6 @@ class _notificationPage extends State<notificationPage> {
                     ),
                   ),
                 ),
-          
               ];
             }
           ),

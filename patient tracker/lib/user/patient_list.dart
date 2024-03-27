@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart'; // for using Google Font
 
-
+/* The Case of Empty List */
 class patient_list extends StatelessWidget {
   //const patient_list({super.key});
   @override
   Widget build(BuildContext context) {
+    /* Initial Message or Empty Case */
     return Container(
       child: Column(
         children: [
@@ -17,8 +18,6 @@ class patient_list extends StatelessWidget {
               color: Color(0xFF373C88),
               fontSize: 24,
               fontWeight: FontWeight.w500,
-              height: 0.10,
-              letterSpacing: 0.10,
             ),
           ),
           SizedBox(height: 30),
@@ -40,6 +39,7 @@ class patient_list extends StatelessWidget {
   }
 }
 
+/* The Case of Not Empty List */
 class not_EmptyList extends StatelessWidget {
   //const not_EmptyList({super.key});
   @override

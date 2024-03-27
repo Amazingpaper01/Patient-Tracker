@@ -23,6 +23,7 @@ class _patientHome extends State<patientHome> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         centerTitle: false,
+        /* Logo Image Button */
         title: IconButton(
           icon: Image.asset(
                 'assets/images/patient_logo.png',
@@ -61,9 +62,9 @@ class _patientHome extends State<patientHome> {
             ),              
             itemBuilder: (context) {
               return [
+                /* LogOut Button */
                 PopupMenuItem(
                   value: 'logout',
-                  //enabled: false,
                   child: Text('Log Out',
                     style: GoogleFonts.montserrat(
                       color: Color(0xFF373C88),
@@ -79,9 +80,9 @@ class _patientHome extends State<patientHome> {
         ],
         backgroundColor: Color(0xFFF4F4F4),
       ),
+      /* create the Side Button */
       floatingActionButton: SpeedDial(
         icon: Icons.accessibility,
-        //activeIcon: Icons.accessibility,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
         ),
@@ -192,7 +193,7 @@ class _patientHome extends State<patientHome> {
   }
 }
 
-
+/* show Patient Information */
 class patientInfo extends StatelessWidget {
   //const MyWidget({super.key});
 
@@ -216,12 +217,14 @@ class patientInfo extends StatelessWidget {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
+                            /* Initial First Name */
                             Text(
                               'K',
                               style: TextStyle(
                                 color: Colors.white,
                               ),
                             ),
+                            /* Initial Last Name */
                             Text(
                               'M',
                               style: TextStyle(
@@ -234,10 +237,12 @@ class patientInfo extends StatelessWidget {
                       SizedBox(width: 3),
                     ],
                   ),
+                  /* Patient name */
                   title: Row(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
+                      /* First name */
                       Text(
                         'Kazuya',
                         style: GoogleFonts.roboto(
@@ -247,6 +252,7 @@ class patientInfo extends StatelessWidget {
                         ),
                       ),
                       SizedBox(width: 5),
+                      /* Last Name */
                       Text(
                         'Mishima',
                         style: GoogleFonts.roboto(
@@ -257,6 +263,7 @@ class patientInfo extends StatelessWidget {
                       ),
                     ],
                   ),
+                  /* Doctor Name */
                   subtitle: Text(
                     'Doctor: Joseph Green',
                     style: GoogleFonts.roboto(
@@ -274,7 +281,7 @@ class patientInfo extends StatelessWidget {
                     color: Color(0xff6750A4),
                   ),
                 ),
-                /* patient details */
+                /* Text: patient details */
                 Container(
                   padding: EdgeInsets.all(20),
                   child: Text(
@@ -306,6 +313,7 @@ class patientInfo extends StatelessWidget {
                                 fontWeight: FontWeight.w800,
                               ),
                             ),
+                            /* Patient ID number (6 digit) */
                             Text(
                               '123456',
                               style: GoogleFonts.roboto(
@@ -330,6 +338,7 @@ class patientInfo extends StatelessWidget {
                                 fontWeight: FontWeight.w800,
                               ),
                             ),
+                            /* Hospital Name */
                             Text(
                               'Clovis Community Hospital',
                               style: GoogleFonts.roboto(
@@ -354,6 +363,7 @@ class patientInfo extends StatelessWidget {
                                 fontWeight: FontWeight.w800,
                               ),
                             ),
+                            /* Room Number */
                             Text(
                               'Red 3B',
                               style: GoogleFonts.roboto(
@@ -378,6 +388,7 @@ class patientInfo extends StatelessWidget {
                                 fontWeight: FontWeight.w800,
                               ),
                             ),
+                            /* Gender */
                             Text(
                               'Male (He/Him)',
                               style: GoogleFonts.roboto(
@@ -402,6 +413,7 @@ class patientInfo extends StatelessWidget {
                                 fontWeight: FontWeight.w800,
                               ),
                             ),
+                            /* Blood Type */
                             Text(
                               'B+',
                               style: GoogleFonts.roboto(
@@ -426,6 +438,7 @@ class patientInfo extends StatelessWidget {
                                 fontWeight: FontWeight.w800,
                               ),
                             ),
+                            /* Paitient Condition */
                             Text(
                               'Knee injury',
                               style: GoogleFonts.roboto(
@@ -450,6 +463,7 @@ class patientInfo extends StatelessWidget {
                                 fontWeight: FontWeight.w800,
                               ),
                             ),
+                            /* Type of Medication */
                             Text(
                               'Ibuprofen',
                               style: GoogleFonts.roboto(
@@ -474,6 +488,7 @@ class patientInfo extends StatelessWidget {
                                 fontWeight: FontWeight.w800,
                               ),
                             ),
+                            /* Admission Date */
                             Text(
                               'null',
                               style: GoogleFonts.roboto(
@@ -498,6 +513,7 @@ class patientInfo extends StatelessWidget {
                                 fontWeight: FontWeight.w800,
                               ),
                             ),
+                            /* Discharge Date */
                             Text(
                               'null',
                               style: GoogleFonts.roboto(

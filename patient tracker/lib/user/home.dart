@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:practice/user/patient.dart'; // for Patient Information Page
-//import 'package:practice/user/patient.dart';
 import 'package:practice/main.dart';   // for login page 
 import 'package:google_fonts/google_fonts.dart'; // for using Google Font
 
@@ -20,6 +19,7 @@ class _Page extends State<Page_User> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         centerTitle: false,
+        /* Logo Image Button */
         title: IconButton(
           icon: Image.asset(
                 'assets/images/patient_logo.png',
@@ -27,7 +27,7 @@ class _Page extends State<Page_User> {
                 width: 80,
             ),
           onPressed: (){
-            //
+            /* Action for Logo Button */
           },
         ),
         actions: <Widget> [
@@ -57,9 +57,9 @@ class _Page extends State<Page_User> {
             ),            
             itemBuilder: (context) {
               return [
+                /* LogOut Button */
                 PopupMenuItem(
                   value: 'logout',
-                  //enabled: false,
                   child: Text('Log Out',
                     style: GoogleFonts.montserrat(
                       color: Color(0xFF373C88),
@@ -68,13 +68,13 @@ class _Page extends State<Page_User> {
                     ),
                   ),
                 ),
-          
               ];
             }
           ),
         ],
         backgroundColor: Color(0xFFF4F4F4),
       ),
+      /* Main part: The patient list */
       body: add_patient(),
     );
   }

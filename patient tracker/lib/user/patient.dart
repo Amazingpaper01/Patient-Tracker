@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:practice/main.dart';  
 import 'package:practice/user/patientInfo.dart'; // for patient Home 
+import 'package:practice/user/patient_list.dart'; // for initial message to the list
 import 'package:google_fonts/google_fonts.dart'; // for using Google Font
-import 'package:practice/user/patient_list.dart';
 
+/* Class for List of Patient Data */
 class listData {
   String fName;
   String lName;
@@ -22,13 +23,14 @@ class add_patient extends StatefulWidget {
   State<add_patient> createState() => _add_patient();
 }
 
-
+/* List for Patient Data */
 List<listData> patientList = <listData>[];  
 
+/* List for Favorite Button Condition */
 List<bool> favoriteButton = [];
 
-class _add_patient extends State<add_patient> {
 
+class _add_patient extends State<add_patient> {
   /* create Controller */
   final TextEditingController patient_fname = TextEditingController();
   final TextEditingController patient_lname = TextEditingController();
@@ -41,6 +43,7 @@ class _add_patient extends State<add_patient> {
     patient_ID.clear();
   }
   
+  /* Manage Messages */
   createList(){
     if (patientList.length == 0){
       return patient_list();
@@ -50,14 +53,15 @@ class _add_patient extends State<add_patient> {
     }      
   }
   
-  
+  /* Patient Data */
   String text_fname = '';
   String text_lname = '';
   int text_patientID = 0;
   String text_initial_fname = '';
   String text_initial_lname = '';
 
-  bool isFavorite = true;  
+  /* Favorite Button */
+  bool isFavorite = true;  // for favorite button codition
 
   /* showDialog to create the new list of the patient */
   Future<void> InputDialog(BuildContext context) async {
@@ -83,11 +87,10 @@ class _add_patient extends State<add_patient> {
                   ),
                   onPressed: (){
                     Navigator.pop(context);
-                    //newPatient(); 
                   },
                 ),
               ],
-            ),          
+            ),
           ),
           content: Container(
             child: Column(
@@ -187,8 +190,6 @@ class _add_patient extends State<add_patient> {
                                   fontSize: 14,
                                   fontFamily: 'Roboto',
                                   fontWeight: FontWeight.w500,
-                                  height: 0.10,
-                                  letterSpacing: 0.10,
                                 ),
                               ),
                             ],
@@ -218,6 +219,7 @@ class _add_patient extends State<add_patient> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 SizedBox(width: double.infinity),
+                /* Question */
                 Container(
                   width: 266,
                   height: 58, 
@@ -243,7 +245,8 @@ class _add_patient extends State<add_patient> {
                   child: Row(   
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     mainAxisSize: MainAxisSize.min,             
-                    children: [                  
+                    children: [   
+                      /* Yes Button */               
                       ElevatedButton(
                         onPressed: (){
                           setState(() {
@@ -264,6 +267,7 @@ class _add_patient extends State<add_patient> {
                         ),
                       ),
                       SizedBox(width: 50),
+                      /* No Button */
                       ElevatedButton(
                         onPressed: (){
                           Navigator.of(context).pop();
@@ -329,6 +333,7 @@ class _add_patient extends State<add_patient> {
                             ),   
                             borderRadius: BorderRadius.circular(10)        
                           ),
+                          /* Template Design of the List */
                           child: ListTile(      
                             leading: Row(
                               mainAxisSize: MainAxisSize.min,
@@ -450,8 +455,6 @@ class _add_patient extends State<add_patient> {
                             fontSize: 14,
                             fontFamily: 'Roboto',
                             fontWeight: FontWeight.w500,
-                            height: 0.10,
-                            letterSpacing: 0.10,
                           ),
                         ),
                       ]

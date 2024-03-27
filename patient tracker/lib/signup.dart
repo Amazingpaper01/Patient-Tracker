@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:practice/main.dart';    // for Login Page
-//import 'package:practice/user/home.dart';    // for Home Page
-import 'package:practice/user/home.dart';    
-import 'package:practice/user/patient.dart';
+import 'package:practice/user/home.dart';  // for Home Page
+//import 'package:practice/user/patient.dart';
 import 'package:practice/staff/home.dart';  // for doctor's Home Page
 import 'package:http/http.dart' as http;  // for http
 import 'dart:convert';  // for decoding received JSON
@@ -17,9 +16,9 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUp extends State<SignUp> {
-  // API
+  /* API */
   final String apiURL = 'http://10.62.78.58:3000/register';
-  // create Controller
+  /* create Controller */
   final signUp_firstName = TextEditingController();
   final signUp_lastName = TextEditingController();
   final signUp_email = TextEditingController();
@@ -29,7 +28,7 @@ class _SignUp extends State<SignUp> {
   String role = ''; 
   bool isVisible_1 = true;
   bool isVisible_2 = true;
-  // ======
+  /* ======================== */
 
   @override
   void dispose() {
@@ -37,10 +36,10 @@ class _SignUp extends State<SignUp> {
     signUp_lastName.dispose();
     signUp_email.dispose();
     signUp_password.dispose();
-    //signUp_confirmPassword.dispose();
     super.dispose();
   }
 
+  /* Applying POST request */
   Future<void> _postData() async{
     try{
       final response = await http.post(
@@ -53,7 +52,6 @@ class _SignUp extends State<SignUp> {
           'lastName':signUp_lastName.text,
           'email':signUp_email.text,
           'password':signUp_password.text,
-          //'confirmPassword':signUp_confirmPassword.text,
           'role':role,
         }),
       );
@@ -81,9 +79,7 @@ class _SignUp extends State<SignUp> {
 
     final formKey = GlobalKey<FormState>();
 
-    
-
-    // function for button
+    /* function for button */
     SignUp(){     
       final email = signUp_email.text;
       final password_1 = signUp_password.text;
@@ -94,20 +90,20 @@ class _SignUp extends State<SignUp> {
       debugPrint(signUp_email.text);
       debugPrint(signUp_password.text);
       
-      // check empty textfields
+      /* check empty textfields */
       if (signUp_firstName.text.isEmpty || signUp_lastName.text.isEmpty 
             || signUp_email.text.isEmpty || signUp_password.text.isEmpty || signUp_confirmPassword.text.isEmpty){
         debugPrint('any field is empty');
       }
       else {
-        // check password
+        /* check password */
         if (password_1 == password_2){
-          // check doctor or not
+          /* check doctor or not */
           if (RegExp(
             r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+(@communitymedical.org)$")
             .hasMatch(email)) {
             debugPrint('doctor email');
-            // go to Login Page (main.dart)
+            /* go to Login Page (main.dart) */
             role = 'staff';
             Navigator.push(
               context,
@@ -124,7 +120,7 @@ class _SignUp extends State<SignUp> {
               r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+\.(com|edu|org|gov)$")
               .hasMatch(email)) {
               debugPrint('patient email');
-              // go to Login Page (main.dart)
+              /* go to Login Page (main.dart) */
               role = 'user';
               Navigator.push(
                 context,
@@ -148,6 +144,7 @@ class _SignUp extends State<SignUp> {
       }    
     }
 
+    /* Main Part of Sign Up Page*/
     return Scaffold(
       body: Container(
         child: Form(
@@ -164,6 +161,7 @@ class _SignUp extends State<SignUp> {
                   Stack (
                     clipBehavior: Clip.none,
                     children: [
+                      /* Backfround Circle */
                       Container (
                         width: 157,
                         height: 158,
@@ -172,6 +170,7 @@ class _SignUp extends State<SignUp> {
                           shape: OvalBorder(),
                         ),
                       ),
+                      /* Logo Image */
                       Positioned(
                         left: -6,
                         top: 5,
@@ -180,7 +179,8 @@ class _SignUp extends State<SignUp> {
                           height: 148.81,
                           width: 171,
                         ),
-                      ),              
+                      ),  
+                      /* Blue Outlined Circle */            
                       Positioned(
                         left: 5.5,
                         top: 5.5,
@@ -201,14 +201,13 @@ class _SignUp extends State<SignUp> {
                     ],
                   ),
                   SizedBox(height: 40),
+                  /* Text: Register */
                   Text(
                     'Register',
                     style: GoogleFonts.montserrat(
                       color: Color(0xFF373C88),
                       fontSize: 40,
                       fontWeight: FontWeight.w500,
-                      height: 0.10,
-                      letterSpacing: 0.10,
                     ),
                   ),
                   SizedBox(height: 50),
@@ -265,7 +264,7 @@ class _SignUp extends State<SignUp> {
                           return 'Please enter your email';
                         }
                         if (value.isNotEmpty){
-                          // check doctor or not
+                          /* check doctor or not */
                           if (RegExp(
                             r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+(@communitymedical.org)$")
                             .hasMatch(value)) {
@@ -367,11 +366,6 @@ class _SignUp extends State<SignUp> {
                       if (formKey.currentState!.validate()){
                         _postData();
                         SignUp();
-                        //signUp_firstName.clear();
-                        //signUp_lastName.clear();     
-                        //signUp_email.clear();
-                        //signUp_password.clear();   
-                        //signUp_confirmPassword.clear(); 
                       }  
                     }, 
                     child: const Text(
@@ -381,16 +375,16 @@ class _SignUp extends State<SignUp> {
                         fontSize: 14,
                         fontFamily: 'Roboto',
                         fontWeight: FontWeight.w500,
-                        height: 0.10,
-                        letterSpacing: 0.10,
                       ),
                     ),
                   ),
                   SizedBox(height: 40),
+                  /* Text: --- OR --- */
                   Container(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        /* underbar */
                         Container(
                           width: 134,
                           decoration: ShapeDecoration(
@@ -404,17 +398,17 @@ class _SignUp extends State<SignUp> {
                           ),
                         ),
                         SizedBox(width: 10),
+                        /* Text: OR */
                         Text(
                           'OR',
                           style: GoogleFonts.montserrat(
                             color: Color(0xFF373C88),
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
-                            height: 0.10,
-                            letterSpacing: 0.10,
                           ),
                         ),
                         SizedBox(width: 10),
+                        /* underbar */
                         Container(
                           width: 134,
                           decoration: ShapeDecoration(
@@ -431,7 +425,7 @@ class _SignUp extends State<SignUp> {
                     ),
                   ),
                   SizedBox(height: 30),
-                  // == go to Sign Up page (signup.dart) ==  
+                  /* go to Sign Up page (signup.dart) */
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xFF373C88),
@@ -455,8 +449,6 @@ class _SignUp extends State<SignUp> {
                         fontSize: 14,
                         fontFamily: 'Roboto',
                         fontWeight: FontWeight.w500,
-                        height: 0.10,
-                        letterSpacing: 0.10,
                       ),
                     ),
                   ),
