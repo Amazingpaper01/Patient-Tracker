@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:practice/main.dart';  
 import 'package:practice/user/patientInfo.dart'; // for patient Home 
 import 'package:google_fonts/google_fonts.dart'; // for using Google Font
-import 'package:stroke_text/stroke_text.dart'; // for using outline to text
 import 'package:practice/user/patient_list.dart';
 
 class listData {
@@ -30,12 +29,12 @@ List<bool> favoriteButton = [];
 
 class _add_patient extends State<add_patient> {
 
-  // create Controller
+  /* create Controller */
   final TextEditingController patient_fname = TextEditingController();
   final TextEditingController patient_lname = TextEditingController();
   final TextEditingController patient_ID = TextEditingController();  
 
-  // patient data list
+  /* patient data list */
   newPatient(){
     patient_fname.clear();
     patient_lname.clear();
@@ -60,7 +59,7 @@ class _add_patient extends State<add_patient> {
 
   bool isFavorite = true;  
 
-  // create form
+  /* showDialog to create the new list of the patient */
   Future<void> InputDialog(BuildContext context) async {
     return showDialog(    
       context: context,
@@ -94,7 +93,7 @@ class _add_patient extends State<add_patient> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // First Name
+                /* First Name */
                 Container(
                   width: 210,
                   height: 56,
@@ -114,7 +113,7 @@ class _add_patient extends State<add_patient> {
                   ),
                 ),
                 SizedBox(height: 30),
-                // Last Name
+                /* Last Name */
                 Container(
                   width: 210,
                   height: 56,
@@ -134,7 +133,7 @@ class _add_patient extends State<add_patient> {
                   ),
                 ),
                 SizedBox(height: 30),
-                // Patient ID
+                /* Patient ID */
                 Container(
                   width: 210,
                   height: 56,
@@ -158,6 +157,7 @@ class _add_patient extends State<add_patient> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     mainAxisSize: MainAxisSize.min,
                     children: [
+                      /* Add Button */
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color(0xFF373C88),
@@ -207,22 +207,105 @@ class _add_patient extends State<add_patient> {
     );
   }
 
+  /* showDialog to make sure the deletion of the list */
+  Future<void> comfirmDeletion(BuildContext context, int index) async {
+    return showDialog(    
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: Container(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(width: double.infinity),
+                Container(
+                  width: 266,
+                  height: 58, 
+                  padding: EdgeInsets.fromLTRB(0, 5, 0, 0),              
+                  decoration: ShapeDecoration(
+                    color: Color(0xFFEFEFEF),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    )
+                  ),
+                  child: Text(
+                    'Are you sure you want to\ndelete this patient?',
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.montserrat(
+                      color: Colors.black,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 25),
+                Container(
+                  child: Row(   
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisSize: MainAxisSize.min,             
+                    children: [                  
+                      ElevatedButton(
+                        onPressed: (){
+                          setState(() {
+                            patientList.removeAt(index); // delete the selected list
+                            Navigator.of(context).pop();
+                          });
+                        }, 
+                        child: Text(
+                          'Yes',
+                          style: GoogleFonts.montserrat(
+                            color: Colors.white,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xFFD00202),
+                        ),
+                      ),
+                      SizedBox(width: 50),
+                      ElevatedButton(
+                        onPressed: (){
+                          Navigator.of(context).pop();
+                        }, 
+                        child: Text(
+                          'No',
+                          style: GoogleFonts.montserrat(
+                            color: Colors.white,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xFF373C88),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      }
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white, // Color.(0xffE5E5E5)
       body: Container(   
-        width: double.infinity,     
+        width: double.infinity,    
+        /* create each list */ 
         child: ListView(
           children: [
             Column(  
               crossAxisAlignment: CrossAxisAlignment.center,      
               children: [
-                //patient_list(),            
                 SizedBox(height: 30), 
-                // create a list based on input data            
-                createList(),                
+                createList(), // create a list based on input data           
                 Container(
                   child: ListView.builder(
                     shrinkWrap: true,
@@ -250,6 +333,7 @@ class _add_patient extends State<add_patient> {
                             leading: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
+                                /* favorite button */
                                 IconButton(
                                   onPressed: (){
                                     setState(() {
@@ -262,17 +346,20 @@ class _add_patient extends State<add_patient> {
                                   ),
                                 ),
                                 SizedBox(width: 10),
+                                /* Profile Icon */
                                 CircleAvatar(
                                   backgroundColor: Color(0xFF373C88),
                                   child: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
+                                      /* First Name Initial */
                                       Text(
                                         patientList[index].initial_fName,
                                         style: TextStyle(
                                           color: Colors.white,
                                         ),
                                       ),
+                                      /* Last Name Initial */
                                       Text(
                                         patientList[index].initial_lName,
                                         style: TextStyle(
@@ -289,6 +376,7 @@ class _add_patient extends State<add_patient> {
                               mainAxisSize: MainAxisSize.min,
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
+                                /* First Name */
                                 Text(
                                   patientList[index].fName,
                                   style: GoogleFonts.roboto(
@@ -298,6 +386,7 @@ class _add_patient extends State<add_patient> {
                                   ),
                                 ),
                                 SizedBox(width: 5),
+                                /* Last Name */
                                 Text(
                                   patientList[index].lName,
                                   style: GoogleFonts.roboto(
@@ -308,6 +397,7 @@ class _add_patient extends State<add_patient> {
                                 ),
                               ],
                             ),
+                            /* Doctor Name */
                             subtitle: Text(
                               'Dr. Joseph Green',
                               style: GoogleFonts.roboto(
@@ -316,12 +406,10 @@ class _add_patient extends State<add_patient> {
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
+                            /* Deletion Button */
                             trailing: IconButton(                          
-                              onPressed: (){
-                                /* delete the list*/
-                                setState(() {
-                                  patientList.removeAt(index);
-                                });
+                              onPressed: () async {
+                                comfirmDeletion(context, index); // confirm the deletion of the list
                               }, 
                               icon: Icon(
                                 Icons.do_not_disturb_on,
@@ -334,14 +422,15 @@ class _add_patient extends State<add_patient> {
                     },
                   ),
                 ),
-                SizedBox(height: 30),                          
+                SizedBox(height: 30),    
+                /* Add New Patient Button */                      
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xFF373C88),
                     foregroundColor: Colors.white
                   ),
                   onPressed: () async {                
-                    InputDialog(context);                  
+                    InputDialog(context);  // show the dialog to create the list              
                   },  
                   child: SizedBox(
                     width: 143,
