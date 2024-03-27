@@ -15,10 +15,6 @@ class listData {
   listData (this.fName, this.lName, this.patientID, this.initial_fName, this.initial_lName);
 }
 
-// patient list
-//List<listData> patientList = [];
-
-//List<String> patientList  = ['Kazuya'];
 
 class add_patient extends StatefulWidget {
   add_patient ({Key? key}) : super(key:key);
@@ -28,7 +24,7 @@ class add_patient extends StatefulWidget {
 }
 
 
-List<listData> patientList = <listData>[]; 
+List<listData> patientList = <listData>[];  
 
 List<bool> favoriteButton = [];
 
@@ -211,6 +207,7 @@ class _add_patient extends State<add_patient> {
     );
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -261,7 +258,7 @@ class _add_patient extends State<add_patient> {
                                   }, 
                                   icon: Icon(
                                     favoriteButton[index] ? Icons.favorite_outline_outlined : Icons.favorite,
-                                    color: favoriteButton[index] ? null: Color(0xffff0000)
+                                    color: favoriteButton[index] ? null: Color(0xFFD00202),//Color(0xffff0000)
                                   ),
                                 ),
                                 SizedBox(width: 10),
@@ -322,7 +319,9 @@ class _add_patient extends State<add_patient> {
                             trailing: IconButton(                          
                               onPressed: (){
                                 /* delete the list*/
-                                //patientList.removeAt(index);
+                                setState(() {
+                                  patientList.removeAt(index);
+                                });
                               }, 
                               icon: Icon(
                                 Icons.do_not_disturb_on,
