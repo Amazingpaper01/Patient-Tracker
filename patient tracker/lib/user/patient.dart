@@ -63,14 +63,18 @@ class _add_patient extends State<add_patient> {
   /* Favorite Button */
   bool isFavorite = true;  // for favorite button codition
 
+  final formKey = GlobalKey<FormState>();
+
   /* showDialog to create the new list of the patient */
   Future<void> InputDialog(BuildContext context) async {
     return showDialog(    
       context: context,
       builder: (context) {
-        return AlertDialog(
+        return Form(
+          key: formKey,
+        child: AlertDialog(
           backgroundColor: Colors.white,
-          title: Container(          
+          title: Container( 
             child: Row(
               children: [
                 Text(
@@ -99,8 +103,7 @@ class _add_patient extends State<add_patient> {
                 /* First Name */
                 Container(
                   width: 210,
-                  height: 56,
-                  child: TextField(
+                  child: TextFormField(
                     controller: patient_fname,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
@@ -113,14 +116,19 @@ class _add_patient extends State<add_patient> {
                         text_initial_fname = text_fname[0];
                       });
                     },
+                    validator: (value) {
+                      if (value == null || value.isEmpty){
+                        return 'Please enter first name';
+                      }
+                      return null;
+                    },
                   ),
                 ),
-                SizedBox(height: 30),
+                SizedBox(height: 20),
                 /* Last Name */
                 Container(
                   width: 210,
-                  height: 56,
-                  child: TextField(
+                  child: TextFormField(
                     controller: patient_lname,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
@@ -133,24 +141,48 @@ class _add_patient extends State<add_patient> {
                         text_initial_lname = text_lname[0];
                       });
                     },
+                    validator: (value) {
+                      if (value == null || value.isEmpty){
+                        return 'Please enter last name';
+                      }
+                      return null;
+                    },
                   ),
                 ),
-                SizedBox(height: 30),
+                SizedBox(height: 20),
                 /* Patient ID */
                 Container(
                   width: 210,
-                  height: 56,
-                  child: TextField(
+                  child: TextFormField(
                     controller: patient_ID,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Patient ID',
-                      hintText: 'Enter here...',
+                      hintText: '6-digit code...',
                     ),
                     onChanged: (String value){
                       setState(() {
                         text_patientID = int.parse(value);  // convert string to int
                       });
+                    },
+                    validator: (value) {
+                      if (value == null || value.isEmpty){
+                        return 'Please enter patient ID';
+                      }
+                      else {
+                        /* check 6 digit numbers or not*/
+                        if(value.isNotEmpty){
+                          if(RegExp(
+                            r"^[0-9]{6}$")
+                            .hasMatch(value)){
+                              return null;
+                          }
+                          else {
+                            return 'Please enter 6-digit numbers';
+                          }
+                        }
+                      }
+                      return null;
                     },
                   ),
                 ),
@@ -167,13 +199,14 @@ class _add_patient extends State<add_patient> {
                           foregroundColor: Colors.white, 
                         ),
                         onPressed: () async {
-                          //Navigator.of(context).pop(_text);
-                          newPatient(); 
-                          Navigator.of(context).pop();
-                          setState(() {
-                            patientList.add(listData(text_fname, text_lname, text_patientID, text_initial_fname, text_initial_lname));  // add elements to the list
-                            favoriteButton.add(isFavorite);
-                          });
+                          if (formKey.currentState!.validate()){
+                            newPatient(); 
+                            Navigator.of(context).pop();
+                            setState(() {
+                              patientList.add(listData(text_fname, text_lname, text_patientID, text_initial_fname, text_initial_lname));  // add elements to the list
+                              favoriteButton.add(isFavorite);
+                            });
+                          } 
                         },
                         child: SizedBox(
                           width: 50,
@@ -199,12 +232,14 @@ class _add_patient extends State<add_patient> {
                     ],
                   ),
                 ),
-                SizedBox(height: 50),
+                SizedBox(height: 10),
               ],
             ),
-          ),        
+          ),    
+        ),    
         );
       },
+    
     );
   }
 
