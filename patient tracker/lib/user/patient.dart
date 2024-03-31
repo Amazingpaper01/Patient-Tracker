@@ -6,13 +6,17 @@ import 'package:google_fonts/google_fonts.dart'; // for using Google Font
 
 /* Class for List of Patient Data */
 class listData {
-  String fName;
-  String lName;
-  int patientID;
-  String initial_fName;
-  String initial_lName;
+  String fName;  // first name
+  String lName;  // last name
+  int patientID;  // patient ID
+  String initial_fName;  // first letter of first name 
+  String initial_lName;  // first letter of last name
+  bool isFavorite;  // favorite status (true or false)
+  int fav;  // favorite status (0 or 1)
+  int numIndex; // index number
+  int favIndex; // index number of favorite list
 
-  listData (this.fName, this.lName, this.patientID, this.initial_fName, this.initial_lName);
+  listData (this.fName, this.lName, this.patientID, this.initial_fName, this.initial_lName, this.isFavorite, this.fav, this.numIndex, this.favIndex);
 }
 
 
@@ -25,9 +29,6 @@ class add_patient extends StatefulWidget {
 
 /* List for Patient Data */
 List<listData> patientList = <listData>[];  
-
-/* List for Favorite Button Condition */
-List<bool> favoriteButton = [];
 
 
 class _add_patient extends State<add_patient> {
@@ -54,14 +55,18 @@ class _add_patient extends State<add_patient> {
   }
   
   /* Patient Data */
-  String text_fname = '';
-  String text_lname = '';
-  int text_patientID = 0;
-  String text_initial_fname = '';
-  String text_initial_lname = '';
+  String text_fname = '';  // first name
+  String text_lname = '';  // last name
+  int text_patientID = 0;  // patient ID
+  String text_initial_fname = '';  // initial first name
+  String text_initial_lname = '';  // initial last name
 
   /* Favorite Button */
-  bool isFavorite = true;  // for favorite button codition
+  bool _isFavorite = true;  // for favorite button codition (true or false)
+  int _fav = 0;  // for favorite button condition (0 or 1)
+  int _numIndex = 0; // index number
+  int _favIndex = 0; // index number of favorite list
+
 
   final formKey = GlobalKey<FormState>();
 
@@ -203,8 +208,9 @@ class _add_patient extends State<add_patient> {
                             newPatient(); 
                             Navigator.of(context).pop();
                             setState(() {
-                              patientList.add(listData(text_fname, text_lname, text_patientID, text_initial_fname, text_initial_lname));  // add elements to the list
-                              favoriteButton.add(isFavorite);
+                              patientList.add(listData(text_fname, text_lname, text_patientID, text_initial_fname, text_initial_lname, _isFavorite, _fav, _numIndex, _favIndex));  // add elements to the list
+                              _numIndex++;
+                              debugPrint(_numIndex.toString());
                             });
                           } 
                         },
@@ -344,7 +350,8 @@ class _add_patient extends State<add_patient> {
               crossAxisAlignment: CrossAxisAlignment.center,      
               children: [
                 SizedBox(height: 30), 
-                createList(), // create a list based on input data           
+                createList(), // create a list based on input data   
+                /* List */       
                 Container(
                   child: ListView.builder(
                     shrinkWrap: true,
@@ -376,13 +383,42 @@ class _add_patient extends State<add_patient> {
                                 /* favorite button */
                                 IconButton(
                                   onPressed: (){
-                                    setState(() {
-                                        favoriteButton[index] = !favoriteButton[index];
+                                    setState(() {                                    
+                                      patientList[index].isFavorite = !patientList[index].isFavorite;  // flip the favorite button status
+                                      if(patientList[index].isFavorite == false){
+                                        patientList[index].fav = 1;
+                                        int num1 = _favIndex++;
+                                        patientList[index].favIndex = num1;
+                                        /* sort the list */
+                                        patientList.sort((a,b) {
+                                          if((a.isFavorite && b.isFavorite) == false){
+                                            /* sort lists among favorite  */
+                                            return a.favIndex.compareTo(b.favIndex);
+                                          }
+                                          /* sort lists among not favorite  */
+                                           return a.numIndex.compareTo(b.numIndex);
+                                        });
+                                      }
+                                      else {
+                                        patientList[index].fav = 0;
+                                        patientList[index].favIndex = 0;
+                                        /* sort the list */
+                                        patientList.sort((a,b) {
+                                          if((a.isFavorite && b.isFavorite) == false){
+                                            /* sort lists among favorite  */
+                                            return a.favIndex.compareTo(b.favIndex);
+                                          }
+                                          /* sort lists among non-favorite  */
+                                           return a.numIndex.compareTo(b.numIndex);
+                                        });                                   
+                                      }
+                                      /* sorted by favorite and non-favorite */
+                                      patientList.sort((a, b) => b.fav.compareTo(a.fav));
                                     });
                                   }, 
                                   icon: Icon(
-                                    favoriteButton[index] ? Icons.favorite_outline_outlined : Icons.favorite,
-                                    color: favoriteButton[index] ? null: Color(0xFFD00202),//Color(0xffff0000)
+                                    patientList[index].isFavorite ? Icons.favorite_outline_outlined : Icons.favorite,
+                                    color: patientList[index].isFavorite ? null: Color(0xFFD00202),//Color(0xffff0000)
                                   ),
                                 ),
                                 SizedBox(width: 10),
