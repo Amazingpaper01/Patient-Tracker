@@ -13,8 +13,8 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart'; // for using SpeedD
 
 //class _patientHome extends State<patientHome> {
 class patientHome extends StatelessWidget {
-  final listData inputString;
-  patientHome(this.inputString);
+  final listData sendListData;
+  patientHome(this.sendListData); // store the patientList[index] data
 
   @override
   Widget build(BuildContext context) {   
@@ -188,7 +188,7 @@ class patientHome extends StatelessWidget {
           ),
         ],
       ),
-      body: patientInfo(inputString),
+      body: patientInfo(sendListData),  // transfer the patientList[index] data
     );
   }
 }
@@ -196,8 +196,8 @@ class patientHome extends StatelessWidget {
 /* show Patient Information */
 class patientInfo extends StatelessWidget {
   //const MyWidget({super.key});
-  final listData inputString2;
-  patientInfo(this.inputString2);
+  final listData sendListData;
+  patientInfo(this.sendListData);  // store the patientList[index] data
 
   @override
   Widget build(BuildContext context) {
@@ -221,14 +221,14 @@ class patientInfo extends StatelessWidget {
                           children: [
                             /* Initial First Name */
                             Text(
-                              '${inputString2.initial_fName}',
+                              '${sendListData.initial_fName}',
                               style: TextStyle(
                                 color: Colors.white,
                               ),
                             ),
                             /* Initial Last Name */
                             Text(
-                              '${inputString2.initial_lName}',
+                              '${sendListData.initial_lName}',
                               style: TextStyle(
                                 color: Colors.white,
                               ),
@@ -246,18 +246,17 @@ class patientInfo extends StatelessWidget {
                     children: [
                       /* First name */
                       Text(
-                        '${inputString2.fName}',//'Kazuya',
+                        '${sendListData.fName}',
                         style: GoogleFonts.roboto(
                           color: Color(0xFF373C88),
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                      
                       SizedBox(width: 5),
                       /* Last Name */
                       Text(
-                        '${inputString2.lName}',
+                        '${sendListData.lName}',
                         style: GoogleFonts.roboto(
                           color: Color(0xFF373C88),
                           fontSize: 16,
@@ -393,7 +392,7 @@ class patientInfo extends StatelessWidget {
                             ),
                             /* Gender */
                             Text(
-                              'Male (He/Him)',
+                              'Male',
                               style: GoogleFonts.roboto(
                                 color: Color(0xFF49454F),
                                 fontSize: 14,
