@@ -42,7 +42,8 @@ class _Page extends State<Page_User> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => LogIn()), // go to patient home pages
-                );                
+                );
+                patientList.clear();                
               }
             },
             child: Container(

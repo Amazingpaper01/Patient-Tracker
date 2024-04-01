@@ -317,7 +317,7 @@ class patientInfo extends StatelessWidget {
                             ),
                             /* Patient ID number (6 digit) */
                             Text(
-                              '123456',
+                              '${sendListData.patientID}',
                               style: GoogleFonts.roboto(
                                 color: Color(0xFF49454F),
                                 fontSize: 14,
@@ -341,6 +341,7 @@ class patientInfo extends StatelessWidget {
                               ),
                             ),
                             /* Hospital Name */
+                            /*
                             Text(
                               'Clovis Community Hospital',
                               style: GoogleFonts.roboto(
@@ -349,6 +350,7 @@ class patientInfo extends StatelessWidget {
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
+                            */
                           ],
                         ),
                       ),
@@ -366,6 +368,7 @@ class patientInfo extends StatelessWidget {
                               ),
                             ),
                             /* Room Number */
+                            /*
                             Text(
                               'Red 3B',
                               style: GoogleFonts.roboto(
@@ -374,6 +377,7 @@ class patientInfo extends StatelessWidget {
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
+                            */
                           ],
                         ),
                       ),
@@ -391,6 +395,7 @@ class patientInfo extends StatelessWidget {
                               ),
                             ),
                             /* Gender */
+                            /*
                             Text(
                               'Male',
                               style: GoogleFonts.roboto(
@@ -399,6 +404,7 @@ class patientInfo extends StatelessWidget {
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
+                            */
                           ],
                         ),
                       ),
@@ -416,6 +422,7 @@ class patientInfo extends StatelessWidget {
                               ),
                             ),
                             /* Blood Type */
+                            /*
                             Text(
                               'B+',
                               style: GoogleFonts.roboto(
@@ -424,6 +431,7 @@ class patientInfo extends StatelessWidget {
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
+                            */
                           ],
                         ),
                       ),
@@ -441,6 +449,7 @@ class patientInfo extends StatelessWidget {
                               ),
                             ),
                             /* Paitient Condition */
+                            /*
                             Text(
                               'Knee injury',
                               style: GoogleFonts.roboto(
@@ -449,6 +458,7 @@ class patientInfo extends StatelessWidget {
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
+                            */
                           ],
                         ),
                       ),
@@ -466,6 +476,7 @@ class patientInfo extends StatelessWidget {
                               ),
                             ),
                             /* Type of Medication */
+                            /*
                             Text(
                               'Ibuprofen',
                               style: GoogleFonts.roboto(
@@ -474,6 +485,7 @@ class patientInfo extends StatelessWidget {
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
+                            */
                           ],
                         ),
                       ),
@@ -491,6 +503,7 @@ class patientInfo extends StatelessWidget {
                               ),
                             ),
                             /* Admission Date */
+                            /*
                             Text(
                               'null',
                               style: GoogleFonts.roboto(
@@ -499,6 +512,7 @@ class patientInfo extends StatelessWidget {
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
+                            */
                           ],
                         ),
                       ),
@@ -516,6 +530,7 @@ class patientInfo extends StatelessWidget {
                               ),
                             ),
                             /* Discharge Date */
+                            /*
                             Text(
                               'null',
                               style: GoogleFonts.roboto(
@@ -524,6 +539,7 @@ class patientInfo extends StatelessWidget {
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
+                            */
                           ],
                         ),
                       ),
