@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:practice/main.dart';    // go back login page
 import 'package:practice/user/chat_page.dart'; // go to chat page
+import 'package:practice/user/patient.dart';
 import 'package:practice/user/pharmacy_page.dart'; // go to pharmacy page
 import 'package:practice/user/vitals_page.dart';  // go to vitals page
 import 'package:practice/user/calender_page.dart'; // go to calender page
@@ -9,16 +10,14 @@ import 'package:google_fonts/google_fonts.dart'; // for using Google Font
 import 'package:flutter_speed_dial/flutter_speed_dial.dart'; // for using SpeedDial
 
 
-class patientHome extends StatefulWidget {
-  //const ({super.key});
+
+//class _patientHome extends State<patientHome> {
+class patientHome extends StatelessWidget {
+  final listData inputString;
+  patientHome(this.inputString);
 
   @override
-  State<patientHome> createState() => _patientHome();
-}
-
-class _patientHome extends State<patientHome> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {   
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -46,7 +45,8 @@ class _patientHome extends State<patientHome> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => LogIn()), // go to user's pages
-                );                
+                );
+                patientList.clear();                
               }
             },
             child: Container(
@@ -188,7 +188,7 @@ class _patientHome extends State<patientHome> {
           ),
         ],
       ),
-      body: patientInfo(),
+      body: patientInfo(inputString),
     );
   }
 }
@@ -196,6 +196,8 @@ class _patientHome extends State<patientHome> {
 /* show Patient Information */
 class patientInfo extends StatelessWidget {
   //const MyWidget({super.key});
+  final listData inputString2;
+  patientInfo(this.inputString2);
 
   @override
   Widget build(BuildContext context) {
@@ -211,7 +213,7 @@ class patientInfo extends StatelessWidget {
                 ListTile(      
                   leading: Row(
                     mainAxisSize: MainAxisSize.min,
-                    children: [                              
+                    children: [                                                    
                       CircleAvatar(
                         backgroundColor: Color(0xFF373C88),
                         child: Row(
@@ -219,14 +221,14 @@ class patientInfo extends StatelessWidget {
                           children: [
                             /* Initial First Name */
                             Text(
-                              'K',
+                              '${inputString2.initial_fName}',
                               style: TextStyle(
                                 color: Colors.white,
                               ),
                             ),
                             /* Initial Last Name */
                             Text(
-                              'M',
+                              '${inputString2.initial_lName}',
                               style: TextStyle(
                                 color: Colors.white,
                               ),
@@ -244,17 +246,18 @@ class patientInfo extends StatelessWidget {
                     children: [
                       /* First name */
                       Text(
-                        'Kazuya',
+                        '${inputString2.fName}',//'Kazuya',
                         style: GoogleFonts.roboto(
                           color: Color(0xFF373C88),
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
+                      
                       SizedBox(width: 5),
                       /* Last Name */
                       Text(
-                        'Mishima',
+                        '${inputString2.lName}',
                         style: GoogleFonts.roboto(
                           color: Color(0xFF373C88),
                           fontSize: 16,
