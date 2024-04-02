@@ -25,7 +25,7 @@ class _Page extends State<Page_Doctor> {
                 width: 80,
             ),
           onPressed: (){
-            //
+            /* action for logo button */
           },
         ),
         actions: <Widget> [
@@ -39,7 +39,8 @@ class _Page extends State<Page_Doctor> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => LogIn()), // go to patient home pages
-                );                
+                ); 
+                patientList1.clear();               
               }
             },
             child: Container(
@@ -57,7 +58,6 @@ class _Page extends State<Page_Doctor> {
               return [
                 PopupMenuItem(
                   value: 'logout',
-                  //enabled: false,
                   child: Text('Log Out',
                     style: GoogleFonts.montserrat(
                       color: Color(0xFF373C88),
@@ -65,8 +65,7 @@ class _Page extends State<Page_Doctor> {
                       fontWeight: FontWeight.w400,
                     ),
                   ),
-                ),
-          
+                ),          
               ];
             }
           ),

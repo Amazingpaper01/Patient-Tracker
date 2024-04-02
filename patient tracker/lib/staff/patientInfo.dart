@@ -7,7 +7,7 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart'; // for using SpeedD
 
 //class _patientHome extends State<patientHome> {
 class patientHome extends StatelessWidget {
-  final listData sendListData;
+  final listData1 sendListData;
   patientHome(this.sendListData); // store the patientList[index] data
 
   @override
@@ -40,7 +40,7 @@ class patientHome extends StatelessWidget {
                   context,
                   MaterialPageRoute(builder: (context) => LogIn()), // go to user's pages
                 );
-                patientList.clear();                
+                patientList1.clear();                
               }
             },
             child: Container(
@@ -192,8 +192,8 @@ class patientHome extends StatelessWidget {
 /* show Patient Information */
 class patientInfo extends StatelessWidget {
   //const MyWidget({super.key});
-  final listData sendListData;
-  patientInfo(this.sendListData);  // store the patientList[index] data
+  final listData1 sendListData1;
+  patientInfo(this.sendListData1);  // store the patientList[index] data
 
   @override
   Widget build(BuildContext context) {
@@ -217,14 +217,14 @@ class patientInfo extends StatelessWidget {
                           children: [
                             /* Initial First Name */
                             Text(
-                              '${sendListData.initial_fName}',
+                              '${sendListData1.initial_fName}',
                               style: TextStyle(
                                 color: Colors.white,
                               ),
                             ),
                             /* Initial Last Name */
                             Text(
-                              '${sendListData.initial_lName}',
+                              '${sendListData1.initial_lName}',
                               style: TextStyle(
                                 color: Colors.white,
                               ),
@@ -242,7 +242,7 @@ class patientInfo extends StatelessWidget {
                     children: [
                       /* First name */
                       Text(
-                        '${sendListData.fName}',
+                        '${sendListData1.fName}',
                         style: GoogleFonts.roboto(
                           color: Color(0xFF373C88),
                           fontSize: 16,
@@ -252,7 +252,7 @@ class patientInfo extends StatelessWidget {
                       SizedBox(width: 5),
                       /* Last Name */
                       Text(
-                        '${sendListData.lName}',
+                        '${sendListData1.lName}',
                         style: GoogleFonts.roboto(
                           color: Color(0xFF373C88),
                           fontSize: 16,
@@ -263,7 +263,7 @@ class patientInfo extends StatelessWidget {
                   ),
                   /* Doctor Name */
                   subtitle: Text(
-                    'Doctor: Joseph Green',
+                    'Doctor: ${sendListData1.doctorName}',
                     style: GoogleFonts.roboto(
                       color: Color(0xFF373C88),
                       fontSize: 14,
@@ -313,7 +313,7 @@ class patientInfo extends StatelessWidget {
                             ),
                             /* Patient ID number (6 digit) */
                             Text(
-                              '${sendListData.patientID}',
+                              'xxxxxx',//'${sendListData.patientID}',
                               style: GoogleFonts.roboto(
                                 color: Color(0xFF49454F),
                                 fontSize: 14,
@@ -337,7 +337,6 @@ class patientInfo extends StatelessWidget {
                               ),
                             ),
                             /* Hospital Name */
-                            /*
                             Text(
                               'Clovis Community Hospital',
                               style: GoogleFonts.roboto(
@@ -346,7 +345,6 @@ class patientInfo extends StatelessWidget {
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
-                            */
                           ],
                         ),
                       ),
@@ -391,16 +389,14 @@ class patientInfo extends StatelessWidget {
                               ),
                             ),
                             /* Gender */
-                            /*
                             Text(
-                              'Male',
+                              '${sendListData1.gender}',
                               style: GoogleFonts.roboto(
                                 color: Color(0xFF49454F),
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
-                            */
                           ],
                         ),
                       ),
@@ -418,16 +414,14 @@ class patientInfo extends StatelessWidget {
                               ),
                             ),
                             /* Blood Type */
-                            /*
                             Text(
-                              'B+',
+                              '${sendListData1.bloodType}',
                               style: GoogleFonts.roboto(
                                 color: Color(0xFF49454F),
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
-                            */
                           ],
                         ),
                       ),

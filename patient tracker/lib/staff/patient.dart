@@ -7,20 +7,27 @@ import 'package:google_fonts/google_fonts.dart'; // for using Google Font
 
 
 /* Class for List of Patient Data */
-class listData {
+class listData1 {
   String fName;  // first name
-  String lName;  // last name
-  int patientID;  // patient ID
+  String lName;  // last name  
   String initial_fName;  // first letter of first name 
   String initial_lName;  // first letter of last name
-  bool isFavorite;  // favorite status (true or false)
-  int fav;  // favorite status (0 or 1)
-  int numIndex; // index number
-  int favIndex; // index number of favorite list
+  String gender; // gender
+  String bloodType; // blood type
+  String doctorName;
 
-  listData (this.fName, this.lName, this.patientID, this.initial_fName, this.initial_lName, this.isFavorite, this.fav, this.numIndex, this.favIndex);
+  //int patientID;  // patient ID
+
+  //bool isFavorite;  // favorite status (true or false)
+  //int fav;  // favorite status (0 or 1)
+  //int numIndex; // index number
+  //int favIndex; // index number of favorite list
+
+  listData1 (this.fName, this.lName, this.initial_fName, this.initial_lName, this.gender, this.bloodType, this.doctorName);
 }
 
+/* List for Patient Data */
+List<listData1> patientList1 = <listData1>[];  
 
 class add_patient extends StatefulWidget {
   add_patient ({Key? key}) : super(key:key);
@@ -30,26 +37,22 @@ class add_patient extends StatefulWidget {
 }
 
 
-/* List for Patient Data */
-List<listData> patientList = <listData>[];  
-
-
 class _add_patient extends State<add_patient> {
   /* create Controller */
   final TextEditingController patient_fname = TextEditingController();
   final TextEditingController patient_lname = TextEditingController();
-  final TextEditingController patient_ID = TextEditingController();  
+  //final TextEditingController patient_ID = TextEditingController();  
 
   /* patient data list */
   newPatient(){
     patient_fname.clear();
     patient_lname.clear();
-    patient_ID.clear();
+    //patient_ID.clear();
   }
   
   /* Manage Messages */
   createList(){
-    if (patientList.length == 0){
+    if (patientList1.length == 0){
       return patient_list();
     }        
     else {
@@ -60,33 +63,37 @@ class _add_patient extends State<add_patient> {
   /* Patient Data */
   String text_fname = '';  // first name
   String text_lname = '';  // last name
-  int text_patientID = 0;  // patient ID
   String text_initial_fname = '';  // initial first name
   String text_initial_lname = '';  // initial last name
+  String text_gender = 'Male'; // gender
+  String text_blood_type = ''; // blood type
+  String text_doctor_name = ''; // doctor name
 
-  /* Favorite Button */
-  bool _isFavorite = true;  // for favorite button codition (true or false)
-  int _fav = 0;  // for favorite button condition (0 or 1)
-  int _numIndex = 0; // index number
-  int _favIndex = 0; // index number of favorite list
+  //String isSelected = 'Male';
+  List<String> genderItem = ['Male','Female'];
+  String? selectedItem;
 
+  //int text_patientID = 0;  // patient ID
 
-  final formKey = GlobalKey<FormState>();
+  final formKey1 = GlobalKey<FormState>();
 
-  /* showDialog to create the new list of the patient */
-  Future<void> InputDialog(BuildContext context) async {
+  /* showDialog to create the new list of the patient (1) */
+  Future<void> InputDialog1(BuildContext context) async {
     return showDialog(    
       context: context,
-      builder: (context) {
+      builder: (context) 
+      => StatefulBuilder(
+        builder: (BuildContext context, setStateSB)
+        {
         return Form(
-          key: formKey,
+          key: formKey1,
           child: AlertDialog(
             backgroundColor: Colors.white,
             title: Container( 
               child: Row(
                 children: [
                   Text(
-                    'Add Patient',
+                    'Create Patient',
                     style: TextStyle(
                       color: Color(0xFF373C88),
                     ),
@@ -120,8 +127,8 @@ class _add_patient extends State<add_patient> {
                       ),
                       onChanged: (String value){
                         setState(() {
-                          text_fname = value;
-                          text_initial_fname = text_fname[0];
+                          text_fname = value;  // store first name
+                          text_initial_fname = text_fname[0];  // store initial first name
                         });
                       },
                       validator: (value) {
@@ -158,7 +165,106 @@ class _add_patient extends State<add_patient> {
                     ),
                   ),
                   SizedBox(height: 20),
+                  /* Gender */
+                  Container(
+                    width: 210,
+                    //alignment: Alignment.center,
+                    /*
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Color.fromARGB(255, 109, 108, 108)), // ボーダーの色と太さを設定
+                      borderRadius: BorderRadius.circular(5), // ボーダーの角の丸みを設定
+                    ),
+                    */
+                    child: DropdownButtonFormField(
+                      hint: Text('Select choice...'),
+                      items: const [
+                        DropdownMenuItem(
+                          child: Text('Male'),
+                          value: 'Male',
+                        ),
+                        DropdownMenuItem(
+                          child: Text('Female'),
+                          value: 'Female',
+                        ),
+                        DropdownMenuItem(
+                          child: Text('Nonbinary'),
+                          value: 'Nonbinary',
+                        ),
+                        DropdownMenuItem(
+                          child: Text('Other'),
+                          value: 'Other',
+                        ),
+                      ],
+                      onChanged: (String? value) {
+                        setStateSB(() {
+                          selectedItem = value!;
+                          text_gender = value;
+                        });
+                      },
+                      value: selectedItem,
+                      dropdownColor: Color(0xFFF5F5F5),
+                      decoration: InputDecoration(
+                        labelText: 'Gender',
+                        border: OutlineInputBorder(),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty){
+                          return 'Please select gender';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  /* Blood Type */
+                  Container(
+                    width: 210,
+                    child: TextFormField(
+                      //controller: patient_lname,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Blood Type',
+                        hintText: 'Enter here...',
+                      ),
+                      onChanged: (String value){
+                        setState(() {
+                          text_blood_type = value;
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty){
+                          return 'Please enter blood type';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  /* Doctor */
+                  Container(
+                    width: 210,
+                    child: TextFormField(
+                      //controller: patient_lname,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Doctor',
+                        hintText: 'Enter here...',
+                      ),
+                      onChanged: (String value){
+                        setState(() {
+                          text_doctor_name = value;
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty){
+                          return 'Please enter doctor name';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
                   /* Patient ID */
+                  /*
                   Container(
                     width: 210,
                     child: TextFormField(
@@ -194,6 +300,7 @@ class _add_patient extends State<add_patient> {
                       },
                     ),
                   ),
+                  */
                   SizedBox(height: 30),
                   Container(                
                     child: Row(
@@ -207,13 +314,11 @@ class _add_patient extends State<add_patient> {
                             foregroundColor: Colors.white, 
                           ),
                           onPressed: () async {
-                            if (formKey.currentState!.validate()){
+                            if (formKey1.currentState!.validate()){
                               newPatient(); 
                               Navigator.of(context).pop();
                               setState(() {
-                                patientList.add(listData(text_fname, text_lname, text_patientID, text_initial_fname, text_initial_lname, _isFavorite, _fav, _numIndex, _favIndex));  // add elements to the list
-                                _numIndex++;
-                                debugPrint(_numIndex.toString());
+                                patientList1.add(listData1(text_fname, text_lname, text_initial_fname, text_initial_lname, text_gender, text_blood_type, text_doctor_name));  // add elements to the list
                               });
                             } 
                           },
@@ -225,7 +330,7 @@ class _add_patient extends State<add_patient> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [                   
                                 Text(
-                                  'Add',
+                                  'Next',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     color: Colors.white,
@@ -248,6 +353,7 @@ class _add_patient extends State<add_patient> {
           ),    
         );
       },
+    ),
     );
   }
 
@@ -293,7 +399,7 @@ class _add_patient extends State<add_patient> {
                       ElevatedButton(
                         onPressed: (){
                           setState(() {
-                            patientList.removeAt(index); // delete the selected list
+                            patientList1.removeAt(index); // delete the selected list
                             Navigator.of(context).pop();
                           });
                         }, 
@@ -358,14 +464,16 @@ class _add_patient extends State<add_patient> {
                   child: ListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(), 
-                    itemCount: patientList.length,
+                    itemCount: patientList1.length,
                     itemBuilder: (context, index){
                       return GestureDetector(
                         onTap: () {
+                          
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => patientHome(patientList[index])), // go to user's pages
+                            MaterialPageRoute(builder: (context) => patientHome(patientList1[index])), // go to user's pages
                           ); 
+                          
                         },
                         child: Card (    
                           margin: EdgeInsets.all(10),
@@ -382,47 +490,6 @@ class _add_patient extends State<add_patient> {
                             leading: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                /* favorite button */
-                                IconButton(
-                                  onPressed: (){
-                                    setState(() {                                    
-                                      patientList[index].isFavorite = !patientList[index].isFavorite;  // flip the favorite button status
-                                      if(patientList[index].isFavorite == false){
-                                        patientList[index].fav = 1;
-                                        int num1 = _favIndex++;
-                                        patientList[index].favIndex = num1;
-                                        /* sort the list */
-                                        patientList.sort((a,b) {
-                                          if((a.isFavorite && b.isFavorite) == false){
-                                            /* sort lists among favorite  */
-                                            return a.favIndex.compareTo(b.favIndex);
-                                          }
-                                          /* sort lists among not favorite  */
-                                           return a.numIndex.compareTo(b.numIndex);
-                                        });
-                                      }
-                                      else {
-                                        patientList[index].fav = 0;
-                                        patientList[index].favIndex = 0;
-                                        /* sort the list */
-                                        patientList.sort((a,b) {
-                                          if((a.isFavorite && b.isFavorite) == false){
-                                            /* sort lists among favorite  */
-                                            return a.favIndex.compareTo(b.favIndex);
-                                          }
-                                          /* sort lists among non-favorite  */
-                                           return a.numIndex.compareTo(b.numIndex);
-                                        });                                   
-                                      }
-                                      /* sorted by favorite and non-favorite */
-                                      patientList.sort((a, b) => b.fav.compareTo(a.fav));
-                                    });
-                                  }, 
-                                  icon: Icon(
-                                    patientList[index].isFavorite ? Icons.favorite_outline_outlined : Icons.favorite,
-                                    color: patientList[index].isFavorite ? null: Color(0xFFD00202),//Color(0xffff0000)
-                                  ),
-                                ),
                                 SizedBox(width: 10),
                                 /* Profile Icon */
                                 CircleAvatar(
@@ -432,14 +499,14 @@ class _add_patient extends State<add_patient> {
                                     children: [
                                       /* First Name Initial */
                                       Text(
-                                        patientList[index].initial_fName,
+                                        patientList1[index].initial_fName,
                                         style: TextStyle(
                                           color: Colors.white,
                                         ),
                                       ),
                                       /* Last Name Initial */
                                       Text(
-                                        patientList[index].initial_lName,
+                                        patientList1[index].initial_lName,
                                         style: TextStyle(
                                           color: Colors.white,
                                         ),
@@ -456,7 +523,7 @@ class _add_patient extends State<add_patient> {
                               children: [
                                 /* First Name */
                                 Text(
-                                  patientList[index].fName,
+                                  patientList1[index].fName,
                                   style: GoogleFonts.roboto(
                                     color: Color(0xFF373C88),
                                     fontSize: 16,
@@ -466,7 +533,7 @@ class _add_patient extends State<add_patient> {
                                 SizedBox(width: 5),
                                 /* Last Name */
                                 Text(
-                                  patientList[index].lName,
+                                  patientList1[index].lName,
                                   style: GoogleFonts.roboto(
                                     color: Color(0xFF373C88),
                                     fontSize: 16,
@@ -477,7 +544,7 @@ class _add_patient extends State<add_patient> {
                             ),
                             /* Doctor Name */
                             subtitle: Text(
-                              'Dr. Joseph Green',
+                              'Dr. ${patientList1[index].doctorName}',
                               style: GoogleFonts.roboto(
                                 color: Color(0xFF373C88),
                                 fontSize: 14,
@@ -509,7 +576,7 @@ class _add_patient extends State<add_patient> {
                     foregroundColor: Colors.white
                   ),
                   onPressed: () async {                
-                    InputDialog(context);  // show the dialog to create the list              
+                    InputDialog1(context);  // show the dialog to create the list              
                   },  
                   child: SizedBox(
                     width: 143,
@@ -523,7 +590,7 @@ class _add_patient extends State<add_patient> {
                           ),
                         SizedBox(width: 8),
                         Text(
-                          'New Patient',
+                          'Create Patient',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 14,
