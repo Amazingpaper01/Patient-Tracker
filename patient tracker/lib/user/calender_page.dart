@@ -38,7 +38,11 @@ class calenderPage extends StatelessWidget {
             ),
           onPressed: (){
             /* go back Patient Home page*/
-            Navigator.pop(context);
+            //Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => patientHome(sendListData)), // go to user's pages
+            );
           },
         ),
         actions: <Widget> [

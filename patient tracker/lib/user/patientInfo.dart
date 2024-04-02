@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:practice/main.dart';    // go back login page
 import 'package:practice/user/chat_page.dart'; // go to chat page
 import 'package:practice/user/patient.dart';
+import 'package:practice/user/home.dart';
 import 'package:practice/user/pharmacy_page.dart'; // go to pharmacy page
 import 'package:practice/user/vitals_page.dart';  // go to vitals page
 import 'package:practice/user/calender_page.dart'; // go to calender page
@@ -30,7 +31,11 @@ class patientHome extends StatelessWidget {
             ),
           onPressed: (){
             /* go back Patient Home page*/
-            Navigator.pop(context);
+            //Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Page_User()), // go to user's pages
+            );
           },
         ),
         actions: <Widget> [
