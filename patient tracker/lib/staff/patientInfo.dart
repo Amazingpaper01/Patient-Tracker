@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:practice/main.dart';    // go back login page
-import 'package:practice/user/chat_page.dart'; // go to chat page
-import 'package:practice/user/patient.dart';
-import 'package:practice/user/pharmacy_page.dart'; // go to pharmacy page
-import 'package:practice/user/vitals_page.dart';  // go to vitals page
-import 'package:practice/user/calender_page.dart'; // go to calender page
-import 'package:practice/user/notification_page.dart'; // go to notification page
+import 'package:practice/staff/patient.dart'; // to access the patientList
 import 'package:google_fonts/google_fonts.dart'; // for using Google Font
 import 'package:flutter_speed_dial/flutter_speed_dial.dart'; // for using SpeedDial
 
@@ -80,6 +75,7 @@ class patientHome extends StatelessWidget {
         backgroundColor: Color(0xFFF4F4F4),
       ),
       /* create the Menu Button */
+      /*
       floatingActionButton: SpeedDial(
         icon: Icons.accessibility,
         shape: RoundedRectangleBorder(
@@ -187,6 +183,7 @@ class patientHome extends StatelessWidget {
           ),
         ],
       ),
+      */
       body: patientInfo(sendListData),  // transfer the patientList[index] data
     );
   }

@@ -356,3 +356,113 @@ class _Signup_Form extends State<Signup_Form> {
     return signUp_form;
   }
 }
+/*
+/* create the Menu Button */
+      floatingActionButton: SpeedDial(
+        icon: Icons.accessibility,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        backgroundColor: Color(0xFFECE6F0),
+        overlayColor:  Colors.white,
+        overlayOpacity: 0.4,
+        children: [
+          /* close button */
+          SpeedDialChild(
+            child: Icon(
+              Icons.expand_circle_down_outlined,
+              color: Color(0xFFECE6F0),
+            ),
+            backgroundColor: Color(0xFF373C88),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+          ),
+          /* Notificatin History */
+          SpeedDialChild(
+            child: Icon(
+              Icons.description_outlined,
+              color: Color(0xFF373C88),
+            ),
+            backgroundColor: Color(0xFFECE6F0),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            onTap: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => notificationPage()), // go to notification page
+              );                
+            }
+          ),
+          /* Calender */
+          SpeedDialChild(
+            child: Icon(
+              Icons.date_range_outlined,
+              color: Color(0xFF373C88),
+            ),
+            backgroundColor: Color(0xFFECE6F0),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            onTap: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => calenderPage()), // go to calender page
+              );                
+            }
+          ),
+          /* Vitals */
+          SpeedDialChild(
+            child: Icon(
+              Icons.thermostat_auto_outlined,
+              color: Color(0xFF373C88),
+            ),
+            backgroundColor: Color(0xFFECE6F0),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            onTap: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => vitalsPage()), // go to vitals page
+              );                
+            }
+          ),
+          /* Pharmacy */
+          SpeedDialChild(
+            child: Icon(
+              Icons.medical_services_outlined,
+              color: Color(0xFF373C88),
+            ),
+            backgroundColor: Color(0xFFECE6F0),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            onTap: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => pharmacyPage()), // go to pharmacy page
+              );                
+            }
+          ),
+          /* Chat with Doctor*/
+          SpeedDialChild(
+            child: Icon(
+              Icons.forum_outlined,
+              color: Color(0xFF373C88),
+            ),
+            backgroundColor: Color(0xFFECE6F0),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            onTap: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => chatPage()), // go to chat page
+              );                
+            }
+          ),
+        ],
+      ),
+*/

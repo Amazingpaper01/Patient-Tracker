@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:practice/main.dart';   // for login page 
+import 'package:practice/staff/patient.dart';  
 import 'package:google_fonts/google_fonts.dart'; // for using Google Font
-import 'package:stroke_text/stroke_text.dart'; // for using outline to text
 
 class Page_Doctor extends StatefulWidget {
   //const MyWidget({super.key});
@@ -73,7 +73,7 @@ class _Page extends State<Page_Doctor> {
         ],
         backgroundColor: Color(0xFFF4F4F4),
       ),
-      //body: add_patient(),
+      body: add_patient(),
     );
   }
 }
