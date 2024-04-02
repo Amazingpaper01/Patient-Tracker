@@ -75,6 +75,13 @@ class patientHome extends StatelessWidget {
         backgroundColor: Color(0xFFF4F4F4),
       ),
       /* create the Menu Button */
+      floatingActionButton: SpeedDial(
+        icon: Icons.edit,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        backgroundColor: Color(0xFFECE6F0),
+      ),
       /*
       floatingActionButton: SpeedDial(
         icon: Icons.accessibility,
@@ -313,7 +320,7 @@ class patientInfo extends StatelessWidget {
                             ),
                             /* Patient ID number (6 digit) */
                             Text(
-                              'xxxxxx',//'${sendListData.patientID}',
+                              '${sendListData1.patientID}',//'${sendListData.patientID}',
                               style: GoogleFonts.roboto(
                                 color: Color(0xFF49454F),
                                 fontSize: 14,
@@ -362,16 +369,14 @@ class patientInfo extends StatelessWidget {
                               ),
                             ),
                             /* Room Number */
-                            /*
                             Text(
-                              'Red 3B',
+                              '${sendListData1.room}',
                               style: GoogleFonts.roboto(
                                 color: Color(0xFF49454F),
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
-                            */
                           ],
                         ),
                       ),
@@ -439,16 +444,14 @@ class patientInfo extends StatelessWidget {
                               ),
                             ),
                             /* Paitient Condition */
-                            /*
                             Text(
-                              'Knee injury',
+                              '${sendListData1.condition}',
                               style: GoogleFonts.roboto(
                                 color: Color(0xFF49454F),
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
-                            */
                           ],
                         ),
                       ),
@@ -466,16 +469,14 @@ class patientInfo extends StatelessWidget {
                               ),
                             ),
                             /* Type of Medication */
-                            /*
                             Text(
-                              'Ibuprofen',
+                              '${sendListData1.medication}',
                               style: GoogleFonts.roboto(
                                 color: Color(0xFF49454F),
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
-                            */
                           ],
                         ),
                       ),
@@ -493,16 +494,14 @@ class patientInfo extends StatelessWidget {
                               ),
                             ),
                             /* Admission Date */
-                            /*
                             Text(
-                              'null',
+                              '${sendListData1.admissionDate}',
                               style: GoogleFonts.roboto(
                                 color: Color(0xFF49454F),
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
-                            */
                           ],
                         ),
                       ),

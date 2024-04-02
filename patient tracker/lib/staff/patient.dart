@@ -16,14 +16,19 @@ class listData1 {
   String bloodType; // blood type
   String doctorName;
 
-  //int patientID;  // patient ID
+  String condition;
+  String admissionDate;
+  String room;
+  String medication;
+  int patientID;  // patient ID
 
   //bool isFavorite;  // favorite status (true or false)
   //int fav;  // favorite status (0 or 1)
   //int numIndex; // index number
   //int favIndex; // index number of favorite list
 
-  listData1 (this.fName, this.lName, this.initial_fName, this.initial_lName, this.gender, this.bloodType, this.doctorName);
+  listData1 (this.fName, this.lName, this.initial_fName, this.initial_lName, this.gender, this.bloodType, this.doctorName, 
+    this.condition, this.admissionDate, this.room, this.medication, this.patientID);
 }
 
 /* List for Patient Data */
@@ -69,6 +74,12 @@ class _add_patient extends State<add_patient> {
   String text_blood_type = ''; // blood type
   String text_doctor_name = ''; // doctor name
 
+  String text_condition = '';
+  String text_admission_date = '';
+  String text_room = '';
+  String text_medication = '';
+  int text_patientID = 0;
+
   //String isSelected = 'Male';
   List<String> genderItem = ['Male','Female'];
   String? selectedItem;
@@ -76,8 +87,11 @@ class _add_patient extends State<add_patient> {
   //int text_patientID = 0;  // patient ID
 
   final formKey1 = GlobalKey<FormState>();
+  final formKey2 = GlobalKey<FormState>();
 
   /* showDialog to create the new list of the patient (1) */
+  /* included: first name, last name, gender, blood type, doctor */
+  
   Future<void> InputDialog1(BuildContext context) async {
     return showDialog(    
       context: context,
@@ -111,7 +125,19 @@ class _add_patient extends State<add_patient> {
                 ],
               ),
             ),
-            content: Container(
+            content: 
+            /*
+            Column(
+            children: [
+              */
+            Container(
+              height: 600,
+              width: 200,
+              child: ListView(
+                children: [
+
+
+            Container(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -168,13 +194,6 @@ class _add_patient extends State<add_patient> {
                   /* Gender */
                   Container(
                     width: 210,
-                    //alignment: Alignment.center,
-                    /*
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Color.fromARGB(255, 109, 108, 108)), // ボーダーの色と太さを設定
-                      borderRadius: BorderRadius.circular(5), // ボーダーの角の丸みを設定
-                    ),
-                    */
                     child: DropdownButtonFormField(
                       hint: Text('Select choice...'),
                       items: const [
@@ -220,7 +239,6 @@ class _add_patient extends State<add_patient> {
                   Container(
                     width: 210,
                     child: TextFormField(
-                      //controller: patient_lname,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'Blood Type',
@@ -244,7 +262,6 @@ class _add_patient extends State<add_patient> {
                   Container(
                     width: 210,
                     child: TextFormField(
-                      //controller: patient_lname,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'Doctor',
@@ -263,6 +280,139 @@ class _add_patient extends State<add_patient> {
                       },
                     ),
                   ),
+                  SizedBox(height: 20),
+                  /* Room */
+                  Container(
+                    width: 210,
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Room',
+                        hintText: 'Enter here...',
+                      ),
+                      onChanged: (String value){
+                        setState(() {
+                          //text_doctor_name = value;
+                          text_room = value;
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty){
+                          return 'Please enter room';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  /* Condition */
+                  Container(
+                    width: 210,
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Condition',
+                        hintText: 'Enter here...',
+                      ),
+                      onChanged: (String value){
+                        setState(() {
+                          //text_doctor_name = value;
+                          text_condition = value;
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty){
+                          return 'Please enter condition';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  /* Medication */
+                  Container(
+                    width: 210,
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Medication',
+                        hintText: 'Enter here...',
+                      ),
+                      onChanged: (String value){
+                        setState(() {
+                          //text_doctor_name = value;
+                          text_medication = value;
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty){
+                          return 'Please enter medication';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  /* Admission Date */
+                  Container(
+                    width: 210,
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Admission Date',
+                        hintText: 'Enter here...',
+                      ),
+                      onChanged: (String value){
+                        setState(() {
+                          //text_doctor_name = value;
+                          text_admission_date = value;
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty){
+                          return 'Please enter admission date';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  /* Patient ID */
+                  Container(
+                    width: 210,
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Patient ID',
+                        hintText: '6-digit code...',
+                      ),
+                      onChanged: (String value){
+                        setState(() {
+                          text_patientID = int.parse(value);
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty){
+                          return 'Please enter patient ID';
+                        }
+                        else {
+                          /* check 6 digit numbers or not*/
+                          if(value.isNotEmpty){
+                            if(RegExp(
+                              r"^[0-9]{6}$")
+                              .hasMatch(value)){
+                                return null;
+                            }
+                            else {
+                              return 'Please enter 6-digit numbers';
+                            }
+                          }
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+
                   /* Patient ID */
                   /*
                   Container(
@@ -316,15 +466,289 @@ class _add_patient extends State<add_patient> {
                           onPressed: () async {
                             if (formKey1.currentState!.validate()){
                               newPatient(); 
-                              Navigator.of(context).pop();
+                              Navigator.of(context).pop();  
                               setState(() {
-                                patientList1.add(listData1(text_fname, text_lname, text_initial_fname, text_initial_lname, text_gender, text_blood_type, text_doctor_name));  // add elements to the list
+                                patientList1.add(listData1(text_fname, text_lname, text_initial_fname, text_initial_lname, text_gender, text_blood_type, text_doctor_name, text_condition, text_admission_date, text_room, text_medication, text_patientID));  // add elements to the list
                               });
                             } 
                           },
                           child: SizedBox(
                             width: 50,
                             height: 40,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [                   
+                                Text(
+                                  'Save',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontFamily: 'Roboto',
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),                    
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                ],
+              ),
+            ),
+
+
+                ],
+              ),
+            ),
+            
+            /*
+            Text('Hello')
+            ]),
+            */
+          ), 
+        ); 
+        } 
+      ),
+    );
+  }
+  
+  /*
+  Future<void> InputDialog1(BuildContext context) async {
+    return showDialog(    
+      context: context,
+      builder: (context) 
+      => StatefulBuilder(
+        builder: (BuildContext context, setStateSB)
+        {
+        return Form(
+          key: formKey1,
+          child: AlertDialog(
+            backgroundColor: Colors.white,
+            title: Container( 
+              child: Row(
+                children: [
+                  Text(
+                    'Create Patient',
+                    style: TextStyle(
+                      color: Color(0xFF373C88),
+                    ),
+                  ),
+                  SizedBox(width: 90),
+                  IconButton(
+                    icon: Icon(
+                      Icons.close,
+                      color: Color(0xFF373C88),
+                    ),
+                    onPressed: (){
+                      Navigator.pop(context);
+                    },
+                  ),
+                ],
+              ),
+            ),
+            content: Container(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  /* Condition */
+                  Container(
+                    width: 210,
+                    child: TextFormField(
+                      controller: patient_fname,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Condition',
+                        hintText: 'Enter here...',
+                      ),
+                      onChanged: (String value){
+                        setState(() {
+                          //text_fname = value;  // store first name
+                          //text_initial_fname = text_fname[0];  // store initial first name
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty){
+                          return 'Please enter first name';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  /* Admission Date */
+                  Container(
+                    width: 210,
+                    child: TextFormField(
+                      controller: patient_lname,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Admission Date',
+                        hintText: 'Enter here...',
+                      ),
+                      onChanged: (String value){
+                        setState(() {
+                          text_lname = value;
+                          text_initial_lname = text_lname[0];
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty){
+                          return 'Please enter last name';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  /* Room */
+                  Container(
+                    width: 210,
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Room',
+                        hintText: 'Enter here...',
+                      ),
+                      onChanged: (String value){
+                        setState(() {
+                          text_blood_type = value;
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty){
+                          return 'Please enter blood type';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  /* Room */
+                  Container(
+                    width: 210,
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Medication',
+                        hintText: 'Enter here...',
+                      ),
+                      onChanged: (String value){
+                        setState(() {
+                          text_blood_type = value;
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty){
+                          return 'Please enter medication';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  /* Patient ID */
+                  Container(
+                    width: 210,
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Patient ID',
+                        hintText: 'Enter here...',
+                      ),
+                      onChanged: (String value){
+                        setState(() {
+                          text_blood_type = value;
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty){
+                          return 'Please enter Patient ID';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 30),
+                  Container( 
+                    width: double.infinity,               
+                    child: Row(   
+                      mainAxisAlignment: MainAxisAlignment.center,                   
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        /* Cancel Button */
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white, 
+                            foregroundColor: Color(0xFF373C88),
+                            side: BorderSide(
+                              width: 1,
+                              color:Color(0xFF373C88),
+                            )
+                          ),
+                          onPressed: () async {
+                            if (formKey1.currentState!.validate()){
+                              newPatient(); 
+                              Navigator.of(context).pop();  
+                              /*                            
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => ), // go to patient home pages
+                              );
+                              */
+                              /*
+                              setState(() {
+                                patientList1.add(listData1(text_fname, text_lname, text_initial_fname, text_initial_lname, text_gender, text_blood_type, text_doctor_name));  // add elements to the list
+                              }); 
+                              */                             
+                            } 
+                          },
+                          child: SizedBox(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [                   
+                                Text(
+                                  'Go Back',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Color(0xFF373C88),
+                                    fontSize: 14,
+                                    fontFamily: 'Roboto',
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ]
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 40),
+                        /* Add Button */
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(0xFF373C88),
+                            foregroundColor: Colors.white, 
+                          ),
+                          onPressed: () async {
+                            if (formKey1.currentState!.validate()){
+                              newPatient(); 
+                              Navigator.of(context).pop();  
+                              /*                            
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => ), // go to patient home pages
+                              );
+                              */
+                              setState(() {
+                                patientList1.add(listData1(text_fname, text_lname, text_initial_fname, text_initial_lname, text_gender, text_blood_type, text_doctor_name));  // add elements to the list
+                              });                              
+                            } 
+                          },
+                          child: SizedBox(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -356,7 +780,9 @@ class _add_patient extends State<add_patient> {
     ),
     );
   }
+  */
 
+  
   /* showDialog to make sure the deletion of the list */
   Future<void> comfirmDeletion(BuildContext context, int index) async {
     return showDialog(    
@@ -467,8 +893,7 @@ class _add_patient extends State<add_patient> {
                     itemCount: patientList1.length,
                     itemBuilder: (context, index){
                       return GestureDetector(
-                        onTap: () {
-                          
+                        onTap: () {                          
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => patientHome(patientList1[index])), // go to user's pages
@@ -610,4 +1035,3 @@ class _add_patient extends State<add_patient> {
     );
   }
 }
-
