@@ -8,7 +8,7 @@ import 'dart:convert';  // for decoding received JSON
 import 'package:google_fonts/google_fonts.dart'; // for using Google Font
 import 'package:stroke_text/stroke_text.dart'; // for using outline to text
 
-
+/* create SignUp page */
 class SignUp extends StatefulWidget {
   //const MyWidget({super.key});
   @override
@@ -17,20 +17,22 @@ class SignUp extends StatefulWidget {
 
 class _SignUp extends State<SignUp> {
   /* API */
-  final String apiURL = 'http://10.62.78.58:3000/register';
+  final String apiURL = 'http://10.62.78.58:3000/register';  // backend URL
   /* create Controller */
-  final signUp_firstName = TextEditingController();
-  final signUp_lastName = TextEditingController();
-  final signUp_email = TextEditingController();
-  final signUp_password = TextEditingController();
-  final signUp_confirmPassword = TextEditingController();
-  String result = '';
-  String role = ''; 
-  bool isVisible_1 = true;
-  bool isVisible_2 = true;
+  final TextEditingController signUp_firstName = TextEditingController();
+  final TextEditingController signUp_lastName = TextEditingController();
+  final TextEditingController signUp_email = TextEditingController();
+  final TextEditingController signUp_password = TextEditingController();
+  final TextEditingController signUp_confirmPassword = TextEditingController();
+  
+  String result = '';  // To store the result from the API call
+  String role = '';   // store the role: staff or user
+  bool isVisible_1 = true;  // show the password or not
+  bool isVisible_2 = true;  // show the password or not
   /* ======================== */
 
-  @override
+  //@override
+  /*
   void dispose() {
     signUp_firstName.dispose();
     signUp_lastName.dispose();
@@ -38,9 +40,12 @@ class _SignUp extends State<SignUp> {
     signUp_password.dispose();
     super.dispose();
   }
+  */
 
   /* Applying POST request */
-  Future<void> _postData() async{
+  //Future<void> _postData() async{
+  void postRequest_signup() async{
+    print("test");
     try{
       final response = await http.post(
         Uri.parse(apiURL),
@@ -55,24 +60,29 @@ class _SignUp extends State<SignUp> {
           'role':role,
         }),
       );
-
+      final responseData = jsonDecode(response.body);
+      final resultString = jsonEncode(responseData);
       if (response.statusCode == 200){
-        final responseData = jsonDecode(response.body);
+        /* Successful POST request, handle the reponse here */
         setState(() {
-          result = 'Name:${responseData['firstName']}';
+          result = resultString;
+          print(resultString);
         });
       }
       else {
-        throw Exception('Failed to post data');
+        /* if the server returns an error response, thrown an exception */
+        //throw Exception('Failed to post data');
+        print(resultString);
       }    
     }
     catch(e){
       setState(() {
         result = 'Error: $e';
+        print(result);
       });
     }
   }
-  // ======
+  /* ======================== */
 
   @override
   Widget build(BuildContext context) {
@@ -363,9 +373,9 @@ class _SignUp extends State<SignUp> {
                       foregroundColor: Colors.white,
                     ),
                     onPressed: (){                    
-                      if (formKey.currentState!.validate()){
-                        _postData();
+                      if (formKey.currentState!.validate()){                         
                         SignUp();
+                        postRequest_signup(); // send POST request
                       }  
                     }, 
                     child: const Text(

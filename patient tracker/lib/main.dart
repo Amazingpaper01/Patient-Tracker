@@ -3,8 +3,8 @@ import 'package:flutter/widgets.dart';
 import 'package:practice/signup.dart';  // for SignUp page
 import 'package:practice/user/home.dart';   // for users' Home Page 
 import 'package:practice/staff/home.dart';  // for doctors' Home Page
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:http/http.dart' as http;  // for http
+import 'dart:convert';  // for decoding received JSON
 import 'dart:async';
 import 'package:google_fonts/google_fonts.dart'; // for using Google Font
 import 'package:form_field_validator/form_field_validator.dart';
@@ -36,19 +36,18 @@ class LogIn extends StatefulWidget {
 
 class _LogIn extends State<LogIn> {
   /* API */
-  final String apiURL = 'http://10.62.77.52:3000/auth/login'; // backend URL
+  //final String apiURL = 'http://10.62.77.52:3000/auth/login'; // backend URL
   /* create Controller */
   final TextEditingController signIn_email = TextEditingController();
   final TextEditingController signIn_password = TextEditingController();  
   
   String result = ''; // To store the result from the API call
   bool isVisible = true; // show the password or not
-  // ===========
-
-  
+  /* ======================== */
 
   /* applying POST request */
   //Future <void> postRequest() async {
+    /*
   void postRequest() async {
     print("test");
     try {
@@ -63,7 +62,7 @@ class _LogIn extends State<LogIn> {
         }),
       );
       final responseData = jsonDecode(response.body);
-        final resultString = jsonEncode(responseData);
+      final resultString = jsonEncode(responseData);
       // print(response.statusCode);
       if (response.statusCode == 200) {
         /* Successful POST request, handle the reponse here */    
@@ -87,7 +86,8 @@ class _LogIn extends State<LogIn> {
       });
     }
   }
-  // ===========
+  */
+  /* ======================== */
   
   @override
   Widget build(BuildContext context) {
@@ -282,7 +282,7 @@ class _LogIn extends State<LogIn> {
                 onPressed: () {
                   if (formKey.currentState!.validate()){
                     LogIn(); //LogIn
-                    postRequest();  
+                    //postRequest();  // send POST request
                   }        
                 },  
                 child: const Text(

@@ -9,7 +9,7 @@ import 'package:practice/user/notification_page.dart'; // go to notification pag
 import 'package:google_fonts/google_fonts.dart'; // for using Google Font
 import 'package:flutter_speed_dial/flutter_speed_dial.dart'; // for using SpeedDial
 
-/*
+
 class chatPage extends StatefulWidget {
   //const MyWidget({super.key});
   final listData sendListData;
@@ -18,12 +18,15 @@ class chatPage extends StatefulWidget {
   @override
   State<chatPage> createState() => _chatPage();
 }
-*/
 
-//class _chatPage extends State<chatPage> {
-class chatPage extends StatelessWidget {
-  final listData sendListData;
-  chatPage(this.sendListData); // store the patientList[index] data
+//int sendChatRequest = 0;
+bool sendChatRequest = false;
+
+
+class _chatPage extends State<chatPage> {
+//class chatPage extends StatelessWidget {
+  //final listData sendListData;
+  //_chatPage(this.sendListData); // store the patientList[index] data
 
   @override
   Widget build(BuildContext context) {
@@ -40,10 +43,9 @@ class chatPage extends StatelessWidget {
             ),
           onPressed: (){
             /* go back Patient Home page*/
-            //Navigator.pop(context);
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => patientHome(sendListData)), // go to user's pages
+              MaterialPageRoute(builder: (context) => patientHome(widget.sendListData)), // go to user's pages
             );
           },
         ),
@@ -126,7 +128,7 @@ class chatPage extends StatelessWidget {
             onTap: (){
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => notificationPage(sendListData)), // go to notification page
+                MaterialPageRoute(builder: (context) => notificationPage(widget.sendListData)), // go to notification page
               );                
             }
           ),
@@ -143,7 +145,7 @@ class chatPage extends StatelessWidget {
             onTap: (){
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => calenderPage(sendListData)), // go to calender page
+                MaterialPageRoute(builder: (context) => calenderPage(widget.sendListData)), // go to calender page
               );                
             }
           ),
@@ -160,7 +162,7 @@ class chatPage extends StatelessWidget {
             onTap: (){
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => vitalsPage(sendListData)), // go to vitals page
+                MaterialPageRoute(builder: (context) => vitalsPage(widget.sendListData)), // go to vitals page
               );                
             }
           ),
@@ -177,7 +179,7 @@ class chatPage extends StatelessWidget {
             onTap: (){
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => pharmacyPage(sendListData)), // go to pharmacy page
+                MaterialPageRoute(builder: (context) => pharmacyPage(widget.sendListData)), // go to pharmacy page
               );                
             }
           ),
@@ -194,50 +196,113 @@ class chatPage extends StatelessWidget {
             onTap: (){
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => patientHome(sendListData)), // go to patientInfo page
+                MaterialPageRoute(builder: (context) => patientHome(widget.sendListData)), // go to patientInfo page
               );                
             }
           ),
         ],
       ),
-      body: requestChat(),
+      body: Container(
+        width: double.infinity,
+        child: Column(
+          children: [
+            SizedBox(height: 50),
+            Text(
+              'Chat with Staff',
+              textAlign: TextAlign.center,
+              style: GoogleFonts.montserrat(
+                color: Colors.black,
+                fontSize: 24,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            SizedBox(height: 40),
+            Container(
+              width: 320,
+              decoration: ShapeDecoration(
+                shape: RoundedRectangleBorder(
+                  side: BorderSide(
+                    width: 1,
+                    strokeAlign: BorderSide.strokeAlignCenter,
+                    color: Color(0xFFCAC4D0),
+                  ),
+                )
+              ),
+            ),
+            SizedBox(height: 30),    
+            sendChatRequest ? pendingRequest() : selectRequest(),  // condition ? true : false
+            SizedBox(height: 30),  
+            SizedBox(
+              height: 40,
+              width: 150,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFF373C88),
+                  foregroundColor: Colors.white, 
+                ),
+                onPressed: (){                  
+                  debugPrint(sendChatRequest.toString());
+                  setState((){
+                    sendChatRequest = !sendChatRequest;
+                  });
+                  debugPrint(sendChatRequest.toString());                  
+                },
+                child: /*Text(
+                  'Send Request',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.w500
+                  ),
+                ), 
+                */               
+                sendChatRequest ? Text(
+                  'Join Chat',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.w500
+                  ),
+                ) : 
+                Text(
+                  'Send Request',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.w500
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
 
-class requestChat extends StatelessWidget {
-  //const requestChat({super.key});
+/* Select Request Reason */
+class selectRequest extends StatefulWidget {
+  const selectRequest({super.key});
+
+  @override
+  State<selectRequest> createState() => _selectRequest();
+}
+
+class _selectRequest extends State<selectRequest> {
+  String? selectedReason;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
       child: Column(
         children: [
-          SizedBox(height: 50),
-          Text(
-            'Chat with Staff',
-            textAlign: TextAlign.center,
-            style: GoogleFonts.montserrat(
-              color: Colors.black,
-              fontSize: 24,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          SizedBox(height: 30),
-          Container(
-            width: 320,
-            decoration: ShapeDecoration(
-              shape: RoundedRectangleBorder(
-                side: BorderSide(
-                  width: 1,
-                  strokeAlign: BorderSide.strokeAlignCenter,
-                  color: Color(0xFFCAC4D0),
-                ),
-              )
-            ),
-          ),
-          SizedBox(height: 30),
           Text(
             'What is the primary concern for wanting\nto contact your provider?',
             textAlign: TextAlign.center,
@@ -247,6 +312,86 @@ class requestChat extends StatelessWidget {
               fontWeight: FontWeight.w400,
             ),
           ),
+          SizedBox(height: 30),
+          /* Reason for chat */
+          Container(
+            width: 250,
+            child: DropdownButtonFormField(
+              hint: Text('  Select'),
+              items: const [
+                DropdownMenuItem(
+                  child: Text('Change in condition'),
+                  value: '1',
+                ),
+                DropdownMenuItem(
+                  child: Text('Reschedule appointment'),
+                  value: '2',
+                ),
+                DropdownMenuItem(
+                  child: Text('Request medical records'),
+                  value: '3',
+                ),
+                DropdownMenuItem(
+                  child: Text('Other'),
+                  value: 'Other',
+                ),
+              ],
+              onChanged: (String? value) {
+                setState(() {
+                  selectedReason = value!;
+                  //text_gender = value;
+                });
+              },
+              value: selectedReason,                              
+              dropdownColor: Color(0xFFF5F5F5),              
+              decoration: InputDecoration(
+                //labelText: 'Gender',
+                border: OutlineInputBorder(),
+              ),
+              /*
+              validator: (value) {
+                if (value == null || value.isEmpty){
+                  return 'Please select gender';
+                }
+                return null;
+              },
+              */
+            ),
+          ),
+          SizedBox(height: 30),
+        ],
+      ),
+    );
+  }
+}
+
+
+/* Pend Chat Request */
+class pendingRequest extends StatefulWidget {
+  const pendingRequest({super.key});
+
+  @override
+  State<pendingRequest> createState() => _pendingRequest();
+}
+
+
+class _pendingRequest extends State<pendingRequest> {
+  //const MyWidget({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        children: [
+          Text(
+            'Request sent.\nPlease join the chat using the button\nbelow and remain connected until a\nprovider joins.',
+            textAlign: TextAlign.center,
+            style: GoogleFonts.montserrat(
+              color: Colors.black,
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+          SizedBox(height: 70),
         ],
       ),
     );

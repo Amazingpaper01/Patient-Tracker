@@ -4,7 +4,9 @@ import 'package:practice/main.dart';
 import 'package:practice/user/patientInfo.dart'; // for patient Home 
 import 'package:practice/user/patient_list.dart'; // for initial message to the list
 import 'package:google_fonts/google_fonts.dart'; // for using Google Font
-
+import 'package:http/http.dart' as http;  // for http
+import 'dart:convert';  // for decoding received JSON
+import 'dart:async';
 
 /* Class for List of Patient Data */
 class listData {
@@ -31,8 +33,53 @@ class add_patient extends StatefulWidget {
 
 
 /* List for Patient Data */
-List<listData> patientList = <listData>[];  
+List<listData> patientList = <listData>[];
 
+/* List for Demo */
+/* line 78: index number for Demo */
+/*
+List<listData> patientList = <listData>[
+  listData('Joe', 'Doe', 654321, 'J', 'D', true, 0,0,0),
+  listData('John', 'Smith', 234567, 'J', 'S', true, 0,1,0),
+];  
+*/
+
+
+
+  
+/*
+  class listData2 {
+    final String fName;  // first name
+    final String lName;  // last name
+    final int patientID;  // patient ID
+    final String hospital; // hospital name
+    final String room;
+    final String gender;
+    final String bloodType;
+    final String condition;
+    final String medication;
+
+    listData2({
+      required this.fName, 
+      required this.lName, 
+      required this.patientID, 
+      required this.hospital, 
+      required this.room,
+      required this.gender, 
+      required this.bloodType,
+      required this.condition, 
+      required this.medication,
+    });
+
+    //final String initial_fName;  // first letter of first name 
+    //final String initial_lName;  // first letter of last name
+    //bool isFavorite;  // favorite status (true or false)
+    //int fav;  // favorite status (0 or 1)
+    //int numIndex; // index number
+    //int favIndex; // index number of favorite list    
+  }
+  */
+  
 
 class _add_patient extends State<add_patient> {
   /* create Controller */
@@ -40,8 +87,8 @@ class _add_patient extends State<add_patient> {
   final TextEditingController patient_lname = TextEditingController();
   final TextEditingController patient_ID = TextEditingController();  
 
-  /* patient data list */
-  newPatient(){
+  /* delete patient data from textfield */
+  deleteTextData(){
     patient_fname.clear();
     patient_lname.clear();
     patient_ID.clear();
@@ -67,7 +114,8 @@ class _add_patient extends State<add_patient> {
   /* Favorite Button */
   bool _isFavorite = true;  // for favorite button codition (true or false)
   int _fav = 0;  // for favorite button condition (0 or 1)
-  int _numIndex = 0; // index number
+  int _numIndex = 0; // index number 
+  /*int _numIndex = 2; // index number for DEMO */
   int _favIndex = 0; // index number of favorite list
 
 
@@ -98,6 +146,7 @@ class _add_patient extends State<add_patient> {
                       color: Color(0xFF373C88),
                     ),
                     onPressed: (){
+                      deleteTextData();  // delete textfield data
                       Navigator.pop(context);
                     },
                   ),
@@ -208,7 +257,7 @@ class _add_patient extends State<add_patient> {
                           ),
                           onPressed: () async {
                             if (formKey.currentState!.validate()){
-                              newPatient(); 
+                              deleteTextData();  // delete textfield data
                               Navigator.of(context).pop();
                               setState(() {
                                 patientList.add(listData(text_fname, text_lname, text_patientID, text_initial_fname, text_initial_lname, _isFavorite, _fav, _numIndex, _favIndex));  // add elements to the list
@@ -338,6 +387,54 @@ class _add_patient extends State<add_patient> {
     );
   }
 
+  /*
+  /* API */
+  final String apiURL = 'http://10.62.77.52:3000/auth/login'; // backend URL
+  String result = "";
+  //Future<listData2> getRequest() async {
+  void getRequest() async {
+    final response = await http.get(Uri.parse(apiURL));
+    //var responseData = json.decode(response.body);
+    try {
+      if(response.statusCode == 200) {
+        String data = response.body;
+        var decodedData = jsonDecode(data);
+        return decodedData;
+      }
+      else {
+        throw Exception('Failed to load album');
+      }
+    }
+    catch(e) {
+      setState((){
+        result = 'Error: $e';
+        print(result);
+      });
+    }
+
+    /*
+    //List<listData> = 
+    List<listData2> patientList2 = <listData2>[];
+    for(var singlePatient in responseData) {
+      listData2 patientData = listData2(
+        fName: singlePatient["fName"],
+        lName: singlePatient["lName"],
+        patientID: singlePatient["patientID"],
+        hospital: singlePatient["hospital"],
+        room: singlePatient["room"],
+        gender: singlePatient["gender"],
+        bloodType: singlePatient["bloodType"],
+        condition: singlePatient["condition"],
+        medication: singlePatient["medication"],
+      );
+      patientList2.add(patientData);
+    }
+    //return patientList2;
+    */
+  }
+  */
+    
+
 
   @override
   Widget build(BuildContext context) {
@@ -366,6 +463,7 @@ class _add_patient extends State<add_patient> {
                             context,
                             MaterialPageRoute(builder: (context) => patientHome(patientList[index])), // go to user's pages
                           ); 
+                          //getRequest();   
                         },
                         child: Card (    
                           margin: EdgeInsets.all(10),
@@ -509,7 +607,7 @@ class _add_patient extends State<add_patient> {
                     foregroundColor: Colors.white
                   ),
                   onPressed: () async {                
-                    InputDialog(context);  // show the dialog to create the list              
+                    InputDialog(context);  // show the dialog to create the list     
                   },  
                   child: SizedBox(
                     width: 143,
