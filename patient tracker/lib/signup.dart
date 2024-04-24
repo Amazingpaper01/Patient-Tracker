@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:practice/main.dart';    // for Login Page
-import 'package:practice/user/home.dart';  // for Home Page
+import 'package:practice/view/user/home.dart';  // for Home Page
 //import 'package:practice/user/patient.dart';
-import 'package:practice/staff/home.dart';  // for doctor's Home Page
+import 'package:practice/view/staff/home.dart';  // for doctor's Home Page
 import 'package:http/http.dart' as http;  // for http
 import 'dart:convert';  // for decoding received JSON
 import 'package:google_fonts/google_fonts.dart'; // for using Google Font
@@ -17,7 +17,7 @@ class SignUp extends StatefulWidget {
 
 class _SignUp extends State<SignUp> {
   /* API */
-  final String apiURL = 'http://10.62.78.58:3000/register';  // backend URL
+  final String apiURL = 'http://10.62.66.173:3000/auth/register';  // backend URL
   /* create Controller */
   final TextEditingController signUp_firstName = TextEditingController();
   final TextEditingController signUp_lastName = TextEditingController();
@@ -115,6 +115,7 @@ class _SignUp extends State<SignUp> {
             debugPrint('doctor email');
             /* go to Login Page (main.dart) */
             role = 'staff';
+            postRequest_signup();
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => Page_Doctor()),
@@ -132,6 +133,7 @@ class _SignUp extends State<SignUp> {
               debugPrint('patient email');
               /* go to Login Page (main.dart) */
               role = 'user';
+              postRequest_signup();
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => Page_User()),
@@ -375,7 +377,7 @@ class _SignUp extends State<SignUp> {
                     onPressed: (){                    
                       if (formKey.currentState!.validate()){                         
                         SignUp();
-                        postRequest_signup(); // send POST request
+                        //postRequest_signup(); // send POST request
                       }  
                     }, 
                     child: const Text(

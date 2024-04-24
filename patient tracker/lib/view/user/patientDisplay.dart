@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:practice/main.dart';  
-import 'package:practice/user/patientInfo.dart'; // for patient Home 
-import 'package:practice/user/patient_list.dart'; // for initial message to the list
+import 'package:practice/view/user/patientInfo.dart'; // for patient Home 
+import 'package:practice/view/user/patient_list.dart'; // for initial message to the list
 import 'package:google_fonts/google_fonts.dart'; // for using Google Font
 import 'package:http/http.dart' as http;  // for http
 import 'dart:convert';  // for decoding received JSON
 import 'dart:async';
+import 'package:practice/model/patient.dart';  // fromJSON
 
 /* Class for List of Patient Data */
 class listData {
@@ -20,7 +21,17 @@ class listData {
   int numIndex; // index number
   int favIndex; // index number of favorite list
 
-  listData (this.fName, this.lName, this.patientID, this.initial_fName, this.initial_lName, this.isFavorite, this.fav, this.numIndex, this.favIndex);
+  listData (
+    this.fName, 
+    this.lName, 
+    this.patientID, 
+    this.initial_fName, 
+    this.initial_lName, 
+    this.isFavorite, 
+    this.fav, 
+    this.numIndex, 
+    this.favIndex
+  );
 }
 
 
@@ -43,8 +54,6 @@ List<listData> patientList = <listData>[
   listData('John', 'Smith', 234567, 'J', 'S', true, 0,1,0),
 ];  
 */
-
-
 
   
 /*
@@ -79,9 +88,139 @@ List<listData> patientList = <listData>[
     //int favIndex; // index number of favorite list    
   }
   */
+
+  class patientProfile {
+    String fName;
+    String lName;
+
+    patientProfile (
+      this.fName, 
+      this.lName,
+    );
+  }
   
 
 class _add_patient extends State<add_patient> {
+  /* API */
+  final String apiURL = 'http://10.62.66.173:3000/auth/addPatient'; // backend URL
+  String result = ''; // to store the result from the API call
+
+  String? res_fName;
+  String? res_lName ;
+  int? res_patientID;
+
+  /* ======================== */
+  /* applying POST request */
+  void postRequest_addPatient() async {
+    try {
+      final response = await http.post(
+        Uri.parse(apiURL),
+        headers: <String, String> {
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'patientID': send_patientID,
+        }),
+      );
+      final responseData = jsonDecode(response.body);
+      final patient = Patient.fromJson(responseData);
+      final resultString = jsonEncode(responseData);
+      //print(patient);
+      // print(response.statusCode);
+      if (response.statusCode == 201) {
+        /* Successful POST request, handle the reponse here */    
+        setState((){
+          //result = 'Email: ${responseData['email']}\nPassword: ${responseData['password']}';
+          result = resultString;
+          print(resultString);
+          res_fName = patient.firtName;
+          res_lName = patient.lastName;
+          res_patientID = patient.patientID;
+          print(patient.firtName);
+          print(res_fName);
+          text_fname = res_fName ?? '';
+          text_lname = res_lName ?? '';
+          text_patientID = res_patientID ?? 0;
+          text_initial_fname = res_fName?[0] ?? '';
+          text_initial_lname = res_lName?[0] ?? '';
+          
+          patientList.add(
+            listData(
+              text_fname, 
+              text_lname, 
+              text_patientID, 
+              text_initial_fname, 
+              text_initial_lname, 
+              _isFavorite, 
+              _fav, 
+              _numIndex, 
+              _favIndex
+            )
+          );  // add elements to the list
+        });
+      }
+      else {
+        /* if the server returns an error response, thrown an exception */
+        //throw Exception('Failed to post data');
+        print(resultString);
+      }
+    }
+    catch (e) {
+      setState((){
+        result = 'Error: $e';
+        print(result);
+      });
+    }
+  }
+  /* ======================== */
+
+  /* API */
+  final String apiURL_get = 'http://10.62.76.132:3000/user/profile'; // backend URL
+  String getResult = ''; // to store the result from the API call
+
+  /* applying GET request */
+  void getRequest_profile() async {
+    try {
+      final response = await http.get(
+        Uri.parse(apiURL_get),        
+      );
+      final responseData = jsonDecode(response.body);
+      final patient = Patient.fromJson(responseData);
+      final resultString = jsonEncode(responseData);
+      // print(response.statusCode);
+      if (response.statusCode == 201) {
+        /* Successful GET request, handle the reponse here */    
+        print(responseData);
+        print(patient.patientID);
+
+        List<patientProfile> profile = [];
+        //for ()
+        String get_fName = patient.firtName ?? '';
+        String get_lName = patient.lastName ?? '';
+
+        profile.add(
+          patientProfile(
+            get_fName, 
+            get_lName
+          )
+        );
+      }
+      else {
+        /* if the server returns an error response, thrown an exception */
+        //throw Exception('Failed to post data');
+        print(resultString);
+      }
+    }
+    catch (e) {
+      setState((){
+        getResult = 'Error: $e';
+        print(getResult);
+      });
+    }
+  }
+  /* ======================== */
+
+
   /* create Controller */
   final TextEditingController patient_fname = TextEditingController();
   final TextEditingController patient_lname = TextEditingController();
@@ -108,6 +247,7 @@ class _add_patient extends State<add_patient> {
   String text_fname = '';  // first name
   String text_lname = '';  // last name
   int text_patientID = 0;  // patient ID
+  int send_patientID = 0;  
   String text_initial_fname = '';  // initial first name
   String text_initial_lname = '';  // initial last name
 
@@ -157,56 +297,6 @@ class _add_patient extends State<add_patient> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  /* First Name */
-                  Container(
-                    width: 210,
-                    child: TextFormField(
-                      controller: patient_fname,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'First Name',
-                        hintText: 'Enter here...',
-                      ),
-                      onChanged: (String value){
-                        setState(() {
-                          text_fname = value;
-                          text_initial_fname = text_fname[0];
-                        });
-                      },
-                      validator: (value) {
-                        if (value == null || value.isEmpty){
-                          return 'Please enter first name';
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  /* Last Name */
-                  Container(
-                    width: 210,
-                    child: TextFormField(
-                      controller: patient_lname,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Last Name',
-                        hintText: 'Enter here...',
-                      ),
-                      onChanged: (String value){
-                        setState(() {
-                          text_lname = value;
-                          text_initial_lname = text_lname[0];
-                        });
-                      },
-                      validator: (value) {
-                        if (value == null || value.isEmpty){
-                          return 'Please enter last name';
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
-                  SizedBox(height: 20),
                   /* Patient ID */
                   Container(
                     width: 210,
@@ -219,7 +309,7 @@ class _add_patient extends State<add_patient> {
                       ),
                       onChanged: (String value){
                         setState(() {
-                          text_patientID = int.parse(value);  // convert string to int
+                          send_patientID = int.parse(value);  // convert string to int
                         });
                       },
                       validator: (value) {
@@ -257,13 +347,192 @@ class _add_patient extends State<add_patient> {
                           ),
                           onPressed: () async {
                             if (formKey.currentState!.validate()){
+                              postRequest_addPatient();
                               deleteTextData();  // delete textfield data
                               Navigator.of(context).pop();
+                              //comfirmDialog();
+                              
+                              showDialog(    
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    
+                                    title: Container( 
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                            'Confirm',
+                                            style: TextStyle(
+                                              color: Color(0xFF373C88),
+                                            ),
+                                          ),
+                                          SizedBox(width: 90),
+                                          IconButton(
+                                            icon: Icon(
+                                              Icons.close,
+                                              color: Color(0xFF373C88),
+                                            ),
+                                            onPressed: (){
+                                              deleteTextData();  // delete textfield data
+                                              Navigator.pop(context);
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+
+                                    content: Container(
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          SizedBox(width: double.infinity),
+                                          /* Question */
+                                          Container(
+                                            //width: 266,
+                                            //height: 58, 
+                                            padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                                            /*              
+                                            decoration: ShapeDecoration(
+                                              color: Color(0xFFEFEFEF),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(20),
+                                              )
+                                            ),
+                                            */
+                                            child: Text(
+                                              'Are you sure you want to\nadd this patient?',
+                                              textAlign: TextAlign.center,
+                                              style: GoogleFonts.montserrat(
+                                                color: Colors.black,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(height: 25),
+                                          Container(
+                                            width: double.infinity,
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  '${res_fName}, ${res_lName}',
+                                                  style: GoogleFonts.montserrat(
+                                                    color: Colors.black,
+                                                    fontSize: 15,
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                                ),                                             
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(height: 10),
+                                          Container(
+                                            width: double.infinity,
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  'Patient ID: ',
+                                                  style: GoogleFonts.montserrat(
+                                                    color: Colors.black,
+                                                    fontSize: 15,
+                                                    fontWeight: FontWeight.w400,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  '${res_patientID}',
+                                                  style: GoogleFonts.montserrat(
+                                                    color: Colors.black,
+                                                    fontSize: 15,
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                                ),                                                
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(height: 30),
+                                          Container(
+                                            child: Row(   
+                                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                              mainAxisSize: MainAxisSize.min,             
+                                              children: [   
+                                                /* Confirm Button */               
+                                                ElevatedButton(
+                                                  onPressed: (){
+                                                    setState(() {                                                      
+                                                      _numIndex++;
+                                                      debugPrint(_numIndex.toString());
+                                                    });
+                                                    //postRequest_addPatient();
+                                                    Navigator.of(context).pop();
+                                                    
+                                                    patientList.add(
+                                                      listData(
+                                                        text_fname, 
+                                                        text_lname, 
+                                                        text_patientID, 
+                                                        text_initial_fname, 
+                                                        text_initial_lname, 
+                                                        _isFavorite, 
+                                                        _fav, 
+                                                        _numIndex, 
+                                                        _favIndex
+                                                      )
+                                                    );
+                                                    
+                                                  }, 
+                                                  child: Text(
+                                                    'Confirm',
+                                                    style: GoogleFonts.montserrat(
+                                                      color: Colors.white,
+                                                      fontSize: 15,
+                                                      fontWeight: FontWeight.w500,
+                                                    ),
+                                                  ),
+                                                  style: ElevatedButton.styleFrom(
+                                                    backgroundColor: Color(0xFF373C88),
+                                                  ),
+                                                ),
+                                                SizedBox(width: 30),
+                                                /* Cancel Button */
+                                                ElevatedButton(
+                                                  onPressed: (){
+                                                    Navigator.of(context).pop();
+                                                  }, 
+                                                  child: Text(
+                                                    'Cancel',
+                                                    style: GoogleFonts.montserrat(
+                                                      color: Color(0xFF373C88),
+                                                      fontSize: 15,
+                                                      fontWeight: FontWeight.w500,
+                                                    ),
+                                                  ),
+                                                  style: ElevatedButton.styleFrom(
+                                                    backgroundColor: Colors.white, 
+                                                    foregroundColor: Color(0xFF373C88),
+                                                    side: BorderSide(
+                                                      color: Color(0xFF373C88)
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(height: 30),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                }
+                              );
+                              /*
                               setState(() {
                                 patientList.add(listData(text_fname, text_lname, text_patientID, text_initial_fname, text_initial_lname, _isFavorite, _fav, _numIndex, _favIndex));  // add elements to the list
                                 _numIndex++;
                                 debugPrint(_numIndex.toString());
                               });
+                              */
                             } 
                           },
                           child: SizedBox(
@@ -300,6 +569,94 @@ class _add_patient extends State<add_patient> {
     );
   }
 
+  //final formKey4 = GlobalKey<FormState>();
+  /* comfirm adding patient */
+  /*
+  Future<void> comfirmDialog(BuildContext context, int index) async {
+    return showDialog(    
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: Container(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(width: double.infinity),
+                /* Question */
+                Container(
+                  width: 266,
+                  height: 58, 
+                  padding: EdgeInsets.fromLTRB(0, 5, 0, 0),              
+                  decoration: ShapeDecoration(
+                    color: Color(0xFFEFEFEF),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    )
+                  ),
+                  child: Text(
+                    'Confirm?',
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.montserrat(
+                      color: Colors.black,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 25),
+                Container(
+                  child: Row(   
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisSize: MainAxisSize.min,             
+                    children: [   
+                      /* Yes Button */               
+                      ElevatedButton(
+                        onPressed: (){
+                          setState(() {
+
+                          });
+                        }, 
+                        child: Text(
+                          'Yes',
+                          style: GoogleFonts.montserrat(
+                            color: Colors.white,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xFFD00202),
+                        ),
+                      ),
+                      SizedBox(width: 50),
+                      /* No Button */
+                      ElevatedButton(
+                        onPressed: (){
+                        }, 
+                        child: Text(
+                          'No',
+                          style: GoogleFonts.montserrat(
+                            color: Colors.white,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xFF373C88),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      }
+    );
+  }
+  */
+
   /* showDialog to make sure the deletion of the list */
   Future<void> comfirmDeletion(BuildContext context, int index) async {
     return showDialog(    
@@ -311,7 +668,7 @@ class _add_patient extends State<add_patient> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 SizedBox(width: double.infinity),
-                /* Question */
+                /* Confirm */
                 Container(
                   width: 266,
                   height: 58, 
@@ -459,6 +816,7 @@ class _add_patient extends State<add_patient> {
                     itemBuilder: (context, index){
                       return GestureDetector(
                         onTap: () {
+                          getRequest_profile();  // get patientInfo 
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => patientHome(patientList[index])), // go to user's pages
@@ -621,7 +979,7 @@ class _add_patient extends State<add_patient> {
                           ),
                         SizedBox(width: 8),
                         Text(
-                          'New Patient',
+                          'Add New Patient',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 14,

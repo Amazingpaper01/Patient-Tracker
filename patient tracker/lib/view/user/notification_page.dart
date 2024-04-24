@@ -1,30 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:practice/main.dart';   // for login page 
-import 'package:practice/user/patient.dart';  // to access the patientList
-import 'package:practice/user/patientInfo.dart'; // go to patientInfo page
-import 'package:practice/user/chat_page.dart'; // go to chat page
-import 'package:practice/user/pharmacy_page.dart'; // go to pharmacy page
-import 'package:practice/user/vitals_page.dart';  // go to vitals page
-import 'package:practice/user/notification_page.dart'; // go to notification page
+import 'package:practice/view/user/patientDisplay.dart';  // to access the patientList
+import 'package:practice/view/user/patientInfo.dart'; // go to patientInfo page
+import 'package:practice/view/user/chat_page.dart'; // go to chat page
+import 'package:practice/view/user/pharmacy_page.dart'; // go to pharmacy page
+import 'package:practice/view/user/vitals_page.dart';  // go to vitals page
+import 'package:practice/view/user/calender_page.dart'; // go to notification page
 import 'package:google_fonts/google_fonts.dart'; // for using Google Font
 import 'package:flutter_speed_dial/flutter_speed_dial.dart'; // for using SpeedDial
 
-
 /*
-class calenderPage extends StatefulWidget {
+class notificationPage extends StatefulWidget {
   //const MyWidget({super.key});
 
   @override
-  State<calenderPage> createState() => _calenderPage();
+  State<notificationPage> createState() => _notificationPage();
 }
 */
 
-//class _calenderPage extends State<calenderPage> {
-class calenderPage extends StatelessWidget {
+//class _notificationPage extends State<notificationPage> {
+class notificationPage extends StatelessWidget {
   final listData sendListData;
-  calenderPage(this.sendListData); // store the patientList[index] data
+  notificationPage(this.sendListData); // store the patientList[index] data
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {    
     return Scaffold(      
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -56,8 +56,8 @@ class calenderPage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => LogIn()), // go to patient home pages
-                );    
-                patientList.clear();             
+                );  
+                patientList.clear();               
               }
             },
             child: Container(
@@ -92,7 +92,7 @@ class calenderPage extends StatelessWidget {
       ),
       /* create the Menu Button */
       floatingActionButton: SpeedDial(
-        icon: Icons.date_range_outlined, // calender icon
+        icon: Icons.description_outlined, // notification history icon
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
         ),
@@ -111,10 +111,10 @@ class calenderPage extends StatelessWidget {
               borderRadius: BorderRadius.circular(10.0),
             ),
           ),
-          /* Notificatin History */
+          /* Calender */
           SpeedDialChild(
             child: Icon(
-              Icons.description_outlined,
+              Icons.date_range_outlined,
               color: Color(0xFF373C88),
             ),
             backgroundColor: Color(0xFFECE6F0),
@@ -124,7 +124,7 @@ class calenderPage extends StatelessWidget {
             onTap: (){
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => notificationPage(sendListData)), // go to notification page
+                MaterialPageRoute(builder: (context) => calenderPage(sendListData)), // go to notification page
               );                
             }
           ),
@@ -198,12 +198,12 @@ class calenderPage extends StatelessWidget {
           ),  
         ],
       ),
-      body: Calender(),
+      body: notificationHistory(),
     );
   }
 }
 
-class Calender extends StatelessWidget {
+class notificationHistory extends StatelessWidget {
   //const requestChat({super.key});
 
   @override
@@ -214,12 +214,25 @@ class Calender extends StatelessWidget {
         children: [
           SizedBox(height: 50),
           Text(
-            'Calender',
+            'Notifications',
             textAlign: TextAlign.center,
             style: GoogleFonts.montserrat(
               color: Colors.black,
               fontSize: 24,
               fontWeight: FontWeight.w500,
+            ),
+          ),
+          SizedBox(height: 30),
+          Container(
+            width: 320,
+            decoration: ShapeDecoration(
+              shape: RoundedRectangleBorder(
+                side: BorderSide(
+                  width: 1,
+                  strokeAlign: BorderSide.strokeAlignCenter,
+                  color: Color(0xFFCAC4D0),
+                ),
+              )
             ),
           ),
         ],

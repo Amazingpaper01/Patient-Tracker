@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:practice/main.dart';    // go back login page
-import 'package:practice/staff/patient.dart'; // to access the patientList
+import 'package:practice/view/staff/edit_patientInfo.dart'; // edit patientIngo page
+import 'package:practice/view/staff/patientDisplay.dart'; // to access the patientList
+import 'package:practice/view/staff/home.dart'; // go to home page
 import 'package:google_fonts/google_fonts.dart'; // for using Google Font
 import 'package:flutter_speed_dial/flutter_speed_dial.dart'; // for using SpeedDial
 import 'package:http/http.dart' as http;  // for http
@@ -23,7 +25,8 @@ class patientHome extends StatefulWidget {
 class patientHome extends StatelessWidget {
 //class _patientHome extends State<patientHome> {
   final listData1 sendListData;
-  patientHome(this.sendListData); // store the patientList[index] data
+  final int indexNum;
+  patientHome(this.sendListData, this.indexNum); // store the patientList[index] data
 
   @override
   Widget build(BuildContext context) {   
@@ -40,7 +43,11 @@ class patientHome extends StatelessWidget {
             ),
           onPressed: (){
             /* go back Patient Home page*/
-            Navigator.pop(context);
+            //Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Page_Doctor()), // go to user's pages
+            );
           },
         ),
         actions: <Widget> [
@@ -108,29 +115,14 @@ class patientHome extends StatelessWidget {
           });
           */
           //editPatientInfo();
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => patientHome_edit(sendListData, indexNum)), // go to user's pages
+          );
         },
       ),
-      body: patientInfo(sendListData)
-      /*
-      Container (
-        child: Column(
-          children: [
-            //isEdit ? editPatientInfo(sendListData) : patientInfo(sendListData),  // transfer the patientList[index] data
-            //patientInfo(sendListData),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: (){
-                setState(() {
-                  isEdit != isEdit;
-                });
-              }, 
-              child: isEdit ? Text('Save') : Text('Edit'),
-            ),
-            *
-          ],
-        ),
-      ),
-      */
+      //body: patientInfo(sendListData)
+      body: patientInfo(sendListData, indexNum)
     );
   }
 }
@@ -139,7 +131,8 @@ class patientHome extends StatelessWidget {
 class patientInfo extends StatelessWidget {
   //const MyWidget({super.key});
   final listData1 sendListData1;
-  patientInfo(this.sendListData1);  // store the patientList[index] data
+  final int indexNum;
+  patientInfo(this.sendListData1, this.indexNum);  // store the patientList[index] data
 
   /* API */
   //final String apiURL = 'http://10.62.77.52:3000/auth/login'; // backend URL
@@ -473,6 +466,7 @@ class patientInfo extends StatelessWidget {
                           ],
                         ),
                       ),
+                      
                     ],
                   ),
                 ),
@@ -484,365 +478,3 @@ class patientInfo extends StatelessWidget {
     );
   }
 }
-
-/*
-class editPatientInfo extends StatefulWidget {
-  //const MyWidget({super.key});
-  final listData1 sendListData1;
-  editPatientInfo(this.sendListData1); 
-
-  @override
-  State<editPatientInfo> createState() => _editPatientInfo(sendListData1);
-}
-
-class _editPatientInfo extends State<editPatientInfo> {
-//class editPatientInfo extends StatelessWidget {
-  //const MyWidget({super.key});
-  final listData1 sendListData1;
-  _editPatientInfo(this.sendListData1);  // store the patientList[index] data
-
-  /* API */
-  //final String apiURL = 'http://10.62.77.52:3000/auth/login'; // backend URL
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: ListView(
-        children: [
-          Container(
-            margin: EdgeInsets.fromLTRB(20, 10, 20, 0),
-            padding: EdgeInsets.all(20),
-            child: Column(
-              children: [
-                /* Icon with initial, Patient Name, doctor name */
-                ListTile(      
-                  leading: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [                                                    
-                      CircleAvatar(
-                        backgroundColor: Color(0xFF373C88),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            /* Initial First Name */
-                            Text(
-                              '${sendListData1.initial_fName}',
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
-                            ),
-                            /* Initial Last Name */
-                            Text(
-                              '${sendListData1.initial_lName}',
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(width: 3),
-                    ],
-                  ),
-                  /* Patient name */
-                  title: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      /* First name */
-                      Text(
-                        '${sendListData1.fName}',
-                        style: GoogleFonts.roboto(
-                          color: Color(0xFF373C88),
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      SizedBox(width: 5),
-                      /* Last Name */
-                      Text(
-                        '${sendListData1.lName}',
-                        style: GoogleFonts.roboto(
-                          color: Color(0xFF373C88),
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                  /* Doctor Name */
-                  subtitle: Text(
-                    'Doctor: ${sendListData1.doctorName}',
-                    style: GoogleFonts.roboto(
-                      color: Color(0xFF373C88),
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ),
-                /* Icon */
-                Container(                
-                  child: Icon(
-                    Icons.account_circle,
-                    size: 200,
-                    color: Color(0xff6750A4),
-                  ),
-                ),
-                /* Text: patient details */
-                Container(
-                  padding: EdgeInsets.all(20),
-                  child: Text(
-                    'Patient Details',
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.roboto(
-                      color: Color(0xFF1D1B20),
-                      fontSize: 16,
-                      fontWeight: FontWeight.w800,
-                      decoration: TextDecoration.underline,
-                    ),
-                  ),
-                ),
-                Container(
-                  width: double.infinity,
-                  child: Column(                  
-                    crossAxisAlignment: CrossAxisAlignment.start,                  
-                    children: [
-                      /* Patient ID */
-                      Container(
-                        padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                        child: Row(
-                          children: [
-                            Text(
-                              'Patient ID: ',
-                              style: GoogleFonts.roboto(
-                                color: Color(0xFF49454F),
-                                fontSize: 14,
-                                fontWeight: FontWeight.w800,
-                              ),
-                            ),
-                            /* Patient ID number (6 digit) */
-                            Text(
-                              '',
-                              style: GoogleFonts.roboto(
-                                color: Color(0xFF49454F),
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      /* Hospital */
-                      Container(
-                        padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                        child: Row(
-                          children: [
-                            Text(
-                              'Hospital: ',
-                              style: GoogleFonts.roboto(
-                                color: Color(0xFF49454F),
-                                fontSize: 14,
-                                fontWeight: FontWeight.w800,
-                              ),
-                            ),
-                            /* Hospital Name */
-                            Text(
-                              'Clovis Community Hospital',
-                              style: GoogleFonts.roboto(
-                                color: Color(0xFF49454F),
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      /* Room */
-                      Container(
-                        padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                        child: Row(
-                          children: [
-                            Text(
-                              'Room: ',
-                              style: GoogleFonts.roboto(
-                                color: Color(0xFF49454F),
-                                fontSize: 14,
-                                fontWeight: FontWeight.w800,
-                              ),
-                            ),
-                            /* Room Number */
-                            Text(
-                              '${sendListData1.room}',
-                              style: GoogleFonts.roboto(
-                                color: Color(0xFF49454F),
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      /* Gender */
-                      Container(
-                        padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                        child: Row(
-                          children: [
-                            Text(
-                              'Gender: ',
-                              style: GoogleFonts.roboto(
-                                color: Color(0xFF49454F),
-                                fontSize: 14,
-                                fontWeight: FontWeight.w800,
-                              ),
-                            ),
-                            /* Gender */
-                            Text(
-                              '${sendListData1.gender}',
-                              style: GoogleFonts.roboto(
-                                color: Color(0xFF49454F),
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      /* Bloodtype */
-                      Container(
-                        padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                        child: Row(
-                          children: [
-                            Text(
-                              'Bloodtype: ',
-                              style: GoogleFonts.roboto(
-                                color: Color(0xFF49454F),
-                                fontSize: 14,
-                                fontWeight: FontWeight.w800,
-                              ),
-                            ),
-                            /* Blood Type */
-                            Text(
-                              '${sendListData1.bloodType}',
-                              style: GoogleFonts.roboto(
-                                color: Color(0xFF49454F),
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      /* Condition */
-                      Container(
-                        padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                        child: Row(
-                          children: [
-                            Text(
-                              'Condition: ',
-                              style: GoogleFonts.roboto(
-                                color: Color(0xFF49454F),
-                                fontSize: 14,
-                                fontWeight: FontWeight.w800,
-                              ),
-                            ),
-                            /* Paitient Condition */
-                            Text(
-                              '${sendListData1.condition}',
-                              style: GoogleFonts.roboto(
-                                color: Color(0xFF49454F),
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      /* Medication */
-                      Container(
-                        padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                        child: Row(
-                          children: [
-                            Text(
-                              'Medication: ',
-                              style: GoogleFonts.roboto(
-                                color: Color(0xFF49454F),
-                                fontSize: 14,
-                                fontWeight: FontWeight.w800,
-                              ),
-                            ),
-                            /* Type of Medication */
-                            Text(
-                              '${sendListData1.medication}',
-                              style: GoogleFonts.roboto(
-                                color: Color(0xFF49454F),
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      /* Admission Date */
-                      Container(
-                        padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                        child: Row(
-                          children: [
-                            Text(
-                              'Admission Date: ',
-                              style: GoogleFonts.roboto(
-                                color: Color(0xFF49454F),
-                                fontSize: 14,
-                                fontWeight: FontWeight.w800,
-                              ),
-                            ),
-                            /* Admission Date */
-                            Text(
-                              '',
-                              style: GoogleFonts.roboto(
-                                color: Color(0xFF49454F),
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      /* Discharge Date */
-                      Container(
-                        padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                        child: Row(
-                          children: [
-                            Text(
-                              'Discharge Date: ',
-                              style: GoogleFonts.roboto(
-                                color: Color(0xFF49454F),
-                                fontSize: 14,
-                                fontWeight: FontWeight.w800,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      /*
-                      SizedBox(
-                        child: ElevatedButton(
-                        onPressed: (){
-                         setState((){
-                          isEdit = false;
-                         }); 
-                        }, 
-                        child: Text('Save'),
-                      ),
-                      )
-                      */
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],      
-      ),
-    );
-  }
-}
-*/
