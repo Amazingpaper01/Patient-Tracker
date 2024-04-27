@@ -8,10 +8,10 @@ const register = async (req, res, next) => {
     const { firstName, lastName, email, password } = req.body;
 
     try {
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const user = new User({ firstName, lastName, email, password: hashedPassword });
+        const user = new User({ firstName, lastName, email, password });
         await user.save();
         res.json({ message: 'Registration Successful' });
+        console.log("New user registered: " + email);
     } catch (error) {
         next(error);
     }
@@ -23,16 +23,22 @@ const login = async (req, res, next) => {
 
     try {
         const user = await User.findOne({ email });
-        const passwordMatch = await user.comparePassword(password);
-        if (!user || !passwordMatch) {
-            return res.status(401).json({ message: 'Email or password is incorrect' });
+        if (!user) {
+            return res.status(404).json({ message: 'Email not found'});
         }
 
+        const passwordMatch = await user.comparePassword(password);
+        if (!passwordMatch) {
+            return res.status(404).json({ message: 'Password is incorrect' });           
+        }
+
+        // Generate JWT token
         const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY, {
             expiresIn: '1 hour'
         });
+
         res.json({ message: `Welcome ${user.firstName}` });
-        //console.log(req.body);
+        console.log("User logged in: " + user.firstName + " " + user.lastName);
         //res.status(200).json(user);
         //res.send({ test: `Hello ${user.firstName}`})
     } catch (error) {
@@ -52,7 +58,7 @@ const logout = async (req, res) => {
 };
 
 // Generate a unique 6-digit patientID for each patient
-function generatePatientID() {
+function genPatientID() {
     return Math.floor(100000 + Math.random() * 900000);
 };
 
@@ -61,12 +67,12 @@ const createpatient = async (req, res) => {
     const { firstName, lastName, gender, bloodtype, doctorName, roomNum, condition, medications } = req.body;
     try {
         // Checks to make sure patientID does not already exist
-        let patientID =  generatePatientID();
+        let patientID =  genPatientID();
         let existingPatient = await Patient.findOne({ patientID });
 
         // If it does exist, generate a new one
         while (existingPatient) {
-          patientID =  generatePatientID();
+          patientID =  genPatientID();
           existingPatient = await Patient.findOne({ patientID });
         }
 
@@ -89,10 +95,15 @@ const addpatient = async (req, res) => {
     try {
         const patient = await Patient.findOne({ patientID });
 
+        const sendPatient = { firstName: patient.firstName, lastName: patient.lastName, 
+            patientID: patient.patientID, gender: patient.gender, doctorName: patient.doctorName,
+            condition: patient.condition, medications: patient.medications, admissionDate: patient.admissionDate,
+            bloodtype: patient.bloodtype, roomNum: patient.roomNum, dischargeDate: patient.dischargeDate };
+
         if (!patient) {
             return res.status(404).json({ message: `Patient ${patientID} not found.` });
         }
-        return res.json({ message: `Patient ${patient.firstName} ${patient.lastName} added.` });
+        return res.json(sendPatient);
     } catch {
         return res.status(500).send("Internal server error.");
     }
@@ -101,14 +112,38 @@ const addpatient = async (req, res) => {
 // Modify patient information in the database
 const modifypatient = async (req, res) => {
     try {
-        const { patientID } = req.params;
-        const { attribute, value } = req.body;
+        const { patientID, firstName, lastName, gender, bloodtype, medications, conditions,
+            roomNum, doctorName } = req.body;
 
-        const patient = await Patient.findById(patientID);
+        const updates = {};
+        if (firstName) {
+          updates.firstName = firstName;
+        }
+        if (lastName) {
+          updates.lastName = lastName;
+        }
+        if (gender) {
+          updates.gender = gender;
+        }
+        if (bloodtype) {
+          updates.bloodtype = bloodtype;
+        }
+        if (medications) {
+          updates.medications = medications;
+        }
+        if (conditions) {
+          updates.conditions = conditions;
+        }
+        if (roomNum) {
+          updates.roomNum = roomNum;
+        }
+        if (doctorName) {
+          updates.doctorName = doctorName;
+        }
+      
+        const updatedPatient = await Patient.updateOne({ patientID }, { $set: updates });
 
-        patient[attribute] = value;
-
-        await patient.save();
+        //await patient.save();
         return res.status(200).json(updatedPatient);
     } catch (error) {
         console.error(error);
@@ -116,4 +151,28 @@ const modifypatient = async (req, res) => {
     }
 };
 
-module.exports = { register, login, logout, createpatient, addpatient, modifypatient };
+const patientprofile = async (req, res) => {
+    const { patientID } = req.body;
+
+    try {
+        const patient = await Patient.findOne({ patientID });
+
+        const sendPatient = { firstName: patient.firstName, lastName: patient.lastName, 
+            patientID: patient.patientID, gender: patient.gender, doctorName: patient.doctorName,
+            condition: patient.condition, medications: patient.medications, admissionDate: patient.admissionDate,
+            bloodtype: patient.bloodtype, roomNum: patient.roomNum, dischargeDate: patient.dischargeDate };
+
+        if (!patient) {
+            return res.status(404).json({ message: `Patient ${patientID} not found.` });
+        }
+        return res.json(sendPatient);
+    } catch {
+        return res.status(500).send("Internal server error.");
+    }
+};
+
+const test = async (req, res) => {
+    return send("hello world");
+};
+
+module.exports = { register, login, logout, createpatient, addpatient, modifypatient, patientprofile, test };
