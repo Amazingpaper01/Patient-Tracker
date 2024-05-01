@@ -15,12 +15,12 @@ class Page_User extends StatefulWidget {
 
 
 class _Page extends State<Page_User> {
-    /* API */
-  final String apiURL = 'http://10.62.77.52:3000/auth/logout'; // backend URL
+  /* API */
+  final String apiURL = 'https://projpatienttracker.azurewebsites.net/auth/logout'; // backend URL
   String result = ''; // To store the result from the API call
 
-  /* ======================== */
-  /* applying POST request */
+  /* =========================================================== */
+  /* POST request: Logout */
   void postRequest_logout() async {
     try {
       final response = await http.post(
@@ -57,7 +57,7 @@ class _Page extends State<Page_User> {
     }
   }
   
-  /* ======================== */
+  /* =========================================================== */
 
   @override
   Widget build(BuildContext context) {
@@ -83,13 +83,13 @@ class _Page extends State<Page_User> {
             color: Color(0xFFF4F4F4),  // color
             surfaceTintColor: Color(0xFFF4F4F4),  // color
             onSelected: (String value) async {
-              if (value == 'logout'){                
+              if (value == 'logout'){    
+                postRequest_logout();             
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => LogIn()), // go to patient home pages
                 );
                 patientList.clear();   
-                postRequest_logout();             
               }
             },
             child: Container(
@@ -122,7 +122,7 @@ class _Page extends State<Page_User> {
         ],
         backgroundColor: Color(0xFFF4F4F4),
       ),
-      /* Main part: The patient list */
+      /* Main part: The patient list (user/patientDisplay.dart) */
       body: add_patient(),
     );
   }

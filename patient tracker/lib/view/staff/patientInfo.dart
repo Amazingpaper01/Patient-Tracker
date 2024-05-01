@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart'; // for using Google Font
 import 'package:flutter_speed_dial/flutter_speed_dial.dart'; // for using SpeedDial
 import 'package:http/http.dart' as http;  // for http
 import 'dart:convert';  // for decoding received JSON
+import 'package:intl/intl.dart'; // for DateTime format
 
 
 bool isEdit = false;
@@ -24,9 +25,12 @@ class patientHome extends StatefulWidget {
 */
 class patientHome extends StatelessWidget {
 //class _patientHome extends State<patientHome> {
-  final listData1 sendListData;
-  final int indexNum;
-  patientHome(this.sendListData, this.indexNum); // store the patientList[index] data
+  // final List<InfoData> sendListData;
+  // patientHome(this.sendListData); // store the patientList[index] data
+  //print(sendListData);
+  final List<listData1> sendListData; 
+  final int numIndex;
+  patientHome(this.sendListData,this.numIndex);
 
   @override
   Widget build(BuildContext context) {   
@@ -104,35 +108,28 @@ class patientHome extends StatelessWidget {
         ),
         backgroundColor: Color(0xFFECE6F0),
         onPress: (){
-          /*
-          setState(){
-            isEdit = true;
-          }
-          */
-          /*
-          setState( (){
-            isEdit != isEdit;
-          });
-          */
-          //editPatientInfo();
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => patientHome_edit(sendListData, indexNum)), // go to user's pages
+            MaterialPageRoute(builder: (context) => patientHome_edit(sendListData, numIndex)), // go to user's pages
           );
         },
       ),
       //body: patientInfo(sendListData)
-      body: patientInfo(sendListData, indexNum)
+      body: patientInfo(sendListData, numIndex)
     );
   }
 }
 
+final dateFormat = DateFormat('yyyy/MM/dd');
+
 /* show Patient Information */
 class patientInfo extends StatelessWidget {
   //const MyWidget({super.key});
-  final listData1 sendListData1;
-  final int indexNum;
-  patientInfo(this.sendListData1, this.indexNum);  // store the patientList[index] data
+  // final List<InfoData> sendListData1;
+  // patientInfo(this.sendListData1);  // store the patientList[index] data
+  final int numIndex;
+  final List<listData1> sendListData; 
+  patientInfo(this.sendListData, this.numIndex);  
 
   /* API */
   //final String apiURL = 'http://10.62.77.52:3000/auth/login'; // backend URL
@@ -158,14 +155,14 @@ class patientInfo extends StatelessWidget {
                           children: [
                             /* Initial First Name */
                             Text(
-                              '${sendListData1.initial_fName}',
+                              '${sendListData.first.initial_fName}',//'${patientList1[numIndex].initial_fName}',//'',//'${sendListData1.initial_fName}',
                               style: TextStyle(
                                 color: Colors.white,
                               ),
                             ),
                             /* Initial Last Name */
                             Text(
-                              '${sendListData1.initial_lName}',
+                              '${sendListData.first.initial_lName}',//'${patientList1[numIndex].initial_lName}',//'',//'${sendListData1.initial_lName}',
                               style: TextStyle(
                                 color: Colors.white,
                               ),
@@ -183,7 +180,7 @@ class patientInfo extends StatelessWidget {
                     children: [
                       /* First name */
                       Text(
-                        '${sendListData1.fName}',
+                        '${sendListData.first.fName}',//'${patientList1[numIndex].fName}',//'',//'${sendListData1.fName}',
                         style: GoogleFonts.roboto(
                           color: Color(0xFF373C88),
                           fontSize: 16,
@@ -193,7 +190,7 @@ class patientInfo extends StatelessWidget {
                       SizedBox(width: 5),
                       /* Last Name */
                       Text(
-                        '${sendListData1.lName}',
+                        '${sendListData.first.lName}',//'${patientList1[numIndex].lName}',//'',//'${sendListData1.lName}',
                         style: GoogleFonts.roboto(
                           color: Color(0xFF373C88),
                           fontSize: 16,
@@ -204,7 +201,7 @@ class patientInfo extends StatelessWidget {
                   ),
                   /* Doctor Name */
                   subtitle: Text(
-                    'Doctor: ${sendListData1.doctorName}',
+                    '${sendListData.first.doctorName}',//'${patientList1[numIndex].doctorName}',//'',//'Doctor: ${sendListData1.doctorName}',
                     style: GoogleFonts.roboto(
                       color: Color(0xFF373C88),
                       fontSize: 14,
@@ -254,7 +251,7 @@ class patientInfo extends StatelessWidget {
                             ),
                             /* Patient ID number (6 digit) */
                             Text(
-                              '',
+                              '${sendListData.first.patientID}',//'${patientList1[numIndex].patientID}',//'',
                               style: GoogleFonts.roboto(
                                 color: Color(0xFF49454F),
                                 fontSize: 14,
@@ -304,7 +301,7 @@ class patientInfo extends StatelessWidget {
                             ),
                             /* Room Number */
                             Text(
-                              '${sendListData1.room}',
+                              '${sendListData.first.room}',//'${patientList1[numIndex].room}',//'${sendListData1.room}',
                               style: GoogleFonts.roboto(
                                 color: Color(0xFF49454F),
                                 fontSize: 14,
@@ -329,7 +326,7 @@ class patientInfo extends StatelessWidget {
                             ),
                             /* Gender */
                             Text(
-                              '${sendListData1.gender}',
+                              '${sendListData.first.gender}',//'${patientList1[numIndex].gender}',//'${sendListData1.gender}',
                               style: GoogleFonts.roboto(
                                 color: Color(0xFF49454F),
                                 fontSize: 14,
@@ -354,7 +351,7 @@ class patientInfo extends StatelessWidget {
                             ),
                             /* Blood Type */
                             Text(
-                              '${sendListData1.bloodType}',
+                              '${sendListData.first.bloodType}',//'${patientList1[numIndex].bloodType}',//'',//'${sendListData1.bloodType}',
                               style: GoogleFonts.roboto(
                                 color: Color(0xFF49454F),
                                 fontSize: 14,
@@ -379,7 +376,7 @@ class patientInfo extends StatelessWidget {
                             ),
                             /* Paitient Condition */
                             Text(
-                              '${sendListData1.condition}',
+                              '${sendListData.first.condition}',// '${patientList1[numIndex].condition}',//'',//'${sendListData1.condition}',
                               style: GoogleFonts.roboto(
                                 color: Color(0xFF49454F),
                                 fontSize: 14,
@@ -404,7 +401,7 @@ class patientInfo extends StatelessWidget {
                             ),
                             /* Type of Medication */
                             Text(
-                              '${sendListData1.medication}',
+                              '${sendListData.first.medication}',//'${patientList1[numIndex].medication}',//'',//'${sendListData1.medication}',
                               style: GoogleFonts.roboto(
                                 color: Color(0xFF49454F),
                                 fontSize: 14,
@@ -429,7 +426,7 @@ class patientInfo extends StatelessWidget {
                             ),
                             /* Admission Date */
                             Text(
-                              '',
+                              '${dateFormat.format(sendListData.first.admDate)}',//'${dateFormat.format(patientList1[numIndex].admDate)}',//'${}',
                               style: GoogleFonts.roboto(
                                 color: Color(0xFF49454F),
                                 fontSize: 14,
@@ -452,17 +449,15 @@ class patientInfo extends StatelessWidget {
                                 fontWeight: FontWeight.w800,
                               ),
                             ),
-                            /* Discharge Date */
-                            /*
+                            /* Discharge Date */                            
                             Text(
-                              'null',
+                              '${dateFormat.format(sendListData.first.disDate)}',//'${dateFormat.format(patientList1[numIndex].disDate)}',//'${patientList1[numIndex].disDate}',
                               style: GoogleFonts.roboto(
                                 color: Color(0xFF49454F),
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
-                            */
                           ],
                         ),
                       ),

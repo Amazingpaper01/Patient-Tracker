@@ -16,12 +16,12 @@ class Page_Doctor extends StatefulWidget {
 
 class _Page extends State<Page_Doctor> {
 
-    /* API */
-  final String apiURL = 'http://10.62.77.52:3000/auth/logout'; // backend URL
+  /* API */
+  final String apiURL = 'https://projpatienttracker.azurewebsites.net/auth/logout'; // backend URL
   String result = ''; // To store the result from the API call
 
-  /* ======================== */
-  /* applying POST request */
+  /* =========================================================== */
+  /* POST request: Logout */
   void postRequest_logout() async {
     try {
       final response = await http.post(
@@ -58,7 +58,7 @@ class _Page extends State<Page_Doctor> {
     }
   }
   
-  /* ======================== */
+  /* =========================================================== */
 
   @override
   Widget build(BuildContext context) {
@@ -83,13 +83,13 @@ class _Page extends State<Page_Doctor> {
             color: Color(0xFFF4F4F4),  // color
             surfaceTintColor: Color(0xFFF4F4F4),  // color
             onSelected: (String value) async {
-              if (value == 'logout'){                
+              if (value == 'logout'){    
+                postRequest_logout();             
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => LogIn()), // go to patient home pages
+                  MaterialPageRoute(builder: (context) => LogIn()), // go to patient home pages (main.dart)
                 ); 
-                patientList1.clear();   
-                postRequest_logout();            
+                patientList1.clear();                              
               }
             },
             child: Container(
@@ -105,6 +105,7 @@ class _Page extends State<Page_Doctor> {
             ),            
             itemBuilder: (context) {
               return [
+                /* logout button */
                 PopupMenuItem(
                   value: 'logout',
                   child: Text('Log Out',
@@ -121,6 +122,7 @@ class _Page extends State<Page_Doctor> {
         ],
         backgroundColor: Color(0xFFF4F4F4),
       ),
+      /* Floating Button: go to Chat page (staff/chat_page.dart) */
       floatingActionButton: SpeedDial(
         icon: Icons.forum_outlined,
         shape: RoundedRectangleBorder(
@@ -134,8 +136,8 @@ class _Page extends State<Page_Doctor> {
           );
         },
       ),
+      /* Main part: The patient list (staff/patientDisplay.dart) */
       body: add_patient(),
-
     );
   }
 }

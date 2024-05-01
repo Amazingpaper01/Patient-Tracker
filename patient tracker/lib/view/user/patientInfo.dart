@@ -9,8 +9,9 @@ import 'package:practice/view/user/calender_page.dart'; // go to calender page
 import 'package:practice/view/user/notification_page.dart'; // go to notification page
 import 'package:google_fonts/google_fonts.dart'; // for using Google Font
 import 'package:flutter_speed_dial/flutter_speed_dial.dart'; // for using SpeedDial
+import 'package:intl/intl.dart'; // for DateTime format
 
-
+final dateFormat2 = DateFormat('yyyy/MM/dd');
 
 //class _patientHome extends State<patientHome> {
 class patientHome extends StatelessWidget {
@@ -274,7 +275,7 @@ class patientInfo extends StatelessWidget {
                   ),
                   /* Doctor Name */
                   subtitle: Text(
-                    'Doctor: Joseph Green',
+                    'Doctor: ${sendListData.doctor}',
                     style: GoogleFonts.roboto(
                       color: Color(0xFF373C88),
                       fontSize: 14,
@@ -348,7 +349,7 @@ class patientInfo extends StatelessWidget {
                               ),
                             ),
                             /* Hospital Name */
-                            /*
+                            
                             Text(
                               'Clovis Community Hospital',
                               style: GoogleFonts.roboto(
@@ -357,7 +358,7 @@ class patientInfo extends StatelessWidget {
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
-                            */
+                            
                           ],
                         ),
                       ),
@@ -375,16 +376,16 @@ class patientInfo extends StatelessWidget {
                               ),
                             ),
                             /* Room Number */
-                            /*
+                            
                             Text(
-                              'Red 3B',
+                              '${sendListData.room}',
                               style: GoogleFonts.roboto(
                                 color: Color(0xFF49454F),
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
-                            */
+                            
                           ],
                         ),
                       ),
@@ -402,16 +403,16 @@ class patientInfo extends StatelessWidget {
                               ),
                             ),
                             /* Gender */
-                            /*
+                            
                             Text(
-                              'Male',
+                              '${sendListData.gender}',
                               style: GoogleFonts.roboto(
                                 color: Color(0xFF49454F),
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
-                            */
+                            
                           ],
                         ),
                       ),
@@ -429,16 +430,16 @@ class patientInfo extends StatelessWidget {
                               ),
                             ),
                             /* Blood Type */
-                            /*
+                            
                             Text(
-                              'B+',
+                              '${sendListData.bloodType}+',
                               style: GoogleFonts.roboto(
                                 color: Color(0xFF49454F),
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
-                            */
+                            
                           ],
                         ),
                       ),
@@ -456,16 +457,16 @@ class patientInfo extends StatelessWidget {
                               ),
                             ),
                             /* Paitient Condition */
-                            /*
+                            
                             Text(
-                              'Knee injury',
+                              '${sendListData.condition}',
                               style: GoogleFonts.roboto(
                                 color: Color(0xFF49454F),
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
-                            */
+                            
                           ],
                         ),
                       ),
@@ -483,16 +484,16 @@ class patientInfo extends StatelessWidget {
                               ),
                             ),
                             /* Type of Medication */
-                            /*
+                            
                             Text(
-                              'Ibuprofen',
+                              '${sendListData.medication}',
                               style: GoogleFonts.roboto(
                                 color: Color(0xFF49454F),
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
-                            */
+                          
                           ],
                         ),
                       ),
@@ -510,16 +511,16 @@ class patientInfo extends StatelessWidget {
                               ),
                             ),
                             /* Admission Date */
-                            /*
+                            
                             Text(
-                              'null',
+                              '${dateFormat2.format(sendListData.admDate)}',
                               style: GoogleFonts.roboto(
                                 color: Color(0xFF49454F),
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
-                            */
+                            
                           ],
                         ),
                       ),
@@ -536,17 +537,16 @@ class patientInfo extends StatelessWidget {
                                 fontWeight: FontWeight.w800,
                               ),
                             ),
-                            /* Discharge Date */
-                            /*
+                            /* Discharge Date */                            
                             Text(
-                              'null',
+                              '${dateFormat2.format(sendListData.disDate)}',
                               style: GoogleFonts.roboto(
                                 color: Color(0xFF49454F),
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
-                            */
+                            
                           ],
                         ),
                       ),

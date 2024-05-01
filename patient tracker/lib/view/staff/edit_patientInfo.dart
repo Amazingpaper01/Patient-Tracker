@@ -2,33 +2,40 @@ import 'package:flutter/material.dart';
 import 'package:practice/main.dart';    // go back login page
 import 'package:practice/view/staff/patientDisplay.dart'; // to access the patientList
 import 'package:practice/view/staff/patientInfo.dart'; // to access the patietInfo
-import 'package:practice/view/staff/patientDisplay.dart';
+import 'package:practice/view/staff/home.dart'; // go to home page
 import 'package:google_fonts/google_fonts.dart'; // for using Google Font
 import 'package:flutter_speed_dial/flutter_speed_dial.dart'; // for using SpeedDial
 import 'package:http/http.dart' as http;  // for http
 import 'dart:convert';  // for decoding received JSON
 import 'package:flutter/material.dart'; // for radio button
+import 'package:practice/model/patient.dart';  
+import 'package:intl/intl.dart'; // for DateTime format
+
 
 
 bool isEdit = false;
 
 //class _patientHome extends State<patientHome> {
-  /*
-class patientHome extends StatefulWidget {
+
+class patientHome_edit extends StatefulWidget {
   //const MyWidget({super.key});
-  final listData1 sendListData1;
-  patientHome(this.sendListData1); 
+  final int numIndex;
+  final List<listData1> sendListData;
+  patientHome_edit(this.sendListData, this.numIndex);
 
   @override
-  State<patientHome> createState() => _patientHome(sendListData1);
+  State<patientHome_edit> createState() => _patientHome_edit(sendListData, numIndex);
 }
-*/
-class patientHome_edit extends StatelessWidget {
-//class _patientHome extends State<patientHome> {
-  final listData1 sendListData;
-  final int indexNum;
-  patientHome_edit(this.sendListData, this.indexNum); // store the patientList[index] data
 
+//class patientHome_edit extends StatelessWidget {
+class _patientHome_edit extends State<patientHome_edit> {
+  // final List<InfoData> sendListData;
+  // patientHome_edit(this.sendListData); // store the patientList[index] data
+  final int numIndex;
+  final List<listData1> sendListData;
+  _patientHome_edit(this.sendListData, this.numIndex);
+
+  
   @override
   Widget build(BuildContext context) {   
     return Scaffold(
@@ -93,28 +100,37 @@ class patientHome_edit extends StatelessWidget {
         ],
         backgroundColor: Color(0xFFF4F4F4),
       ),
-      body: editPatientInfo(sendListData, indexNum)
+      body: editPatientInfo(sendListData, numIndex)
     );
   }
 }
 
+bool isEmptyList = false;
+
 /* show Patient Information */
 class editPatientInfo extends StatefulWidget {
   //const MyWidget({super.key});
-  final listData1 sendListData1;
-  final int indexNum;
-  editPatientInfo(this.sendListData1, this.indexNum); 
+  // final List<InfoData> sendListData1;
+  // editPatientInfo(this.sendListData1); 
+  final int numIndex;
+  final List<listData1> sendListData;
+  editPatientInfo(this.sendListData, this.numIndex);
 
   @override
-  State<editPatientInfo> createState() => _editPatientInfo(sendListData1, indexNum);
+  State<editPatientInfo> createState() => _editPatientInfo(sendListData, numIndex);
 }
 
 /* Modify the patientInfo */
 class _editPatientInfo extends State<editPatientInfo> {
+  // final List<InfoData> sendListData1;
+  // _editPatientInfo(this.sendListData1); 
 //class editPatientInfo extends StatelessWidget {
+  final int numIndex;
+  final List<listData1> sendListData;
+  _editPatientInfo(this.sendListData, this.numIndex);
 
   /* API */
-  final String apiURL = 'http://10.62.76.132:3000/auth/modifyPatient'; // backend URL
+  final String apiURL_modify = 'https://projpatienttracker.azurewebsites.net/auth/modifypatient'; // backend URL
   String result = ''; // to store the result from the API call
   String mes = '';
   /* ======================== */
@@ -124,7 +140,7 @@ class _editPatientInfo extends State<editPatientInfo> {
     print("test");
     try {
       final response = await http.post(
-        Uri.parse(apiURL),
+        Uri.parse(apiURL_modify),
         headers: <String, String> {
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -137,11 +153,12 @@ class _editPatientInfo extends State<editPatientInfo> {
           'condition': new_condition,
           'roomNum': new_room,
           'medications': new_medication,
-          'dischargeDate': new_dischargeDate,
+          //'dischargeDate': new_dischargeDate,
           'patientID': original_patientID
         }),
       );
       final responseData = jsonDecode(response.body);
+      final patient = Patient.fromJson(responseData);
       final resultString = jsonEncode(responseData);
       // print(response.statusCode);
       if (response.statusCode == 201) {
@@ -167,10 +184,57 @@ class _editPatientInfo extends State<editPatientInfo> {
     }
   }
   /* ======================== */
+
+  /* API */
+  final String apiURL_discharge = 'http://192.168.1.72:3000/auth/modifyPatient'; // backend URL
+  //String result = ''; // to store the result from the API call
+  //String mes = '';
+
+  /* ======================== */
+    /* applying POST request */
+  //Future <void> postRequest() async {
+  void postRequest_dischargeDate() async {
+    print("test");
+    try {
+      final response = await http.post(
+        Uri.parse(apiURL_discharge),
+        headers: <String, String> {
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'patientID': '${sendListData.first.patientID}'/*'${patientList1[numIndex].patientID}'*/
+        }),
+      );
+      final responseData = jsonDecode(response.body);
+      final patient = Patient.fromJson(responseData);
+      final resultString = jsonEncode(responseData);
+      
+      // print(response.statusCode);
+      if (response.statusCode == 201) {
+        /* Successful POST request, handle the reponse here */    
+        setState((){
+          //result = 'Email: ${responseData['email']}\nPassword: ${responseData['password']}';
+          result = resultString;
+          print(resultString);   
+          //result = resultString;
+        });
+      }
+      else {
+        /* if the server returns an error response, thrown an exception */
+        //throw Exception('Failed to post data');
+        print(resultString);
+      }
+    }
+    catch (e) {
+      setState((){
+        result = 'Error: $e';
+        print(result);
+      });
+    }
+  }
+  /* ======================== */
+
   //const MyWidget({super.key});
-  final listData1 sendListData1;
-  final int indexNum;
-  _editPatientInfo(this.sendListData1, this.indexNum);  // store the patientList[index] data
 
   //String name = sendListData1.fName;
 
@@ -181,7 +245,7 @@ class _editPatientInfo extends State<editPatientInfo> {
   TextEditingController roomController = TextEditingController();
   TextEditingController conditionController = TextEditingController();
   TextEditingController  medicationController = TextEditingController();
-  TextEditingController  dischargeDateController = TextEditingController();
+  //TextEditingController  dischargeDateController = TextEditingController();
 
   String? selectedBloodType;
   String? selectedItem;
@@ -194,7 +258,7 @@ class _editPatientInfo extends State<editPatientInfo> {
   String new_bloodType = '';
   String new_condition = '';
   String new_medication = '';
-  String new_dischargeDate = '';
+  //String new_dischargeDate = '';
 
   String original_fname = '';
   String original_lname = '';
@@ -217,25 +281,25 @@ class _editPatientInfo extends State<editPatientInfo> {
 
   void initState() {
     super.initState();
-    fnameController = new TextEditingController(text: sendListData1.fName);
-    lnameController = new TextEditingController(text: sendListData1.lName);
-    dnameController = new TextEditingController(text: sendListData1.doctorName);
-    roomController = new TextEditingController(text: sendListData1.room);
-    conditionController = new TextEditingController(text: sendListData1.condition);
-    medicationController = new TextEditingController(text: sendListData1.medication);
-    dischargeDateController = new TextEditingController(text: 'N/A');
-    selectedItem = sendListData1.gender;
-    selectedBloodType = sendListData1.bloodType;
-    original_fname = sendListData1.fName;
-    original_lname = sendListData1.lName;
-    original_dname = sendListData1.doctorName;
-    original_room = sendListData1.room;
-    original_gender = sendListData1.gender;
-    original_bloodType = sendListData1.bloodType;
-    original_condition = sendListData1.condition;
-    original_medication = sendListData1.medication;
+    fnameController = new TextEditingController(text: '${sendListData.first.fName}');
+    lnameController = new TextEditingController(text: '${sendListData.first.lName}'); //patientList1[numIndex].lName);
+    dnameController = new TextEditingController(text: '${sendListData.first.doctorName}'); //patientList1[numIndex].doctorName);
+    roomController = new TextEditingController(text: '${sendListData.first.room}');// patientList1[numIndex].room);
+    conditionController = new TextEditingController(text: '${sendListData.first.condition}'); // patientList1[numIndex].condition);
+    medicationController = new TextEditingController(text: '${sendListData.first.medication}'); // patientList1[numIndex].medication);
+    //dischargeDateController = new TextEditingController(text: 'N/A');
+    selectedItem = '${sendListData.first.gender}';//patientList1[numIndex].gender;//'';
+    selectedBloodType = '${sendListData.first.bloodType}';//patientList1[numIndex].bloodType;
+    original_fname = '${sendListData.first.fName}';// patientList1[numIndex].fName;
+    original_lname = '${sendListData.first.lName}'; // patientList1[numIndex].lName;
+    original_dname = '${sendListData.first.doctorName}';// patientList1[numIndex].doctorName;
+    original_room = ''; // patientList1[numIndex].room;
+    original_gender = ''; // patientList1[numIndex].gender;
+    original_bloodType = ''; // patientList1[numIndex].bloodType;
+    original_condition = ''; // patientList1[numIndex].condition;
+    original_medication = ''; // patientList1[numIndex].medication;
 
-    original_patientID = sendListData1.patientID;
+    original_patientID = sendListData.first.patientID; // patientList1[numIndex].patientID;//sendListData1.patientID;
   }
   
   Widget build(BuildContext context) {
@@ -250,6 +314,46 @@ class _editPatientInfo extends State<editPatientInfo> {
               padding: EdgeInsets.all(20),
               child: Column(
                 children: [
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xFF373C88),
+                        foregroundColor: Colors.white, 
+                      ),
+                      onPressed: (){    
+                        postRequest_dischargeDate();
+                        setState((){    
+                          patientList1.removeAt(numIndex);
+                        });                        
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Page_Doctor()),
+                        );                  
+                      }, 
+                      child: SizedBox(
+                        width: 130,
+                        height: 40,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [ 
+                            Icon(
+                              Icons.add_task,
+                              color: Colors.white,
+                            ),
+                            SizedBox(width: 8),                 
+                            Text(
+                              'Discharge Date',
+                              style: TextStyle(
+                                color: Colors.white
+                              ),
+                            ),
+                          ]
+                        ),
+                      ),
+                    ),
+                   ),
+                  SizedBox(height: 10),
                   /* Icon with initial, Patient Name, doctor name */
                   ListTile(      
                     leading: Row(
@@ -262,14 +366,14 @@ class _editPatientInfo extends State<editPatientInfo> {
                             children: [
                               /* Initial First Name */
                               Text(
-                                '${sendListData1.initial_fName}',
+                                '',//'${patientList1[numIndex].initial_fName}',//'${sendListData1.initial_fName}',
                                 style: TextStyle(
                                   color: Colors.white,
                                 ),
                               ),
                               /* Initial Last Name */
                               Text(
-                                '${sendListData1.initial_lName}',
+                                '',//'${patientList1[numIndex].initial_lName}',//'${sendListData1.initial_lName}',
                                 style: TextStyle(
                                   color: Colors.white,
                                 ),
@@ -287,7 +391,7 @@ class _editPatientInfo extends State<editPatientInfo> {
                       children: [
                         /* First name */
                         Text(
-                          '${sendListData1.fName}',
+                          '${original_fname}',//'${sendListData1.fName}',
                           style: GoogleFonts.roboto(
                             color: Color(0xFF373C88),
                             fontSize: 16,
@@ -297,7 +401,7 @@ class _editPatientInfo extends State<editPatientInfo> {
                         SizedBox(width: 5),
                         /* Last Name */
                         Text(
-                          '${sendListData1.lName}',
+                          '${original_lname}',//'${sendListData1.lName}',
                           style: GoogleFonts.roboto(
                             color: Color(0xFF373C88),
                             fontSize: 16,
@@ -308,7 +412,7 @@ class _editPatientInfo extends State<editPatientInfo> {
                     ),
                     /* Doctor Name */
                     subtitle: Text(
-                      'Doctor: ${sendListData1.doctorName}',
+                      'Doctor: ${original_dname}',//'Doctor: ${sendListData1.doctorName}',
                       style: GoogleFonts.roboto(
                         color: Color(0xFF373C88),
                         fontSize: 14,
@@ -316,17 +420,14 @@ class _editPatientInfo extends State<editPatientInfo> {
                       ),
                     ),
                   ),
-                  
-                
                   /* Modify the patient and doctor name */
                   Container(
                     padding: EdgeInsets.all(20),
                     child: Column(
                       children: [
-
                         /* First Name */
                         Container(
-                          padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                          padding: EdgeInsets.fromLTRB(0, 10, 0, 10),                          
                           child: Row(
                             children: [                              
                               Text(
@@ -351,7 +452,7 @@ class _editPatientInfo extends State<editPatientInfo> {
                                     setState(() {
                                       //text_doctor_name = value;
                                       new_fname = value;
-                                      sendListData1.fName = new_fname;
+                                      //sendListData1.fName = new_fname;
                                     });
                                   },
                                 ),
@@ -360,8 +461,9 @@ class _editPatientInfo extends State<editPatientInfo> {
                           ),
                         ),
                         /* Last Name */
+                
                         Container(
-                          padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                          padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
                           child: Row(
                             children: [                              
                               Text(
@@ -386,7 +488,7 @@ class _editPatientInfo extends State<editPatientInfo> {
                                     setState(() {
                                       //text_doctor_name = value;
                                       new_lname = value;
-                                      sendListData1.lName = new_lname;
+                                      //sendListData1.lName = new_lname;
                                     });
                                   },
                                 ),
@@ -394,9 +496,10 @@ class _editPatientInfo extends State<editPatientInfo> {
                             ],
                           ),
                         ),
+
                         /* Doctor Name */
                         Container(
-                          padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                          padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
                           child: Row(
                             children: [                              
                               Text(
@@ -421,7 +524,7 @@ class _editPatientInfo extends State<editPatientInfo> {
                                     setState(() {
                                       //text_doctor_name = value;
                                       new_dname = value;
-                                      sendListData1.doctorName = new_dname;
+                                      //sendListData1.doctorName = new_dname;
                                     });
                                   },
                                 ),
@@ -537,9 +640,8 @@ class _editPatientInfo extends State<editPatientInfo> {
                                   },
                                   onChanged: (String value){
                                     setState(() {
-                                      //text_doctor_name = value;
                                       new_room = value;
-                                      sendListData1.room = new_room;
+                                      //sendListData1.room = new_room;
                                     });
                                   },
                                 ),
@@ -588,7 +690,7 @@ class _editPatientInfo extends State<editPatientInfo> {
                                     setState(() {
                                       selectedItem = value!;
                                       new_gender = value;
-                                      sendListData1.gender = value;
+                                      //sendListData1.gender = value;
                                     });
                                   },
                                   value: selectedItem,                              
@@ -662,7 +764,7 @@ class _editPatientInfo extends State<editPatientInfo> {
                                     setState(() {
                                       selectedBloodType = value!;
                                       new_bloodType = value;
-                                      sendListData1.bloodType = value;
+                                      //sendListData1.bloodType = value;
                                     });
                                   },
                                   value: selectedBloodType,
@@ -711,7 +813,7 @@ class _editPatientInfo extends State<editPatientInfo> {
                                     setState(() {
                                       //text_doctor_name = value;
                                       new_condition = value;
-                                      sendListData1.condition = new_condition;
+                                      //sendListData1.condition = new_condition;
                                     });
                                   },
                                 ),
@@ -744,7 +846,7 @@ class _editPatientInfo extends State<editPatientInfo> {
                                     setState(() {
                                       //text_doctor_name = value;
                                       new_medication = value;
-                                      sendListData1.medication = new_medication;
+                                      //sendListData1.medication = new_medication;
                                     });
                                   },
                                 ),
@@ -767,7 +869,7 @@ class _editPatientInfo extends State<editPatientInfo> {
                               ),
                               /* Admission Date */
                               Text(
-                                '',
+                                '${dateFormat.format(sendListData.first.admDate)}',//'${dateFormat.format(patientList1[numIndex].admDate)}',
                                 style: GoogleFonts.roboto(
                                   color: Color(0xFF49454F),
                                   fontSize: 14,
@@ -791,6 +893,16 @@ class _editPatientInfo extends State<editPatientInfo> {
                                 ),
                               ),
                               SizedBox(width: 10),
+                              /* Admission Date */
+                              Text(
+                                '${dateFormat.format(sendListData.first.disDate)}',//'${dateFormat.format(patientList1[numIndex].disDate)}',
+                                style: GoogleFonts.roboto(
+                                  color: Color(0xFF49454F),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                              /*
                               Container(
                                 width: 170,
                                 padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
@@ -806,6 +918,7 @@ class _editPatientInfo extends State<editPatientInfo> {
                                   },
                                 ),
                               ),
+                              */
                             ],
                           ),
                         ),
@@ -836,12 +949,12 @@ class _editPatientInfo extends State<editPatientInfo> {
                               selectedItem = null;
                               selectedBloodType = null;
                               /* return the data to original data */
-                              sendListData1.fName = original_fname;
-                              sendListData1.lName = original_lname;
-                              sendListData1.room = original_room;
-                              sendListData1.gender = original_gender;
-                              sendListData1.condition = original_condition;
-                              sendListData1.medication = original_medication;
+                              // sendListData1.fName = original_fname;
+                              // sendListData1.lName = original_lname;
+                              //sendListData1.room = original_room;
+                              //sendListData1.gender = original_gender;
+                              //sendListData1.condition = original_condition;
+                              //sendListData1.medication = original_medication;
                             });
                           }, 
                           child: 
@@ -876,8 +989,8 @@ class _editPatientInfo extends State<editPatientInfo> {
                             });
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => patientHome(sendListData1, indexNum)), // go to user's pages
-                            );
+                              MaterialPageRoute(builder: (context) => patientHome(sendListData, numIndex)), // go to user's pages
+                            );                            
                             postRequest_modifyPatiend();
                           }, 
                           child: SizedBox(

@@ -6,7 +6,7 @@ part 'patient.g.dart';
 @freezed
 class Patient with _$Patient {
   factory Patient({
-    String? firtName,
+    String? firstName,
     String? lastName,
     String? gender,
     String? bloodtype,

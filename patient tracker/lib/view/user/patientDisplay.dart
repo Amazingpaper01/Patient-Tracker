@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:practice/main.dart';  
 import 'package:practice/view/user/patientInfo.dart'; // for patient Home 
 import 'package:practice/view/user/patient_list.dart'; // for initial message to the list
 import 'package:google_fonts/google_fonts.dart'; // for using Google Font
@@ -21,6 +20,17 @@ class listData {
   int numIndex; // index number
   int favIndex; // index number of favorite list
 
+  String gender;
+  String bloodType;
+
+  String room;
+  String condition;
+  String medication;
+
+  DateTime admDate;
+  DateTime disDate;
+  String doctor;
+
   listData (
     this.fName, 
     this.lName, 
@@ -30,7 +40,16 @@ class listData {
     this.isFavorite, 
     this.fav, 
     this.numIndex, 
-    this.favIndex
+    this.favIndex,
+
+    this.gender,
+    this.bloodType,
+    this.room,
+    this.condition,
+    this.medication,
+    this.admDate,
+    this.disDate,
+    this.doctor,
   );
 }
 
@@ -56,58 +75,29 @@ List<listData> patientList = <listData>[
 */
 
   
-/*
-  class listData2 {
-    final String fName;  // first name
-    final String lName;  // last name
-    final int patientID;  // patient ID
-    final String hospital; // hospital name
-    final String room;
-    final String gender;
-    final String bloodType;
-    final String condition;
-    final String medication;
 
-    listData2({
-      required this.fName, 
-      required this.lName, 
-      required this.patientID, 
-      required this.hospital, 
-      required this.room,
-      required this.gender, 
-      required this.bloodType,
-      required this.condition, 
-      required this.medication,
-    });
 
-    //final String initial_fName;  // first letter of first name 
-    //final String initial_lName;  // first letter of last name
-    //bool isFavorite;  // favorite status (true or false)
-    //int fav;  // favorite status (0 or 1)
-    //int numIndex; // index number
-    //int favIndex; // index number of favorite list    
-  }
-  */
+String _fName2 = ''; //patient.firstName ?? '';
+String _lName2 = ''; //patient.lastName ?? '';
+String _init_fName2 = ''; //fName[1];
+String _init_lName2 = ''; //lName[1];
+String _dName2 = ''; //patient.doctorName ?? '';
+int _patientID2 = 0;
+String _gender2 = '';
+String _bloodType2 = '';
+String _room2 = '';
+String _condition2 = '';
+String _medication2 = '';
+DateTime _admDate2 = DateTime.now();
+DateTime _disDate2 = DateTime(0000,0,0,00,00,00);
 
-  class patientProfile {
-    String fName;
-    String lName;
 
-    patientProfile (
-      this.fName, 
-      this.lName,
-    );
-  }
-  
 
 class _add_patient extends State<add_patient> {
+  List<Patient> patientInfo = <Patient>[];
   /* API */
-  final String apiURL = 'http://10.62.66.173:3000/auth/addPatient'; // backend URL
+  final String apiURL = 'https://projpatienttracker.azurewebsites.net/auth/addpatient'; // backend URL
   String result = ''; // to store the result from the API call
-
-  String? res_fName;
-  String? res_lName ;
-  int? res_patientID;
 
   /* ======================== */
   /* applying POST request */
@@ -125,43 +115,38 @@ class _add_patient extends State<add_patient> {
       final responseData = jsonDecode(response.body);
       final patient = Patient.fromJson(responseData);
       final resultString = jsonEncode(responseData);
+      print('patientID: ${patient.patientID}');   
+      //final text_fname2 = patient.firtName ?? '';
+      //print(text_fname2);
+      print(patient);
+
+      setState((){
+        _fName2 = patient.firstName ?? '';
+        _lName2 = patient.lastName ?? '';
+        _init_fName2 = _fName2[0];
+        _init_lName2 = _lName2[0];
+        _patientID2 = patient.patientID ?? 0;
+        _dName2 = patient.doctorName ?? '';
+        _gender2 = patient.gender ?? '';
+        _bloodType2 = patient.bloodtype ?? '';
+        _room2  = patient.roomNum ?? '';
+        _condition2 = patient.condition ?? '';
+        _medication2  = patient.medications ?? '';
+        _admDate2 = patient.admissionDate ?? DateTime.now();
+        _disDate2 = patient.dischargeDate ?? DateTime(0000,0,00,00,00,00);
+      });
+
+      
       //print(patient);
       // print(response.statusCode);
       if (response.statusCode == 201) {
         /* Successful POST request, handle the reponse here */    
         setState((){
-          //result = 'Email: ${responseData['email']}\nPassword: ${responseData['password']}';
-          result = resultString;
-          print(resultString);
-          res_fName = patient.firtName;
-          res_lName = patient.lastName;
-          res_patientID = patient.patientID;
-          print(patient.firtName);
-          print(res_fName);
-          text_fname = res_fName ?? '';
-          text_lname = res_lName ?? '';
-          text_patientID = res_patientID ?? 0;
-          text_initial_fname = res_fName?[0] ?? '';
-          text_initial_lname = res_lName?[0] ?? '';
-          
-          patientList.add(
-            listData(
-              text_fname, 
-              text_lname, 
-              text_patientID, 
-              text_initial_fname, 
-              text_initial_lname, 
-              _isFavorite, 
-              _fav, 
-              _numIndex, 
-              _favIndex
-            )
-          );  // add elements to the list
+          patientInfo.add(patient);
         });
       }
       else {
         /* if the server returns an error response, thrown an exception */
-        //throw Exception('Failed to post data');
         print(resultString);
       }
     }
@@ -172,38 +157,33 @@ class _add_patient extends State<add_patient> {
       });
     }
   }
-  /* ======================== */
 
+  /* ======================== */
   /* API */
-  final String apiURL_get = 'http://10.62.76.132:3000/user/profile'; // backend URL
+  final String apiURL_profile2 = 'http://129.8.213.164:3000/auth/patientProfile'; // backend URL
   String getResult = ''; // to store the result from the API call
 
   /* applying GET request */
-  void getRequest_profile() async {
+  void postRequest_profile2(int num) async {
     try {
-      final response = await http.get(
-        Uri.parse(apiURL_get),        
+      final response = await http.post(
+        Uri.parse(apiURL_profile2),
+        headers: <String, String> {
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'patientID': num,
+        }),        
       );
       final responseData = jsonDecode(response.body);
       final patient = Patient.fromJson(responseData);
       final resultString = jsonEncode(responseData);
-      // print(response.statusCode);
+
+
       if (response.statusCode == 201) {
         /* Successful GET request, handle the reponse here */    
         print(responseData);
-        print(patient.patientID);
-
-        List<patientProfile> profile = [];
-        //for ()
-        String get_fName = patient.firtName ?? '';
-        String get_lName = patient.lastName ?? '';
-
-        profile.add(
-          patientProfile(
-            get_fName, 
-            get_lName
-          )
-        );
+        
       }
       else {
         /* if the server returns an error response, thrown an exception */
@@ -349,10 +329,57 @@ class _add_patient extends State<add_patient> {
                             if (formKey.currentState!.validate()){
                               postRequest_addPatient();
                               deleteTextData();  // delete textfield data
-                              Navigator.of(context).pop();
-                              //comfirmDialog();
                               
-                              showDialog(    
+                              Future.delayed(Duration(seconds: 1), () {
+                                Navigator.of(context).pop();
+                                _secondDialog2(context);
+                              });
+                              
+                              /*
+                              setState(() {
+                                patientList.add(listData(text_fname, text_lname, text_patientID, text_initial_fname, text_initial_lname, _isFavorite, _fav, _numIndex, _favIndex));  // add elements to the list
+                                _numIndex++;
+                                debugPrint(_numIndex.toString());
+                              });
+                              */
+                            } 
+                          },
+                          child: SizedBox(
+                            width: 50,
+                            height: 40,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [                   
+                                Text(
+                                  'Add',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontFamily: 'Roboto',
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),                    
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                ],
+              ),
+            ),    
+          ),    
+        );
+      },
+    );
+  }
+
+  Future<void> _secondDialog2(BuildContext context) async {
+    return showDialog(    
                                 context: context,
                                 builder: (context) {
                                   return AlertDialog(
@@ -388,17 +415,7 @@ class _add_patient extends State<add_patient> {
                                           SizedBox(width: double.infinity),
                                           /* Question */
                                           Container(
-                                            //width: 266,
-                                            //height: 58, 
                                             padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                                            /*              
-                                            decoration: ShapeDecoration(
-                                              color: Color(0xFFEFEFEF),
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(20),
-                                              )
-                                            ),
-                                            */
                                             child: Text(
                                               'Are you sure you want to\nadd this patient?',
                                               textAlign: TextAlign.center,
@@ -416,7 +433,7 @@ class _add_patient extends State<add_patient> {
                                               mainAxisAlignment: MainAxisAlignment.center,
                                               children: [
                                                 Text(
-                                                  '${res_fName}, ${res_lName}',
+                                                  '${_fName2}, ${_lName2}',
                                                   style: GoogleFonts.montserrat(
                                                     color: Colors.black,
                                                     fontSize: 15,
@@ -441,7 +458,7 @@ class _add_patient extends State<add_patient> {
                                                   ),
                                                 ),
                                                 Text(
-                                                  '${res_patientID}',
+                                                  '${_patientID2}',
                                                   style: GoogleFonts.montserrat(
                                                     color: Colors.black,
                                                     fontSize: 15,
@@ -469,18 +486,26 @@ class _add_patient extends State<add_patient> {
                                                     
                                                     patientList.add(
                                                       listData(
-                                                        text_fname, 
-                                                        text_lname, 
-                                                        text_patientID, 
-                                                        text_initial_fname, 
-                                                        text_initial_lname, 
+                                                        _fName2, 
+                                                        _lName2, 
+                                                        _patientID2, 
+                                                        _init_fName2, 
+                                                        _init_lName2, 
                                                         _isFavorite, 
                                                         _fav, 
                                                         _numIndex, 
-                                                        _favIndex
+                                                        _favIndex,
+
+                                                        _gender2,
+                                                        _bloodType2, 
+                                                        _room2, 
+                                                        _condition2, 
+                                                        _medication2, 
+                                                        _admDate2, 
+                                                        _disDate2,
+                                                        _dName2
                                                       )
                                                     );
-                                                    
                                                   }, 
                                                   child: Text(
                                                     'Confirm',
@@ -526,136 +551,7 @@ class _add_patient extends State<add_patient> {
                                   );
                                 }
                               );
-                              /*
-                              setState(() {
-                                patientList.add(listData(text_fname, text_lname, text_patientID, text_initial_fname, text_initial_lname, _isFavorite, _fav, _numIndex, _favIndex));  // add elements to the list
-                                _numIndex++;
-                                debugPrint(_numIndex.toString());
-                              });
-                              */
-                            } 
-                          },
-                          child: SizedBox(
-                            width: 50,
-                            height: 40,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [                   
-                                Text(
-                                  'Add',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14,
-                                    fontFamily: 'Roboto',
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),                    
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                ],
-              ),
-            ),    
-          ),    
-        );
-      },
-    );
   }
-
-  //final formKey4 = GlobalKey<FormState>();
-  /* comfirm adding patient */
-  /*
-  Future<void> comfirmDialog(BuildContext context, int index) async {
-    return showDialog(    
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          content: Container(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(width: double.infinity),
-                /* Question */
-                Container(
-                  width: 266,
-                  height: 58, 
-                  padding: EdgeInsets.fromLTRB(0, 5, 0, 0),              
-                  decoration: ShapeDecoration(
-                    color: Color(0xFFEFEFEF),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    )
-                  ),
-                  child: Text(
-                    'Confirm?',
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.montserrat(
-                      color: Colors.black,
-                      fontSize: 15,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ),
-                SizedBox(height: 25),
-                Container(
-                  child: Row(   
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    mainAxisSize: MainAxisSize.min,             
-                    children: [   
-                      /* Yes Button */               
-                      ElevatedButton(
-                        onPressed: (){
-                          setState(() {
-
-                          });
-                        }, 
-                        child: Text(
-                          'Yes',
-                          style: GoogleFonts.montserrat(
-                            color: Colors.white,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFFD00202),
-                        ),
-                      ),
-                      SizedBox(width: 50),
-                      /* No Button */
-                      ElevatedButton(
-                        onPressed: (){
-                        }, 
-                        child: Text(
-                          'No',
-                          style: GoogleFonts.montserrat(
-                            color: Colors.white,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFF373C88),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      }
-    );
-  }
-  */
 
   /* showDialog to make sure the deletion of the list */
   Future<void> comfirmDeletion(BuildContext context, int index) async {
@@ -744,52 +640,6 @@ class _add_patient extends State<add_patient> {
     );
   }
 
-  /*
-  /* API */
-  final String apiURL = 'http://10.62.77.52:3000/auth/login'; // backend URL
-  String result = "";
-  //Future<listData2> getRequest() async {
-  void getRequest() async {
-    final response = await http.get(Uri.parse(apiURL));
-    //var responseData = json.decode(response.body);
-    try {
-      if(response.statusCode == 200) {
-        String data = response.body;
-        var decodedData = jsonDecode(data);
-        return decodedData;
-      }
-      else {
-        throw Exception('Failed to load album');
-      }
-    }
-    catch(e) {
-      setState((){
-        result = 'Error: $e';
-        print(result);
-      });
-    }
-
-    /*
-    //List<listData> = 
-    List<listData2> patientList2 = <listData2>[];
-    for(var singlePatient in responseData) {
-      listData2 patientData = listData2(
-        fName: singlePatient["fName"],
-        lName: singlePatient["lName"],
-        patientID: singlePatient["patientID"],
-        hospital: singlePatient["hospital"],
-        room: singlePatient["room"],
-        gender: singlePatient["gender"],
-        bloodType: singlePatient["bloodType"],
-        condition: singlePatient["condition"],
-        medication: singlePatient["medication"],
-      );
-      patientList2.add(patientData);
-    }
-    //return patientList2;
-    */
-  }
-  */
     
 
 
@@ -816,7 +666,6 @@ class _add_patient extends State<add_patient> {
                     itemBuilder: (context, index){
                       return GestureDetector(
                         onTap: () {
-                          getRequest_profile();  // get patientInfo 
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => patientHome(patientList[index])), // go to user's pages
@@ -933,7 +782,7 @@ class _add_patient extends State<add_patient> {
                             ),
                             /* Doctor Name */
                             subtitle: Text(
-                              'Dr. Joseph Green',
+                              'Dr. ${patientList[index].doctor}',
                               style: GoogleFonts.roboto(
                                 color: Color(0xFF373C88),
                                 fontSize: 14,

@@ -20,7 +20,7 @@ Patient _$PatientFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Patient {
-  String? get firtName => throw _privateConstructorUsedError;
+  String? get firstName => throw _privateConstructorUsedError;
   String? get lastName => throw _privateConstructorUsedError;
   String? get gender => throw _privateConstructorUsedError;
   String? get bloodtype => throw _privateConstructorUsedError;
@@ -43,7 +43,7 @@ abstract class $PatientCopyWith<$Res> {
       _$PatientCopyWithImpl<$Res, Patient>;
   @useResult
   $Res call(
-      {String? firtName,
+      {String? firstName,
       String? lastName,
       String? gender,
       String? bloodtype,
@@ -69,7 +69,7 @@ class _$PatientCopyWithImpl<$Res, $Val extends Patient>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? firtName = freezed,
+    Object? firstName = freezed,
     Object? lastName = freezed,
     Object? gender = freezed,
     Object? bloodtype = freezed,
@@ -82,9 +82,9 @@ class _$PatientCopyWithImpl<$Res, $Val extends Patient>
     Object? dischargeDate = freezed,
   }) {
     return _then(_value.copyWith(
-      firtName: freezed == firtName
-          ? _value.firtName
-          : firtName // ignore: cast_nullable_to_non_nullable
+      firstName: freezed == firstName
+          ? _value.firstName
+          : firstName // ignore: cast_nullable_to_non_nullable
               as String?,
       lastName: freezed == lastName
           ? _value.lastName
@@ -138,7 +138,7 @@ abstract class _$$PatientImplCopyWith<$Res> implements $PatientCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {String? firtName,
+      {String? firstName,
       String? lastName,
       String? gender,
       String? bloodtype,
@@ -162,7 +162,7 @@ class __$$PatientImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? firtName = freezed,
+    Object? firstName = freezed,
     Object? lastName = freezed,
     Object? gender = freezed,
     Object? bloodtype = freezed,
@@ -175,9 +175,9 @@ class __$$PatientImplCopyWithImpl<$Res>
     Object? dischargeDate = freezed,
   }) {
     return _then(_$PatientImpl(
-      firtName: freezed == firtName
-          ? _value.firtName
-          : firtName // ignore: cast_nullable_to_non_nullable
+      firstName: freezed == firstName
+          ? _value.firstName
+          : firstName // ignore: cast_nullable_to_non_nullable
               as String?,
       lastName: freezed == lastName
           ? _value.lastName
@@ -227,7 +227,7 @@ class __$$PatientImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$PatientImpl extends _Patient {
   _$PatientImpl(
-      {this.firtName,
+      {this.firstName,
       this.lastName,
       this.gender,
       this.bloodtype,
@@ -244,7 +244,7 @@ class _$PatientImpl extends _Patient {
       _$$PatientImplFromJson(json);
 
   @override
-  final String? firtName;
+  final String? firstName;
   @override
   final String? lastName;
   @override
@@ -268,7 +268,7 @@ class _$PatientImpl extends _Patient {
 
   @override
   String toString() {
-    return 'Patient(firtName: $firtName, lastName: $lastName, gender: $gender, bloodtype: $bloodtype, doctorName: $doctorName, roomNum: $roomNum, condition: $condition, medications: $medications, patientID: $patientID, admissionDate: $admissionDate, dischargeDate: $dischargeDate)';
+    return 'Patient(firstName: $firstName, lastName: $lastName, gender: $gender, bloodtype: $bloodtype, doctorName: $doctorName, roomNum: $roomNum, condition: $condition, medications: $medications, patientID: $patientID, admissionDate: $admissionDate, dischargeDate: $dischargeDate)';
   }
 
   @override
@@ -276,8 +276,8 @@ class _$PatientImpl extends _Patient {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$PatientImpl &&
-            (identical(other.firtName, firtName) ||
-                other.firtName == firtName) &&
+            (identical(other.firstName, firstName) ||
+                other.firstName == firstName) &&
             (identical(other.lastName, lastName) ||
                 other.lastName == lastName) &&
             (identical(other.gender, gender) || other.gender == gender) &&
@@ -302,7 +302,7 @@ class _$PatientImpl extends _Patient {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      firtName,
+      firstName,
       lastName,
       gender,
       bloodtype,
@@ -330,7 +330,7 @@ class _$PatientImpl extends _Patient {
 
 abstract class _Patient extends Patient {
   factory _Patient(
-      {final String? firtName,
+      {final String? firstName,
       final String? lastName,
       final String? gender,
       final String? bloodtype,
@@ -346,7 +346,7 @@ abstract class _Patient extends Patient {
   factory _Patient.fromJson(Map<String, dynamic> json) = _$PatientImpl.fromJson;
 
   @override
-  String? get firtName;
+  String? get firstName;
   @override
   String? get lastName;
   @override

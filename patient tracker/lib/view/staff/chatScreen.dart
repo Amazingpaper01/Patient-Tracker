@@ -11,13 +11,11 @@ import 'package:socket_io_client/socket_io_client.dart' as IO; // for socket IO
 
 class chatScreenPage extends StatefulWidget {
   //const MyWidget({super.key});
-  // final listData sendListData;
-  // chatPage(this.sendListData); // store the patientList[index] data
-
+  //final listData sendListData;
+  //chatScreenPage(this.sendListData); // store the patientList[index] data
   @override
   State<chatScreenPage> createState() => _chatScreenPage();
 }
-
 
 class messageList{
   String mes;
@@ -29,15 +27,12 @@ class messageList{
   );  
 }
 
-
-//List<String> messList = ['Hey','Hey','Hey','Hey'];
 List<messageList> messList = [];
-
 
 class _chatScreenPage extends State<chatScreenPage> {
 //class chatPage extends StatelessWidget {
   //final listData sendListData;
-  //_chatPage(this.sendListData); // store the patientList[index] data
+  //_chatScreenPage(this.sendListData); // store the patientList[index] data
 
   /* chat message */
   TextEditingController staff_message = TextEditingController();
@@ -45,30 +40,20 @@ class _chatScreenPage extends State<chatScreenPage> {
   bool isStaffMes = true;
   late final IO.Socket socket;
 
-  
+  void sendMessage() {
+    socket.emit('send-message',{
+      'body':staff_message.text,
+    });
+  }
 
-  /*
+  
   /* start connection */
   @override
   void initState(){
-
-    messList.add(
-      messageList('Hello', true)
-    );
-    messList.add(
-      messageList('Hey', false)
-    );
-    messList.add(
-      messageList('Hello', true)
-    );
-    messList.add(
-      messageList('Hey', false)
-    );
-
     super.initState();
 
     socket = IO.io(
-      "http://localhost:3000",
+      "http://129.8.213.164:3000",
       IO.OptionBuilder()
         .setTransports(['websocket'])
         .disableAutoConnect()
@@ -107,7 +92,7 @@ class _chatScreenPage extends State<chatScreenPage> {
     socket.dispose();
     super.dispose();
   }
-  */
+  
 
   @override
 
@@ -126,10 +111,12 @@ class _chatScreenPage extends State<chatScreenPage> {
             ),
           onPressed: (){
             /* go back Patient Home page*/
+            
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => Page_Doctor()), // go to user's pages
             );
+            
           },
         ),
         actions: <Widget> [
@@ -185,17 +172,14 @@ class _chatScreenPage extends State<chatScreenPage> {
           width: double.infinity,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            //mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Expanded(
                 child: Container(
-                  //width: 200,
                   child: ListView.builder(
                     reverse: true,
                     shrinkWrap: true,
                     itemCount: messList.length,//messList.length,                      
                     itemBuilder: (context, index){
-                      //final message = messList[index];
                       final isLeftAligned = messList[index].isYourMes;
                       return Container(
                         child: Column(
@@ -212,7 +196,6 @@ class _chatScreenPage extends State<chatScreenPage> {
                             Container ( 
                               constraints: BoxConstraints(maxWidth: 200),
                               margin: EdgeInsets.fromLTRB(0, 5, 0, 5), 
-                              //margin: EdgeInsets.fromLTRB(isLeftAligned ? 0 : 100, 5, isLeftAligned ? 100 : 0, 5),              
                               padding: EdgeInsets.all(10),                              
                               decoration: ShapeDecoration(
                                 color: isLeftAligned ? Color(0xFF373C88) : Color(0xFFF4F4F4),
@@ -238,7 +221,6 @@ class _chatScreenPage extends State<chatScreenPage> {
                 ),
               ),
               SizedBox(height: 30),
-              //Spacer(),
               Container(
                 padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                 decoration: ShapeDecoration(
@@ -282,6 +264,7 @@ class _chatScreenPage extends State<chatScreenPage> {
                         SizedBox(width: 20),
                         IconButton(
                           onPressed: (){
+                            sendMessage();
                             setState((){  
                               /*                            
                               messList.add(

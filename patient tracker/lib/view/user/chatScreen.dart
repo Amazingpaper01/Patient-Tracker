@@ -1,33 +1,117 @@
 import 'package:flutter/material.dart';
+import 'package:practice/view/user/home.dart';
 import 'package:practice/view/user/patientDisplay.dart';  // to access the patientList
 import 'package:practice/main.dart';   // for login page 
-import 'package:practice/view/user/patientInfo.dart'; // go to patientInfo page
-import 'package:practice/view/user/pharmacy_page.dart'; // go to pharmacy page
-import 'package:practice/view/user/vitals_page.dart';  // go to vitals page
-import 'package:practice/view/user/calender_page.dart'; // go to calender page
-import 'package:practice/view/user/notification_page.dart'; // go to notification page
+import 'package:practice/view/user/chat_page.dart'; 
 import 'package:google_fonts/google_fonts.dart'; // for using Google Font
 import 'package:flutter_speed_dial/flutter_speed_dial.dart'; // for using SpeedDial
+import 'package:socket_io_client/socket_io_client.dart' as IO; // for socket IO
 
 
-class joinChatPage extends StatefulWidget {
+class chatScreenPage extends StatefulWidget {
   //const MyWidget({super.key});
   final listData sendListData;
-  joinChatPage(this.sendListData); // store the patientList[index] data
+  chatScreenPage(this.sendListData); // store the patientList[index] data
 
   @override
-  State<joinChatPage> createState() => _joinChatPage(sendListData);
+  State<chatScreenPage> createState() => _chatScreenPage(sendListData);
 }
 
-//int sendChatRequest = 0;
-bool sendChatRequest = false;
+class messageList{
+  String mes;
+  bool isYourMes;
 
-class _joinChatPage extends State<joinChatPage> {
+  messageList(
+    this.mes,
+    this.isYourMes,
+  );  
+}
+
+List<messageList> messList = [];
+
+class _chatScreenPage extends State<chatScreenPage> {
 //class chatPage extends StatelessWidget {
   final listData sendListData;
-  _joinChatPage(this.sendListData); // store the patientList[index] data
+  _chatScreenPage(this.sendListData); // store the patientList[index] data
+
+  /* chat message */
+  TextEditingController staff_message = TextEditingController();
+  String text_message = '';
+  bool isStaffMes = true;
+  late final IO.Socket socket;
+
+  void sendMessage() {
+    socket.emit('send-message',{
+      'body':staff_message.text,
+    });
+  }
+
+  
+  /* start connection */
+  @override
+  void initState(){
+    /*
+    messList.add(
+      messageList('Hello', true)
+    );
+    messList.add(
+      messageList('Hey', false)
+    );
+    messList.add(
+      messageList('Hello', true)
+    );
+    messList.add(
+      messageList('Hey', false)
+    );
+    */
+
+    super.initState();
+
+    socket = IO.io(
+      "http://localhost:3000",
+      IO.OptionBuilder()
+        .setTransports(['websocket'])
+        .disableAutoConnect()
+        .build()
+    );
+    
+    /* Success Connection */
+    socket.connect();   // connect with server
+    socket.onConnect((_) {
+      // execute if connect ??
+      debugPrint('connect');
+    });
+
+    /* error case */
+    socket.onDisconnect((_) => print('Disconnection'));
+    socket.onConnectError((err) => print(err));
+    socket.onError((err) => print(err));
+
+    /* get event from the server */
+    socket.on('getMessageEvent',(newMessage){
+      //messageList.add(MessageModel.fromJson(data));
+      debugPrint('$newMessage');
+    });
+
+  }
+
+  /* send messages to the server */
+  void sendMessage_staff() {
+    socket.emit('sendMessageEvent', 'Hello');
+  }
+
+  /* stop the connection  */
+  @override
+  void dispose() {
+    socket.disconnect();
+    socket.dispose();
+    super.dispose();
+  }
+  
 
   @override
+
+
   Widget build(BuildContext context) {
     return Scaffold(      
       appBar: AppBar(
@@ -42,13 +126,10 @@ class _joinChatPage extends State<joinChatPage> {
             ),
           onPressed: (){
             /* go back Patient Home page*/
-            /*
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => patientHome(widget.sendListData)), // go to user's pages
+              MaterialPageRoute(builder: (context) => Page_User()), // go to user's pages
             );
-            */
-            Navigator.of(context).pop();
           },
         ),
         actions: <Widget> [
@@ -96,115 +177,164 @@ class _joinChatPage extends State<joinChatPage> {
         ],
         backgroundColor: Color(0xFFF4F4F4),
       ),
-      /* create the Menu Button */
-      floatingActionButton: SpeedDial(
-        icon: Icons.forum_outlined, // chat icon
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
+      body: SafeArea(
+        child: Container(
+          //width: 600,
+          alignment: Alignment.center,          
+          margin: EdgeInsets.fromLTRB(30, 20, 30, 30),
+          width: double.infinity,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Container(
+                  child: ListView.builder(
+                    reverse: true,
+                    shrinkWrap: true,
+                    itemCount: messList.length,//messList.length,                      
+                    itemBuilder: (context, index){
+                      final isLeftAligned = messList[index].isYourMes;
+                      return Container(
+                        child: Column(
+                          crossAxisAlignment: isLeftAligned ? CrossAxisAlignment.start : CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              '2:43 PM',
+                              style: TextStyle(
+                                color: Color(0xFF666565),
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            Container ( 
+                              constraints: BoxConstraints(maxWidth: 200),
+                              margin: EdgeInsets.fromLTRB(0, 5, 0, 5), 
+                              padding: EdgeInsets.all(10),                              
+                              decoration: ShapeDecoration(
+                                color: isLeftAligned ? Color(0xFF373C88) : Color(0xFFF4F4F4),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(9),
+                                ),
+                              ),
+                              child: Text(
+                                //'Hello\nsfasf',
+                                '${messList[index].mes}',
+                                style: TextStyle(
+                                  color: isLeftAligned ? Colors.white : Colors.black,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ), 
+                ),
+              ),
+              SizedBox(height: 30),
+              Container(
+                padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                decoration: ShapeDecoration(
+                  color: Color(0xFFF4F4F4),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(4),
+                      topRight: Radius.circular(4),
+                    ),
+                  ),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [                    
+                    Text(
+                      'Chat',
+                      style: TextStyle(
+                        color: Color(0xFF373C88),
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: 250,
+                          child: TextFormField(
+                            controller: staff_message,
+                            keyboardType: TextInputType.multiline,
+                            maxLines: 3,
+                            decoration: InputDecoration(
+                              hintText: 'Enter message...'
+                            ),
+                            onChanged: (String? value) {
+                              setState(() {
+                              text_message = value!;
+                              });
+                            },
+                          ),
+                        ),
+                        SizedBox(width: 20),
+                        IconButton(
+                          onPressed: (){
+                            sendMessage();
+                            setState((){  
+                              /*                            
+                              messList.add(
+                                messageList(text_message, isStaffMes)
+                              );
+                              */                              
+                              messList.insert(
+                                0, messageList(text_message, isStaffMes)
+                              );
+                              isStaffMes = !isStaffMes;
+                              staff_message.clear();
+                              text_message = '';
+                            });
+                          }, 
+                          icon: Icon(
+                            Icons.send,
+                            color: Color(0xFF373C88),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 50),
+              SizedBox(
+                width: 120,
+                height: 40,                
+                child: ElevatedButton(
+                  onPressed: (){
+                    setState((){
+                      sendChatRequest = !sendChatRequest;
+                    });
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => chatPage(sendListData)), // go to patient home pages
+                    );                    
+                  }, 
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFF373C88),
+                    foregroundColor: Colors.white, 
+                  ),
+                  child: Text(
+                    'Exit Chat',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
-        backgroundColor: Color(0xFFECE6F0),
-        overlayColor:  Colors.white,
-        overlayOpacity: 0.4,
-        children: [
-          /* close button */
-          SpeedDialChild(
-            child: Icon(
-              Icons.expand_circle_down_outlined,
-              color: Color(0xFFECE6F0),
-            ),
-            backgroundColor: Color(0xFF373C88),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-          ),
-          /* Notificatin History */
-          SpeedDialChild(
-            child: Icon(
-              Icons.description_outlined,
-              color: Color(0xFF373C88),
-            ),
-            backgroundColor: Color(0xFFECE6F0),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            onTap: (){
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => notificationPage(widget.sendListData)), // go to notification page
-              );                
-            }
-          ),
-          /* Calender */
-          SpeedDialChild(
-            child: Icon(
-              Icons.date_range_outlined,
-              color: Color(0xFF373C88),
-            ),
-            backgroundColor: Color(0xFFECE6F0),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            onTap: (){
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => calenderPage(widget.sendListData)), // go to calender page
-              );                
-            }
-          ),
-          /* Vitals */
-          SpeedDialChild(
-            child: Icon(
-              Icons.thermostat_auto_outlined,
-              color: Color(0xFF373C88),
-            ),
-            backgroundColor: Color(0xFFECE6F0),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            onTap: (){
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => vitalsPage(widget.sendListData)), // go to vitals page
-              );                
-            }
-          ),
-          /* Pharmacy */
-          SpeedDialChild(
-            child: Icon(
-              Icons.medical_services_outlined,
-              color: Color(0xFF373C88),
-            ),
-            backgroundColor: Color(0xFFECE6F0),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            onTap: (){
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => pharmacyPage(widget.sendListData)), // go to pharmacy page
-              );                
-            }
-          ),
-          /* Patient Information*/
-          SpeedDialChild(
-            child: Icon(
-              Icons.accessibility,
-              color: Color(0xFF373C88),
-            ),
-            backgroundColor: Color(0xFFECE6F0),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            onTap: (){
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => patientHome(widget.sendListData)), // go to patientInfo page
-              );                
-            }
-          ),
-        ],
       ),
-      //body:
     );
   }
 }
