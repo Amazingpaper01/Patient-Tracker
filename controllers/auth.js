@@ -171,8 +171,25 @@ const patientprofile = async (req, res) => {
     }
 };
 
-const test = async (req, res) => {
-    return send("hello world");
+// Modify patient information in the database
+const dischargepatient = async (req, res) => {
+    const { patientID } = req.body;
+
+    try {
+        const patient = await Patient.findOneAndUpdate({ patientID }, { dischargeDate: Date.now() }, { new: true});
+
+        //await patient.save();
+        return res.status(200).json({ message: `Patient discharged at ${ patient.dischargeDate }` });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
 };
 
-module.exports = { register, login, logout, createpatient, addpatient, modifypatient, patientprofile, test };
+// POST request to test if connection works without database
+const test = async (req, res) => {
+    return res.json({ message: "hello world" });
+};
+
+module.exports = { register, login, logout, createpatient, addpatient, modifypatient, 
+    patientprofile, dischargepatient, test };
