@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:practice/user/patient.dart';  // to access the patientList
+import 'package:practice/view/user/patientDisplay.dart';  // to access the patientList
 import 'package:practice/main.dart';   // for login page 
-import 'package:practice/user/patientInfo.dart'; // go to patientInfo page
-import 'package:practice/user/pharmacy_page.dart'; // go to pharmacy page
-import 'package:practice/user/vitals_page.dart';  // go to vitals page
-import 'package:practice/user/calender_page.dart'; // go to calender page
-import 'package:practice/user/notification_page.dart'; // go to notification page
+import 'package:practice/view/user/patientInfo.dart'; // go to patientInfo page
+import 'package:practice/view/user/pharmacy_page.dart'; // go to pharmacy page
+import 'package:practice/view/user/vitals_page.dart';  // go to vitals page
+import 'package:practice/view/user/calender_page.dart'; // go to calender page
+import 'package:practice/view/user/notification_page.dart'; // go to notification page
+import 'package:practice/view/user/chatScreen.dart'; // go to joinChat page
 import 'package:google_fonts/google_fonts.dart'; // for using Google Font
 import 'package:flutter_speed_dial/flutter_speed_dial.dart'; // for using SpeedDial
 
@@ -229,7 +230,8 @@ class _chatPage extends State<chatPage> {
                 )
               ),
             ),
-            SizedBox(height: 30),    
+            SizedBox(height: 30),
+            /* switch the message about the condition of request  */    
             sendChatRequest ? pendingRequest() : selectRequest(),  // condition ? true : false
             SizedBox(height: 30),  
             SizedBox(
@@ -240,24 +242,22 @@ class _chatPage extends State<chatPage> {
                   backgroundColor: Color(0xFF373C88),
                   foregroundColor: Colors.white, 
                 ),
-                onPressed: (){                  
-                  debugPrint(sendChatRequest.toString());
-                  setState((){
-                    sendChatRequest = !sendChatRequest;
-                  });
-                  debugPrint(sendChatRequest.toString());                  
+                onPressed: () async {    
+                  if (sendChatRequest) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => chatScreenPage(widget.sendListData)), // go to patientInfo page (user/chatScreen.dart)
+                    );
+                  }         
+                  else{
+                    if(formKey5.currentState!.validate()){
+                      setState((){
+                        sendChatRequest = !sendChatRequest;
+                      });
+                    }
+                  }                                 
                 },
-                child: /*Text(
-                  'Send Request',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
-                    fontFamily: 'Roboto',
-                    fontWeight: FontWeight.w500
-                  ),
-                ), 
-                */               
+                child:             
                 sendChatRequest ? Text(
                   'Join Chat',
                   textAlign: TextAlign.center,
@@ -287,6 +287,8 @@ class _chatPage extends State<chatPage> {
   }
 }
 
+final formKey5 = GlobalKey<FormState>();
+
 /* Select Request Reason */
 class selectRequest extends StatefulWidget {
   const selectRequest({super.key});
@@ -300,66 +302,65 @@ class _selectRequest extends State<selectRequest> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          Text(
-            'What is the primary concern for wanting\nto contact your provider?',
-            textAlign: TextAlign.center,
-            style: GoogleFonts.montserrat(
-              color: Colors.black,
-              fontSize: 16,
-              fontWeight: FontWeight.w400,
-            ),
-          ),
-          SizedBox(height: 30),
-          /* Reason for chat */
-          Container(
-            width: 250,
-            child: DropdownButtonFormField(
-              hint: Text('  Select'),
-              items: const [
-                DropdownMenuItem(
-                  child: Text('Change in condition'),
-                  value: '1',
-                ),
-                DropdownMenuItem(
-                  child: Text('Reschedule appointment'),
-                  value: '2',
-                ),
-                DropdownMenuItem(
-                  child: Text('Request medical records'),
-                  value: '3',
-                ),
-                DropdownMenuItem(
-                  child: Text('Other'),
-                  value: 'Other',
-                ),
-              ],
-              onChanged: (String? value) {
-                setState(() {
-                  selectedReason = value!;
-                  //text_gender = value;
-                });
-              },
-              value: selectedReason,                              
-              dropdownColor: Color(0xFFF5F5F5),              
-              decoration: InputDecoration(
-                //labelText: 'Gender',
-                border: OutlineInputBorder(),
+    return Form(
+      key: formKey5,
+      child: Container(
+        child: Column(
+          children: [
+            Text(
+              'What is the primary concern for wanting\nto contact your provider?',
+              textAlign: TextAlign.center,
+              style: GoogleFonts.montserrat(
+                color: Colors.black,
+                fontSize: 16,
+                fontWeight: FontWeight.w400,
               ),
-              /*
-              validator: (value) {
-                if (value == null || value.isEmpty){
-                  return 'Please select gender';
-                }
-                return null;
-              },
-              */
             ),
-          ),
-          SizedBox(height: 30),
-        ],
+            SizedBox(height: 30),
+            /* Reason for chat */
+            Container(
+              width: 250,
+              child: DropdownButtonFormField(
+                hint: Text('  Select'),
+                items: const [
+                  DropdownMenuItem(
+                    child: Text('Change in condition'),
+                    value: '1',
+                  ),
+                  DropdownMenuItem(
+                    child: Text('Reschedule appointment'),
+                    value: '2',
+                  ),
+                  DropdownMenuItem(
+                    child: Text('Request medical records'),
+                    value: '3',
+                  ),
+                  DropdownMenuItem(
+                    child: Text('Other'),
+                    value: 'Other',
+                  ),
+                ],
+                onChanged: (String? value) {
+                  setState(() {
+                    selectedReason = value!;
+                  });
+                },
+                validator: (value) {
+                  if (value == null || value.isEmpty){
+                    return 'Please select reasons';
+                  }
+                  return null;
+                },
+                value: selectedReason,                              
+                dropdownColor: Color(0xFFF5F5F5),              
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                ),                
+              ),
+            ),
+            SizedBox(height: 30),
+          ],
+        ),
       ),
     );
   }
@@ -373,7 +374,6 @@ class pendingRequest extends StatefulWidget {
   @override
   State<pendingRequest> createState() => _pendingRequest();
 }
-
 
 class _pendingRequest extends State<pendingRequest> {
   //const MyWidget({super.key});

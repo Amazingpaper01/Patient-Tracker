@@ -1,30 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:practice/main.dart';   // for login page 
-import 'package:practice/user/patient.dart';  // to access the patientList
-import 'package:practice/user/patientInfo.dart'; // go to patientInfo page
-import 'package:practice/user/chat_page.dart'; // go to chat page
-import 'package:practice/user/pharmacy_page.dart'; // go to pharmacy page
-import 'package:practice/user/vitals_page.dart';  // go to vitals page
-import 'package:practice/user/notification_page.dart'; // go to notification page
+import 'package:practice/view/user/patientDisplay.dart';  // to access the patientList
+import 'package:practice/view/user/patientInfo.dart'; // go to patientInfo page
+import 'package:practice/view/user/chat_page.dart'; // go to pharmacy page
+import 'package:practice/view/user/vitals_page.dart';  // go to vitals page
+import 'package:practice/view/user/calender_page.dart'; // go to calender page
+import 'package:practice/view/user/notification_page.dart'; // go to notification page
 import 'package:google_fonts/google_fonts.dart'; // for using Google Font
 import 'package:flutter_speed_dial/flutter_speed_dial.dart'; // for using SpeedDial
 
-
 /*
-class calenderPage extends StatefulWidget {
+class pharmacyPage extends StatefulWidget {
   //const MyWidget({super.key});
 
   @override
-  State<calenderPage> createState() => _calenderPage();
+  State<pharmacyPage> createState() => _pharmacyPage();
 }
 */
 
-//class _calenderPage extends State<calenderPage> {
-class calenderPage extends StatelessWidget {
+//class _pharmacyPage extends State<pharmacyPage> {
+class pharmacyPage extends StatelessWidget {
   final listData sendListData;
-  calenderPage(this.sendListData); // store the patientList[index] data
+  pharmacyPage(this.sendListData); // store the patientList[index] data
+
   @override
   Widget build(BuildContext context) {
+    /* App Bar */
     return Scaffold(      
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -56,8 +57,8 @@ class calenderPage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => LogIn()), // go to patient home pages
-                );    
-                patientList.clear();             
+                );     
+                patientList.clear();           
               }
             },
             child: Container(
@@ -87,12 +88,12 @@ class calenderPage extends StatelessWidget {
               ];
             }
           ),
-        ],
+        ],        
         backgroundColor: Color(0xFFF4F4F4),
       ),
       /* create the Menu Button */
       floatingActionButton: SpeedDial(
-        icon: Icons.date_range_outlined, // calender icon
+        icon: Icons.medical_services_outlined, // pharmacy icon
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
         ),
@@ -128,6 +129,23 @@ class calenderPage extends StatelessWidget {
               );                
             }
           ),
+          /* Calender */
+          SpeedDialChild(
+            child: Icon(
+              Icons.date_range_outlined,
+              color: Color(0xFF373C88),
+            ),
+            backgroundColor: Color(0xFFECE6F0),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            onTap: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => calenderPage(sendListData)), // go to pharmacy page
+              );                
+            }
+          ),
           /* Vitals */
           SpeedDialChild(
             child: Icon(
@@ -142,23 +160,6 @@ class calenderPage extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => vitalsPage(sendListData)), // go to vitals page
-              );                
-            }
-          ),
-          /* Pharmacy */
-          SpeedDialChild(
-            child: Icon(
-              Icons.medical_services_outlined,
-              color: Color(0xFF373C88),
-            ),
-            backgroundColor: Color(0xFFECE6F0),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            onTap: (){
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => pharmacyPage(sendListData)), // go to pharmacy page
               );                
             }
           ),
@@ -198,12 +199,12 @@ class calenderPage extends StatelessWidget {
           ),  
         ],
       ),
-      body: Calender(),
+      body: pharmacy(),
     );
   }
 }
 
-class Calender extends StatelessWidget {
+class pharmacy extends StatelessWidget {
   //const requestChat({super.key});
 
   @override
@@ -214,7 +215,7 @@ class Calender extends StatelessWidget {
         children: [
           SizedBox(height: 50),
           Text(
-            'Calender',
+            'Pharmacy',
             textAlign: TextAlign.center,
             style: GoogleFonts.montserrat(
               color: Colors.black,

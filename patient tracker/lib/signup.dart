@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:practice/main.dart';    // for Login Page
-import 'package:practice/user/home.dart';  // for Home Page
-//import 'package:practice/user/patient.dart';
-import 'package:practice/staff/home.dart';  // for doctor's Home Page
+import 'package:practice/view/user/home.dart';  // for Home Page
+import 'package:practice/view/staff/home.dart';  // for doctor's Home Page
 import 'package:http/http.dart' as http;  // for http
 import 'dart:convert';  // for decoding received JSON
 import 'package:google_fonts/google_fonts.dart'; // for using Google Font
@@ -17,7 +16,8 @@ class SignUp extends StatefulWidget {
 
 class _SignUp extends State<SignUp> {
   /* API */
-  final String apiURL = 'http://10.62.78.58:3000/register';  // backend URL
+  final String apiURL = 'https://projpatienttracker.azurewebsites.net/auth/register';  // backend URL
+
   /* create Controller */
   final TextEditingController signUp_firstName = TextEditingController();
   final TextEditingController signUp_lastName = TextEditingController();
@@ -29,20 +29,8 @@ class _SignUp extends State<SignUp> {
   String role = '';   // store the role: staff or user
   bool isVisible_1 = true;  // show the password or not
   bool isVisible_2 = true;  // show the password or not
-  /* ======================== */
-
-  //@override
-  /*
-  void dispose() {
-    signUp_firstName.dispose();
-    signUp_lastName.dispose();
-    signUp_email.dispose();
-    signUp_password.dispose();
-    super.dispose();
-  }
-  */
-
-  /* Applying POST request */
+  /* =========================================================== */
+  /* POST request: SignUp */
   //Future<void> _postData() async{
   void postRequest_signup() async{
     print("test");
@@ -82,7 +70,7 @@ class _SignUp extends State<SignUp> {
       });
     }
   }
-  /* ======================== */
+  /* =========================================================== */
 
   @override
   Widget build(BuildContext context) {
@@ -113,8 +101,9 @@ class _SignUp extends State<SignUp> {
             r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+(@communitymedical.org)$")
             .hasMatch(email)) {
             debugPrint('doctor email');
-            /* go to Login Page (main.dart) */
+            /* go to Doctor's Home Page (staff/home.dart) */
             role = 'staff';
+            postRequest_signup();
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => Page_Doctor()),
@@ -130,8 +119,9 @@ class _SignUp extends State<SignUp> {
               r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+\.(com|edu|org|gov)$")
               .hasMatch(email)) {
               debugPrint('patient email');
-              /* go to Login Page (main.dart) */
+              /* go to User's Home Page (user/home.dart) */
               role = 'user';
+              postRequest_signup();
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => Page_User()),
@@ -153,6 +143,8 @@ class _SignUp extends State<SignUp> {
         }
       }    
     }
+
+    // ===========================================================
 
     /* Main Part of Sign Up Page*/
     return Scaffold(
@@ -375,7 +367,7 @@ class _SignUp extends State<SignUp> {
                     onPressed: (){                    
                       if (formKey.currentState!.validate()){                         
                         SignUp();
-                        postRequest_signup(); // send POST request
+                        //postRequest_signup(); // send POST request
                       }  
                     }, 
                     child: const Text(

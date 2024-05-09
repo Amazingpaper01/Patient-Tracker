@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:practice/main.dart';   // for login page 
-import 'package:practice/user/patient.dart';  // to access the patientList
-import 'package:practice/user/patientInfo.dart'; // go to patientInfo page
-import 'package:practice/user/chat_page.dart'; // go to chat page
-import 'package:practice/user/pharmacy_page.dart'; // go to pharmacy page
-import 'package:practice/user/vitals_page.dart';  // go to vitals page
-import 'package:practice/user/calender_page.dart'; // go to notification page
+import 'package:practice/view/user/patientDisplay.dart';  // to access the patientList
+import 'package:practice/view/user/patientInfo.dart'; // go to patientInfo page
+import 'package:practice/view/user/chat_page.dart'; // go to chat page
+import 'package:practice/view/user/pharmacy_page.dart'; // go to pharmacy page
+import 'package:practice/view/user/vitals_page.dart';  // go to vitals page
+import 'package:practice/view/user/calender_page.dart'; // go to notification page
 import 'package:google_fonts/google_fonts.dart'; // for using Google Font
 import 'package:flutter_speed_dial/flutter_speed_dial.dart'; // for using SpeedDial
 

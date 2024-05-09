@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:practice/user/patient.dart'; // for Patient Information Page
+import 'package:practice/view/user/patientDisplay.dart'; // for Patient Information Page
 import 'package:practice/main.dart';   // for login page 
 import 'package:google_fonts/google_fonts.dart'; // for using Google Font
+import 'package:http/http.dart' as http;  // for http
+import 'dart:convert';  // for decoding received JSON
 
 class Page_User extends StatefulWidget {
   //const MyWidget({super.key});
@@ -13,6 +15,49 @@ class Page_User extends StatefulWidget {
 
 
 class _Page extends State<Page_User> {
+  /* API */
+  final String apiURL = 'https://projpatienttracker.azurewebsites.net/auth/logout'; // backend URL
+  String result = ''; // To store the result from the API call
+
+  /* =========================================================== */
+  /* POST request: Logout */
+  void postRequest_logout() async {
+    try {
+      final response = await http.post(
+        Uri.parse(apiURL),
+        headers: <String, String> {
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        /*
+        body: jsonEncode(<String, dynamic>{
+          'email': signIn_email.text,
+          'password': signIn_password.text
+        }),
+        */
+      );
+      final responseData = jsonDecode(response.body);
+      final resultString = jsonEncode(responseData);
+      if (response.statusCode == 200) {
+        /* Successful POST request, handle the reponse here */    
+        setState((){
+          result = resultString;
+          print(resultString);
+        });
+      }
+      else {
+        /* if the server returns an error response, thrown an exception */
+        print(resultString);
+      }
+    }
+    catch (e) {
+      setState((){
+        result = 'Error: $e';
+        print(result);
+      });
+    }
+  }
+  
+  /* =========================================================== */
 
   @override
   Widget build(BuildContext context) {
@@ -38,12 +83,13 @@ class _Page extends State<Page_User> {
             color: Color(0xFFF4F4F4),  // color
             surfaceTintColor: Color(0xFFF4F4F4),  // color
             onSelected: (String value) async {
-              if (value == 'logout'){                
+              if (value == 'logout'){    
+                postRequest_logout();             
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => LogIn()), // go to patient home pages
                 );
-                patientList.clear();                
+                patientList.clear();   
               }
             },
             child: Container(
@@ -76,7 +122,7 @@ class _Page extends State<Page_User> {
         ],
         backgroundColor: Color(0xFFF4F4F4),
       ),
-      /* Main part: The patient list */
+      /* Main part: The patient list (user/patientDisplay.dart) */
       body: add_patient(),
     );
   }

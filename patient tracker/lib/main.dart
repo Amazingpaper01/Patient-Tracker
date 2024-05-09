@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:practice/signup.dart';  // for SignUp page
-import 'package:practice/user/home.dart';   // for users' Home Page 
-import 'package:practice/staff/home.dart';  // for doctors' Home Page
+import 'package:practice/view/user/home.dart';   // for users' Home Page 
+import 'package:practice/view/staff/home.dart';  // for doctors' Home Page
 import 'package:http/http.dart' as http;  // for http
 import 'dart:convert';  // for decoding received JSON
 import 'dart:async';
 import 'package:google_fonts/google_fonts.dart'; // for using Google Font
 import 'package:form_field_validator/form_field_validator.dart';
-	
+import 'package:flutter_riverpod/flutter_riverpod.dart'; // for riverpod
 
 
-void main() => runApp(const MyApp());
+void main() => runApp(const ProviderScope(child: MyApp()));
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -25,7 +25,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-
 /* create LogIn page */
 class LogIn extends StatefulWidget {
   //const Login_Form({Key? key}) : super(key: key);
@@ -36,18 +35,18 @@ class LogIn extends StatefulWidget {
 
 class _LogIn extends State<LogIn> {
   /* API */
-  //final String apiURL = 'http://10.62.77.52:3000/auth/login'; // backend URL
+  final String apiURL = 'https://projpatienttracker.azurewebsites.net/auth/login'; // backend URL
+
   /* create Controller */
   final TextEditingController signIn_email = TextEditingController();
   final TextEditingController signIn_password = TextEditingController();  
   
   String result = ''; // To store the result from the API call
   bool isVisible = true; // show the password or not
-  /* ======================== */
 
-  /* applying POST request */
+  /* =========================================================== */
+  /* POST request: logIn */
   //Future <void> postRequest() async {
-    /*
   void postRequest() async {
     print("test");
     try {
@@ -63,15 +62,12 @@ class _LogIn extends State<LogIn> {
       );
       final responseData = jsonDecode(response.body);
       final resultString = jsonEncode(responseData);
-      // print(response.statusCode);
       if (response.statusCode == 200) {
         /* Successful POST request, handle the reponse here */    
         setState((){
-          //result = 'Email: ${responseData['email']}\nPassword: ${responseData['password']}';
           result = resultString;
           print(resultString);
         });
-
       }
       else {
         /* if the server returns an error response, thrown an exception */
@@ -86,8 +82,8 @@ class _LogIn extends State<LogIn> {
       });
     }
   }
-  */
-  /* ======================== */
+  
+  /* =========================================================== */
   
   @override
   Widget build(BuildContext context) {
@@ -95,7 +91,7 @@ class _LogIn extends State<LogIn> {
     final formKey = GlobalKey<FormState>();
 
     /* function for button */
-    void LogIn(){
+    void LogIn(){      
       final email = signIn_email.text;
       debugPrint(signIn_email.text);
       debugPrint(signIn_password.text);
@@ -109,8 +105,9 @@ class _LogIn extends State<LogIn> {
         if (RegExp(
           r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+(@communitymedical.org)$")
           .hasMatch(email)) {
-          debugPrint('doctor email');
-          /* go to Doctor's Home Page (home_doctor.dart) */
+          //debugPrint('doctor email');
+          /* go to Doctor's Home Page (staff/home.dart) */
+          postRequest();
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => Page_Doctor()), // go to doctor's pages
@@ -122,8 +119,9 @@ class _LogIn extends State<LogIn> {
           if (RegExp(
             r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+\.(com|edu|org|gov)$")
             .hasMatch(email)) {
-            debugPrint('patient email');
-            /* go to Home Page (home.dart) */
+            //debugPrint('patient email');
+            /* go to User's Home Page (user/home.dart) */
+            postRequest();
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => Page_User()), // go to user's pages
@@ -137,7 +135,8 @@ class _LogIn extends State<LogIn> {
         }
       }      
     }
-    // ===========
+
+    // ===========================================================
 
     /* Main Part of the LogIn Page */
     return Scaffold(
@@ -282,7 +281,6 @@ class _LogIn extends State<LogIn> {
                 onPressed: () {
                   if (formKey.currentState!.validate()){
                     LogIn(); //LogIn
-                    //postRequest();  // send POST request
                   }        
                 },  
                 child: const Text(
@@ -356,7 +354,7 @@ class _LogIn extends State<LogIn> {
                   signIn_email.clear();
                   signIn_password.clear();        
                 },  
-                child: const Text(
+                child: Text(
                   'Sign Up',
                   style: TextStyle(
                     color: Colors.white,

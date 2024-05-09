@@ -1,21 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:practice/main.dart';    // go back login page
-import 'package:practice/user/chat_page.dart'; // go to chat page
-import 'package:practice/user/patient.dart';
-import 'package:practice/user/home.dart';
-import 'package:practice/user/pharmacy_page.dart'; // go to pharmacy page
-import 'package:practice/user/vitals_page.dart';  // go to vitals page
-import 'package:practice/user/calender_page.dart'; // go to calender page
-import 'package:practice/user/notification_page.dart'; // go to notification page
+import 'package:practice/view/staff/edit_patientInfo.dart'; // edit patientIngo page
+import 'package:practice/view/staff/patientDisplay.dart'; // to access the patientList
+import 'package:practice/view/staff/home.dart'; // go to home page
 import 'package:google_fonts/google_fonts.dart'; // for using Google Font
 import 'package:flutter_speed_dial/flutter_speed_dial.dart'; // for using SpeedDial
+import 'package:http/http.dart' as http;  // for http
+import 'dart:convert';  // for decoding received JSON
+import 'package:intl/intl.dart'; // for DateTime format
 
 
+bool isEdit = false;
 
 //class _patientHome extends State<patientHome> {
+  /*
+class patientHome extends StatefulWidget {
+  //const MyWidget({super.key});
+  final listData1 sendListData1;
+  patientHome(this.sendListData1); 
+
+  @override
+  State<patientHome> createState() => _patientHome(sendListData1);
+}
+*/
 class patientHome extends StatelessWidget {
-  final listData sendListData;
-  patientHome(this.sendListData); // store the patientList[index] data
+//class _patientHome extends State<patientHome> {
+  // final List<InfoData> sendListData;
+  // patientHome(this.sendListData); // store the patientList[index] data
+  //print(sendListData);
+  final List<listData1> sendListData; 
+  final int numIndex;
+  patientHome(this.sendListData,this.numIndex);
 
   @override
   Widget build(BuildContext context) {   
@@ -35,7 +50,7 @@ class patientHome extends StatelessWidget {
             //Navigator.pop(context);
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => Page_User()), // go to user's pages
+              MaterialPageRoute(builder: (context) => Page_Doctor()), // go to user's pages
             );
           },
         ),
@@ -51,7 +66,7 @@ class patientHome extends StatelessWidget {
                   context,
                   MaterialPageRoute(builder: (context) => LogIn()), // go to user's pages
                 );
-                patientList.clear();                
+                patientList1.clear();                
               }
             },
             child: Container(
@@ -87,125 +102,37 @@ class patientHome extends StatelessWidget {
       ),
       /* create the Menu Button */
       floatingActionButton: SpeedDial(
-        icon: Icons.accessibility,
+        icon: Icons.edit,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
         ),
         backgroundColor: Color(0xFFECE6F0),
-        overlayColor:  Colors.white,
-        overlayOpacity: 0.4,
-        children: [
-          /* close button */
-          SpeedDialChild(
-            child: Icon(
-              Icons.expand_circle_down_outlined,
-              color: Color(0xFFECE6F0),
-            ),
-            backgroundColor: Color(0xFF373C88),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-          ),
-          /* Notificatin History */
-          SpeedDialChild(
-            child: Icon(
-              Icons.description_outlined,
-              color: Color(0xFF373C88),
-            ),
-            backgroundColor: Color(0xFFECE6F0),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            onTap: (){
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => notificationPage(sendListData)), // go to notification page
-              );                
-            }
-          ),
-          /* Calender */
-          SpeedDialChild(
-            child: Icon(
-              Icons.date_range_outlined,
-              color: Color(0xFF373C88),
-            ),
-            backgroundColor: Color(0xFFECE6F0),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            onTap: (){
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => calenderPage(sendListData)), // go to calender page
-              );                
-            }
-          ),
-          /* Vitals */
-          SpeedDialChild(
-            child: Icon(
-              Icons.thermostat_auto_outlined,
-              color: Color(0xFF373C88),
-            ),
-            backgroundColor: Color(0xFFECE6F0),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            onTap: (){
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => vitalsPage(sendListData)), // go to vitals page
-              );                
-            }
-          ),
-          /* Pharmacy */
-          SpeedDialChild(
-            child: Icon(
-              Icons.medical_services_outlined,
-              color: Color(0xFF373C88),
-            ),
-            backgroundColor: Color(0xFFECE6F0),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            onTap: (){
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => pharmacyPage(sendListData)), // go to pharmacy page
-              );                
-            }
-          ),
-          /* Chat with Doctor*/
-          SpeedDialChild(
-            child: Icon(
-              Icons.forum_outlined,
-              color: Color(0xFF373C88),
-            ),
-            backgroundColor: Color(0xFFECE6F0),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            onTap: (){
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => chatPage(sendListData)), // go to chat page
-              );                
-            }
-          ),
-        ],
+        onPress: (){
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => patientHome_edit(sendListData, numIndex)), // go to user's pages
+          );
+        },
       ),
-      body: patientInfo(sendListData),  // transfer the patientList[index] data
+      //body: patientInfo(sendListData)
+      body: patientInfo(sendListData, numIndex)
     );
   }
 }
 
+final dateFormat = DateFormat('yyyy/MM/dd');
+
 /* show Patient Information */
 class patientInfo extends StatelessWidget {
   //const MyWidget({super.key});
-  final listData sendListData;
-  patientInfo(this.sendListData);  // store the patientList[index] data
+  // final List<InfoData> sendListData1;
+  // patientInfo(this.sendListData1);  // store the patientList[index] data
+  final int numIndex;
+  final List<listData1> sendListData; 
+  patientInfo(this.sendListData, this.numIndex);  
 
-  
-
+  /* API */
+  //final String apiURL = 'http://10.62.77.52:3000/auth/login'; // backend URL
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -228,14 +155,14 @@ class patientInfo extends StatelessWidget {
                           children: [
                             /* Initial First Name */
                             Text(
-                              '${sendListData.initial_fName}',
+                              '${sendListData.first.initial_fName}',//'${patientList1[numIndex].initial_fName}',//'',//'${sendListData1.initial_fName}',
                               style: TextStyle(
                                 color: Colors.white,
                               ),
                             ),
                             /* Initial Last Name */
                             Text(
-                              '${sendListData.initial_lName}',
+                              '${sendListData.first.initial_lName}',//'${patientList1[numIndex].initial_lName}',//'',//'${sendListData1.initial_lName}',
                               style: TextStyle(
                                 color: Colors.white,
                               ),
@@ -253,7 +180,7 @@ class patientInfo extends StatelessWidget {
                     children: [
                       /* First name */
                       Text(
-                        '${sendListData.fName}',
+                        '${sendListData.first.fName}',//'${patientList1[numIndex].fName}',//'',//'${sendListData1.fName}',
                         style: GoogleFonts.roboto(
                           color: Color(0xFF373C88),
                           fontSize: 16,
@@ -263,7 +190,7 @@ class patientInfo extends StatelessWidget {
                       SizedBox(width: 5),
                       /* Last Name */
                       Text(
-                        '${sendListData.lName}',
+                        '${sendListData.first.lName}',//'${patientList1[numIndex].lName}',//'',//'${sendListData1.lName}',
                         style: GoogleFonts.roboto(
                           color: Color(0xFF373C88),
                           fontSize: 16,
@@ -274,7 +201,7 @@ class patientInfo extends StatelessWidget {
                   ),
                   /* Doctor Name */
                   subtitle: Text(
-                    'Doctor: Joseph Green',
+                    '${sendListData.first.doctorName}',//'${patientList1[numIndex].doctorName}',//'',//'Doctor: ${sendListData1.doctorName}',
                     style: GoogleFonts.roboto(
                       color: Color(0xFF373C88),
                       fontSize: 14,
@@ -324,7 +251,7 @@ class patientInfo extends StatelessWidget {
                             ),
                             /* Patient ID number (6 digit) */
                             Text(
-                              '${sendListData.patientID}',
+                              '${sendListData.first.patientID}',//'${patientList1[numIndex].patientID}',//'',
                               style: GoogleFonts.roboto(
                                 color: Color(0xFF49454F),
                                 fontSize: 14,
@@ -348,7 +275,6 @@ class patientInfo extends StatelessWidget {
                               ),
                             ),
                             /* Hospital Name */
-                            /*
                             Text(
                               'Clovis Community Hospital',
                               style: GoogleFonts.roboto(
@@ -357,7 +283,6 @@ class patientInfo extends StatelessWidget {
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
-                            */
                           ],
                         ),
                       ),
@@ -375,16 +300,14 @@ class patientInfo extends StatelessWidget {
                               ),
                             ),
                             /* Room Number */
-                            /*
                             Text(
-                              'Red 3B',
+                              '${sendListData.first.room}',//'${patientList1[numIndex].room}',//'${sendListData1.room}',
                               style: GoogleFonts.roboto(
                                 color: Color(0xFF49454F),
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
-                            */
                           ],
                         ),
                       ),
@@ -402,16 +325,14 @@ class patientInfo extends StatelessWidget {
                               ),
                             ),
                             /* Gender */
-                            /*
                             Text(
-                              'Male',
+                              '${sendListData.first.gender}',//'${patientList1[numIndex].gender}',//'${sendListData1.gender}',
                               style: GoogleFonts.roboto(
                                 color: Color(0xFF49454F),
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
-                            */
                           ],
                         ),
                       ),
@@ -429,16 +350,14 @@ class patientInfo extends StatelessWidget {
                               ),
                             ),
                             /* Blood Type */
-                            /*
                             Text(
-                              'B+',
+                              '${sendListData.first.bloodType}',//'${patientList1[numIndex].bloodType}',//'',//'${sendListData1.bloodType}',
                               style: GoogleFonts.roboto(
                                 color: Color(0xFF49454F),
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
-                            */
                           ],
                         ),
                       ),
@@ -456,16 +375,14 @@ class patientInfo extends StatelessWidget {
                               ),
                             ),
                             /* Paitient Condition */
-                            /*
                             Text(
-                              'Knee injury',
+                              '${sendListData.first.condition}',// '${patientList1[numIndex].condition}',//'',//'${sendListData1.condition}',
                               style: GoogleFonts.roboto(
                                 color: Color(0xFF49454F),
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
-                            */
                           ],
                         ),
                       ),
@@ -483,16 +400,14 @@ class patientInfo extends StatelessWidget {
                               ),
                             ),
                             /* Type of Medication */
-                            /*
                             Text(
-                              'Ibuprofen',
+                              '${sendListData.first.medication}',//'${patientList1[numIndex].medication}',//'',//'${sendListData1.medication}',
                               style: GoogleFonts.roboto(
                                 color: Color(0xFF49454F),
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
-                            */
                           ],
                         ),
                       ),
@@ -510,16 +425,14 @@ class patientInfo extends StatelessWidget {
                               ),
                             ),
                             /* Admission Date */
-                            /*
                             Text(
-                              'null',
+                              '${dateFormat.format(sendListData.first.admDate)}',//'${dateFormat.format(patientList1[numIndex].admDate)}',//'${}',
                               style: GoogleFonts.roboto(
                                 color: Color(0xFF49454F),
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
-                            */
                           ],
                         ),
                       ),
@@ -536,20 +449,19 @@ class patientInfo extends StatelessWidget {
                                 fontWeight: FontWeight.w800,
                               ),
                             ),
-                            /* Discharge Date */
-                            /*
+                            /* Discharge Date */                            
                             Text(
-                              'null',
+                              '${dateFormat.format(sendListData.first.disDate)}',//'${dateFormat.format(patientList1[numIndex].disDate)}',//'${patientList1[numIndex].disDate}',
                               style: GoogleFonts.roboto(
                                 color: Color(0xFF49454F),
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
-                            */
                           ],
                         ),
                       ),
+                      
                     ],
                   ),
                 ),
@@ -561,4 +473,3 @@ class patientInfo extends StatelessWidget {
     );
   }
 }
-
