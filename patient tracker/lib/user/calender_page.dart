@@ -8,18 +8,8 @@ import 'package:practice/user/vitals_page.dart';  // go to vitals page
 import 'package:practice/user/notification_page.dart'; // go to notification page
 import 'package:google_fonts/google_fonts.dart'; // for using Google Font
 import 'package:flutter_speed_dial/flutter_speed_dial.dart'; // for using SpeedDial
+import 'package:intl/intl.dart';
 
-
-/*
-class calenderPage extends StatefulWidget {
-  //const MyWidget({super.key});
-
-  @override
-  State<calenderPage> createState() => _calenderPage();
-}
-*/
-
-//class _calenderPage extends State<calenderPage> {
 class calenderPage extends StatelessWidget {
   final listData sendListData;
   calenderPage(this.sendListData); // store the patientList[index] data
@@ -198,32 +188,94 @@ class calenderPage extends StatelessWidget {
           ),  
         ],
       ),
-      body: Calender(),
+      body: CalendarPage(), // Replace Calender with CalendarPage
     );
   }
 }
 
-class Calender extends StatelessWidget {
-  //const requestChat({super.key});
+class CalendarPage extends StatefulWidget {
+  @override
+  _CalendarPageState createState() => _CalendarPageState();
+}
+
+class _CalendarPageState extends State<CalendarPage> {
+  DateTime _selectedDate = DateTime.now();
+
+  // Map to store dummy events for specific dates
+  Map<DateTime, String> _dummyEvents = {
+    DateTime(2024, 4, 28): 'Leg Surgery',
+    DateTime(2024, 5, 5): 'New Prescription',
+    DateTime(2024, 5, 8): 'Discharge',
+  };
+
+  void _selectDate(DateTime date) {
+    setState(() {
+      _selectedDate = date;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      child: Column(
-        children: [
-          SizedBox(height: 50),
+    String? event = _dummyEvents[_selectedDate];
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          'Selected Date:',
+          style: TextStyle(fontSize: 20),
+        ),
+        SizedBox(height: 10),
+        Text(
+          '${_selectedDate.day}/${_selectedDate.month}/${_selectedDate.year}',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+        SizedBox(height: 20),
+        if (event != null)
           Text(
-            'Calender',
-            textAlign: TextAlign.center,
-            style: GoogleFonts.montserrat(
-              color: Colors.black,
-              fontSize: 24,
-              fontWeight: FontWeight.w500,
-            ),
+            'Event: $event', // Display the event if there's one for the selected date
+            style: TextStyle(fontSize: 20),
           ),
-        ],
-      ),
+        SizedBox(height: 20),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () {
+                _selectDate(_selectedDate.subtract(Duration(days: 1)));
+              },
+            ),
+            ElevatedButton(
+              onPressed: () {
+                showDatePicker(
+                  context: context,
+                  initialDate: _selectedDate,
+                  firstDate: DateTime(2000),
+                  lastDate: DateTime(2100),
+                ).then((selectedDate) {
+                  if (selectedDate != null) {
+                    _selectDate(selectedDate);
+                  }
+                });
+              },
+              child: Text('Select Date'),
+            ),
+            IconButton(
+              icon: Icon(Icons.arrow_forward),
+              onPressed: () {
+                _selectDate(_selectedDate.add(Duration(days: 1)));
+              },
+            ),
+          ],
+        ),
+      ],
     );
   }
+}
+
+void main() {
+  runApp(MaterialApp(
+    home: CalendarPage(),
+  ));
 }
